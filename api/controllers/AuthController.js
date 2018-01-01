@@ -1,0 +1,40 @@
+/**
+ * AuthController
+ *
+ * @description :: Server-side logic for managing auths
+ * @help        :: See http://sailsjs.org/#!/documentation/concepts/Controllers
+ */
+
+const sails = require('sails');
+const passport = require('passport');
+
+module.exports = {
+	_config: {
+    actions: false,
+    shortcuts: false,
+    rest: false
+  },
+  login: (req, res) => {
+    passport.authenticate('local', (err, user, info) => {
+      if (err) {
+        return res.status(500).send(err);
+      }
+
+      if (!user) {
+        return res.redirect('/login');
+      }
+
+      req.login(user, (err) => {
+        if (err) {
+          return res.send(err);
+        }
+
+        res.redirect('/dashboard');
+      });
+    })(req, res);
+  },
+  logout: (req, res) => {
+    req.logout();
+    res.redirect('/');
+  }
+};

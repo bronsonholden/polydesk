@@ -1,0 +1,10 @@
+<% endpoint = sails.getRouteFor('AuthController.login') %>
+
+<h1>Login</h1>
+<form method="<%- endpoint.method -%>" action="<%- endpoint.url -%>">
+  <input type="email" name="email">
+  <input type="password" name="password">
+  <input type="submit" value="submit">
+</form>
+<br>
+<a href="/">Back</a>

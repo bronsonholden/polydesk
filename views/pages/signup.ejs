@@ -1,0 +1,9 @@
+<% endpoint = sails.getRouteFor('UserController.create') %>
+<h1>Signup</h1>
+<form method="<%- endpoint.method -%>" action="<%- endpoint.url -%>">
+  <input type="email" name="email">
+  <input type="password" name="password">
+  <input type="submit" value="submit">
+</form>
+<br>
+<a href="/">Back</a>

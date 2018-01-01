@@ -39,12 +39,27 @@ module.exports.routes = {
   *                                                                          *
   ***************************************************************************/
 
+  'get /login': {
+    view: 'pages/login'
+  },
+
+  'get /signup': {
+    view: 'pages/signup'
+  },
+
+  'post /login': 'AuthController.login',
+  '/logout': 'AuthController.logout',
+
+  'post /signup': 'UserController.create',
+
+  'get /dashboard': 'DashboardController.dashboard',
 
   //  ╔═╗╔═╗╦  ╔═╗╔╗╔╔╦╗╔═╗╔═╗╦╔╗╔╔╦╗╔═╗
   //  ╠═╣╠═╝║  ║╣ ║║║ ║║╠═╝║ ║║║║║ ║ ╚═╗
   //  ╩ ╩╩  ╩  ╚═╝╝╚╝═╩╝╩  ╚═╝╩╝╚╝ ╩ ╚═╝
 
-
+  'post /api/login': 'RESTAuthController.login',
+  'post /api/logout': 'RESTAuthController.logout'
 
   //  ╦ ╦╔═╗╔╗ ╦ ╦╔═╗╔═╗╦╔═╔═╗
   //  ║║║║╣ ╠╩╗╠═╣║ ║║ ║╠╩╗╚═╗
