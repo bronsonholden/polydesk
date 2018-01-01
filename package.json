@@ -1,0 +1,46 @@
+{
+  "name": "polydesk",
+  "private": true,
+  "version": "0.1.0",
+  "description": "Polydesk is an extensible digital workspace for modern business.",
+  "keywords": [
+    "digital",
+    "workspace",
+    "modern",
+    "business",
+    "document",
+    "management",
+    "workflow",
+    "office",
+    "process",
+    "improve",
+    "accelerate"
+  ],
+  "dependencies": {
+    "async": "2.0.1",
+    "connect-redis": "3.2.0",
+    "grunt": "1.0.1",
+    "lodash": "3.10.1",
+    "sails": "^1.0.0-45",
+    "sails-hook-grunt": "^2.2.1",
+    "sails-hook-orm": "^2.0.0-16",
+    "sails-hook-sockets": "^1.4.0",
+    "socket.io-redis": "5.2.0"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "start": "NODE_ENV=production node app.js",
+    "test": "npm run custom-tests && echo 'Done.'",
+    "custom-tests": "echo \"(No other custom tests yet.)\" && echo"
+  },
+  "main": "app.js",
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/anonymous node/sails user/polydesk.git"
+  },
+  "author": "Paul Holden",
+  "license": "UNLICENSED",
+  "engines": {
+    "node": "8"
+  }
+}
