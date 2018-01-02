@@ -19,6 +19,10 @@ module.exports = {
       type: 'string',
       minLength: 8,
       required: true
+    },
+    defaultAccount: {
+      model: 'Account',
+      required: true
     }
   },
   customToJSON: function () {

@@ -53,6 +53,7 @@ module.exports.routes = {
   'post /signup': 'UserController.create',
 
   'get /dashboard': 'DashboardController.dashboard',
+  'get /documents': 'DashboardController.documents',
 
   //  ╔═╗╔═╗╦  ╔═╗╔╗╔╔╦╗╔═╗╔═╗╦╔╗╔╔╦╗╔═╗
   //  ╠═╣╠═╝║  ║╣ ║║║ ║║╠═╝║ ║║║║║ ║ ╚═╗

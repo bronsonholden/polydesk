@@ -20,7 +20,8 @@ module.exports.policies = {
   // '*': true,
 
   'DashboardController': {
-    '*': 'isAuthenticated'
+    '*': 'isAuthenticated',
+    'documents': 'canViewDocuments'
   }
 
 };

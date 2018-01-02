@@ -29,6 +29,9 @@ module.exports = {
           return res.send(err);
         }
 
+        req.session.user = user.id;
+        req.session.account = user.defaultAccount;
+
         res.redirect('/dashboard');
       });
     })(req, res);

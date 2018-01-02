@@ -19,7 +19,8 @@ module.exports = {
       type: 'string',
       required: true,
       isIn: [
-        'can_login'
+        'can_login',
+        'view_documents'
       ]
     }
   }

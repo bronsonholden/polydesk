@@ -33,18 +33,6 @@ module.exports = {
           });
         },
         (callback) => {
-          User.create({
-            email: req.param('email'),
-            password: req.param('password')
-          }).fetch().exec((err, user) => {
-              if (err) {
-                return callback(err);
-              }
-
-              callback(null, user);
-          });
-        },
-        (user, callback) => {
           Account.create({
             name: req.param('email')
           }).fetch().exec((err, account) => {
@@ -52,15 +40,35 @@ module.exports = {
               return callback(err);
             }
 
-            callback(null, user, account);
+            callback(null, account);
+          });
+        },
+        (account, callback) => {
+          User.create({
+            email: req.param('email'),
+            password: req.param('password'),
+            defaultAccount: account.id
+          }).fetch().exec((err, user) => {
+              if (err) {
+                return callback(err);
+              }
+
+              callback(null, user, account);
           });
         },
         (user, account, callback) => {
-          Capability.create({
-            name: 'can_login',
-            user: user.id,
-            account: account.id
-          }).exec((err) => {
+          var arr = [
+            'can_login',
+            'view_documents'
+          ].map((cap) => {
+            return {
+              name: cap,
+              user: user.id,
+              account: account.id
+            }
+          });
+
+          Capability.createEach(arr).exec((err) => {
             if (err) {
               return callback(err);
             }
@@ -81,7 +89,7 @@ module.exports = {
       });
     }).intercept((err) => {
       res.status(500).send({
-        message: 'An unexpected server error occurred'
+        message: err.message
       });
     }).exec((err, user) => {
       res.status(201).send(user);
