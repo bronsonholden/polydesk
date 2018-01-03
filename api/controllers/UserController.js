@@ -59,7 +59,8 @@ module.exports = {
         (user, account, callback) => {
           var arr = [
             'can_login',
-            'view_documents'
+            'view_documents',
+            'edit_metadata_groups'
           ].map((cap) => {
             return {
               name: cap,

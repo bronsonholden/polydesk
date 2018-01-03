@@ -20,7 +20,8 @@ module.exports = {
       required: true,
       isIn: [
         'can_login',
-        'view_documents'
+        'view_documents',
+        'edit_metadata_groups'
       ]
     }
   }

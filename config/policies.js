@@ -24,6 +24,7 @@ module.exports.policies = {
     'documents': 'canViewDocuments'
   },
   'MetadataGroupController': {
-    '*': 'isAuthenticated'
+    '*': 'isAuthenticated',
+    'create': 'canEditMetadataGroups'
   }
 };
