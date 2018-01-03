@@ -38,11 +38,7 @@ passport.use(new LocalStrategy({
         });
       }
 
-      callback(null, {
-        email: user.email,
-        createdAt: user.createdAt,
-        id: user.id
-      }, {
+      callback(null, user.toJSON(), {
         message: 'Login successful'
       });
     });

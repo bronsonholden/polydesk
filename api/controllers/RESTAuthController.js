@@ -29,6 +29,9 @@ module.exports = {
           return res.status(500).send(err);
         }
 
+        req.session.user = user.id;
+        req.session.account = user.defaultAccount;
+
         res.status(200).send(info);
       });
     })(req, res);

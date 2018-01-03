@@ -73,7 +73,7 @@ module.exports = {
               return callback(err);
             }
 
-            callback(null, user);
+            callback(null, user, account);
           });
         }
       ], (err, user) => {

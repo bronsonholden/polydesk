@@ -30,7 +30,8 @@ module.exports = {
       id: this.id,
       email: this.email,
       createdAt: this.createdAt,
-      updatedAt: this.updatedAt
+      updatedAt: this.updatedAt,
+      defaultAccount: this.defaultAccount
     }
   },
   beforeCreate: (user, callback) => {

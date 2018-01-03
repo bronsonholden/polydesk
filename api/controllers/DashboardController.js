@@ -6,12 +6,12 @@
  */
 
 module.exports = {
-	_config: {
+  _config: {
     actions: false,
     shortcuts: false,
     rest: false
   },
-	dashboard: (req, res) => {
+  dashboard: (req, res) => {
     res.view('pages/dashboard');
   },
   documents: (req, res) => {
