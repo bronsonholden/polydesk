@@ -13,8 +13,5 @@ module.exports = {
   },
   dashboard: (req, res) => {
     res.view('pages/dashboard');
-  },
-  documents: (req, res) => {
-    res.view('pages/documents');
   }
 };

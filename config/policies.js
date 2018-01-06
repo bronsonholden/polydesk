@@ -21,7 +21,9 @@ module.exports.policies = {
 
   'DashboardController': {
     '*': 'isAuthenticated',
-    'documents': 'canViewDocuments'
+  },
+  'DocumentController': {
+    'browse': 'canViewDocuments'
   },
   'MetadataGroupController': {
     '*': 'isAuthenticated',

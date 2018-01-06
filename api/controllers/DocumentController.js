@@ -1,0 +1,12 @@
+/**
+ * DocumentController
+ *
+ * @description :: Server-side logic for managing documents
+ * @help        :: See http://sailsjs.org/#!/documentation/concepts/Controllers
+ */
+
+module.exports = {
+  browse: (req, res) => {
+    res.view('pages/documents');
+  }
+};
