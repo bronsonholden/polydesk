@@ -14,6 +14,10 @@ module.exports = {
     name: {
       type: 'string',
       required: true
+    },
+    users: {
+      collection: 'User',
+      via: 'groups'
     }
   }
 };

@@ -57,8 +57,25 @@ module.exports = {
           });
         },
         (user, account, callback) => {
+          User.addToCollection(user.id, 'accounts', account.id).exec((err) => {
+            if (err) {
+              return callback(err);
+            }
+
+            callback(null, user, account);
+          });
+        },
+        (user, account, callback) => {
+          Account.addToCollection(account.id, 'users', user.id).exec((err) => {
+            if (err) {
+              return callback(err);
+            }
+
+            callback(null, user, account);
+          });
+        },
+        (user, account, callback) => {
           var arr = [
-            'can_login',
             'view_documents',
             'edit_metadata_groups'
           ].map((cap) => {

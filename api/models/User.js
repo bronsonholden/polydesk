@@ -23,6 +23,14 @@ module.exports = {
     defaultAccount: {
       model: 'Account',
       required: true
+    },
+    accounts: {
+      collection: 'Account',
+      via: 'users'
+    },
+    groups: {
+      collection: 'UserGroup',
+      via: 'users'
     }
   },
   customToJSON: function () {

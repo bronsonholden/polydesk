@@ -60,7 +60,8 @@ module.exports.routes = {
   //  ╩ ╩╩  ╩  ╚═╝╝╚╝═╩╝╩  ╚═╝╩╝╚╝ ╩ ╚═╝
 
   'post /api/login': 'RESTAuthController.login',
-  'post /api/logout': 'RESTAuthController.logout'
+  'post /api/logout': 'RESTAuthController.logout',
+  'post /api/usergroup/add': 'UserGroupController.add'
 
   //  ╦ ╦╔═╗╔╗ ╦ ╦╔═╗╔═╗╦╔═╔═╗
   //  ║║║║╣ ╠╩╗╠═╣║ ║║ ║╠╩╗╚═╗

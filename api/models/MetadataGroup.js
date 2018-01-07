@@ -7,13 +7,21 @@
 
 module.exports = {
   attributes: {
+    name: {
+      type: 'string',
+      required: true
+    },
     account: {
       model: 'Account',
       required: true
     },
-    name: {
-      type: 'string',
-      required: true
+    parent: {
+      model: 'MetadataGroup',
+      via: 'children'
+    },
+    children: {
+      collection: 'MetadataGroup',
+      via: 'parent'
     }
   }
 };

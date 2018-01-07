@@ -11,6 +11,14 @@ module.exports = {
       type: 'string',
       required: true,
       unique: true
+    },
+    users: {
+      collection: 'User',
+      via: 'accounts'
+    },
+    groups: {
+      collection: 'UserGroup',
+      via: 'account'
     }
   }
 };
