@@ -71,9 +71,7 @@ module.exports = {
         message: err.message
       });
     }).exec((err, result) => {
-      if (!err) {
-        res.status(200).send(result);
-      }
+      res.status(200).send(result);
     });
   },
   create: (req, res) => {
@@ -84,10 +82,9 @@ module.exports = {
       async.waterfall([
         (callback) => {
           if (!req.param('name')) {
-            return callback({
-              code: 'E_MISSING_PARAM',
-              message: 'User group name is required'
-            });
+            var e = new Error('User group name is required');
+            e.code = 'E_MISSING_PARAM';
+            return callback(e);
           }
 
           callback();
@@ -102,10 +99,9 @@ module.exports = {
             }
 
             if (userGroup) {
-              return callback({
-                code: 'E_USERGROUP_EXISTS',
-                message: 'A user group with that name already exists in this account'
-              });
+              var e = new Error('A user group with that name already exists in this account');
+              e.code = 'E_USERGROUP_EXISTS';
+              return callback(e);
             }
 
             callback();

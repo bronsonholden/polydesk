@@ -16,10 +16,9 @@ module.exports = {
       async.waterfall([
         (callback) => {
           if (!req.param('name')) {
-            return callback({
-              code: 'E_MISSING_PARAM',
-              message: 'Metadata group name is required'
-            });
+            var e = new Error('Metadata group name is required');
+            e.code = 'E_MISSING_PARAM';
+            return callback(e);
           }
 
           callback();
@@ -34,10 +33,9 @@ module.exports = {
             }
 
             if (metadatagroup) {
-              return callback({
-                code: 'E_METADATAGROUP_EXISTS',
-                message: 'A metadata group with that name already exists in this account'
-              });
+              var e = new Error('A metadata group with that name already exists in this account');
+              e.code = 'E_METADATAGROUP_EXISTS';
+              return callback(e);
             }
 
             callback();
