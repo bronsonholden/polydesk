@@ -27,7 +27,7 @@ module.exports = {
           MetadataGroup.findOne({
             account: req.session.account,
             name: req.param('name')
-          }, (err, metadatagroup) => {
+          }).usingConnection(db).exec((err, metadatagroup) => {
             if (err) {
               return callback(err);
             }
@@ -45,7 +45,7 @@ module.exports = {
           MetadataGroup.create({
             account: req.session.account,
             name: req.param('name')
-          }).fetch().exec((err, metadatagroup) => {
+          }).usingConnection(db).fetch().exec((err, metadatagroup) => {
             if (err) {
               return callback(err);
             }

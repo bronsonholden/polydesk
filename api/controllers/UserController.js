@@ -18,7 +18,7 @@ module.exports = {
         (callback) => {
           User.findOne({
             email: req.param('email')
-          }).exec((err, user) => {
+          }).usingConnection(db).exec((err, user) => {
             if (err) {
               return callback(err);
             }
@@ -35,7 +35,7 @@ module.exports = {
         (callback) => {
           Account.create({
             name: req.param('email')
-          }).fetch().exec((err, account) => {
+          }).usingConnection(db).fetch().exec((err, account) => {
             if (err) {
               return callback(err);
             }
@@ -48,7 +48,7 @@ module.exports = {
             email: req.param('email'),
             password: req.param('password'),
             defaultAccount: account.id
-          }).fetch().exec((err, user) => {
+          }).usingConnection(db).fetch().exec((err, user) => {
               if (err) {
                 return callback(err);
               }
@@ -57,7 +57,7 @@ module.exports = {
           });
         },
         (user, account, callback) => {
-          User.addToCollection(user.id, 'accounts', account.id).exec((err) => {
+          User.addToCollection(user.id, 'accounts', account.id).usingConnection(db).exec((err) => {
             if (err) {
               return callback(err);
             }
@@ -66,7 +66,7 @@ module.exports = {
           });
         },
         (user, account, callback) => {
-          Account.addToCollection(account.id, 'users', user.id).exec((err) => {
+          Account.addToCollection(account.id, 'users', user.id).usingConnection(db).exec((err) => {
             if (err) {
               return callback(err);
             }
@@ -86,7 +86,7 @@ module.exports = {
             }
           });
 
-          Capability.createEach(arr).exec((err) => {
+          Capability.createEach(arr).usingConnection(db).exec((err) => {
             if (err) {
               return callback(err);
             }

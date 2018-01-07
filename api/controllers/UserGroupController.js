@@ -20,7 +20,7 @@ module.exports = {
             id: req.param('user')
           }).populate('accounts', {
             id: req.session.account
-          }).exec((err, user) => {
+          }).usingConnection(db).exec((err, user) => {
             if (err) {
               return callback(err);
             }
@@ -38,7 +38,7 @@ module.exports = {
           UserGroup.findOne({
             id: req.param('userGroup'),
             account: req.session.account
-          }).exec((err, userGroup) => {
+          }).usingConnection(db).exec((err, userGroup) => {
             if (err) {
               return callback(err);
             }
@@ -93,7 +93,7 @@ module.exports = {
           UserGroup.findOne({
             account: req.session.account,
             name: req.param('name')
-          }, (err, userGroup) => {
+          }).usingConnection(db).exec((err, userGroup) => {
             if (err) {
               return callback(err);
             }
@@ -111,7 +111,7 @@ module.exports = {
           UserGroup.create({
             account: req.session.account,
             name: req.param('name')
-          }).fetch().exec((err, userGroup) => {
+          }).usingConnection(db).fetch().exec((err, userGroup) => {
             if (err) {
               return callback(err);
             }
@@ -120,7 +120,7 @@ module.exports = {
           });
         },
         (userGroup, callback) => {
-          Account.addToCollection(req.session.account, 'groups', userGroup.id).exec((err) => {
+          Account.addToCollection(req.session.account, 'groups', userGroup.id).usingConnection(db).exec((err) => {
             if (err) {
               return callback(err);
             }
