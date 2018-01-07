@@ -61,7 +61,7 @@ module.exports = {
         }
 
         callback(null, userGroup);
-      })
+      });
     }).intercept('E_MISSING_PARAM', (err) => {
       return res.status(422).send({
         message: err.message
