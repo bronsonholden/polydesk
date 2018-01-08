@@ -16,6 +16,21 @@ module.exports = {
 
       async.waterfall([
         (callback) => {
+          if (!req.param('user')) {
+            var e = new Error('User ID is required');
+            e.code = 'E_MISSING_PARAM';
+            return callback(e);
+          }
+
+          if (!req.param('userGroup')) {
+            var e = new Error('User group ID is required');
+            e.code = 'E_MISSING_PARAM';
+            return callback(e);
+          }
+
+          callback();
+        },
+        (callback) => {
           User.findOne({
             id: req.param('user')
           }).populate('accounts', {
@@ -64,6 +79,10 @@ module.exports = {
       });
     }).intercept('E_MISSING', (err) => {
       res.status(404).send({
+        message: err.message
+      });
+    }).intercept('E_MISSING_PARAM', (err) => {
+      res.status(422).send({
         message: err.message
       });
     }).intercept((err) => {
