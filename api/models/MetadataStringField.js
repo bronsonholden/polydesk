@@ -1,5 +1,5 @@
 /**
- * MetadataGroup.js
+ * MetadataField.js
  *
  * @description :: A model definition.  Represents a database table/collection/etc.
  * @docs        :: https://sailsjs.com/docs/concepts/models-and-orm/models
@@ -11,21 +11,13 @@ module.exports = {
       type: 'string',
       required: true
     },
-    account: {
-      model: 'Account',
+    fieldIndex: {
+      type: 'number',
       required: true
     },
-    parent: {
+    metadataGroup: {
       model: 'MetadataGroup',
-      via: 'children'
-    },
-    children: {
-      collection: 'MetadataGroup',
-      via: 'parent'
-    },
-    stringFields: {
-      collection: 'MetadataStringField',
-      via: 'metadataGroup'
+      required: true
     }
   }
 };
