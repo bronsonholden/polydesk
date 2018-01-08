@@ -1,0 +1,6 @@
+<h1>Metadata Groups</h1>
+<ul>
+  <% metadataGroups.forEach(function (group) { %>
+    <li><a href="/metadatagroups/<%- group.id -%>"><%- group.name -%></a></li>
+  <% }); %>
+</ul>

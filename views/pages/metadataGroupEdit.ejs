@@ -1,0 +1,16 @@
+<h1><%- metadataGroup.name -%></h1>
+<table>
+  <tbody>
+    <% metadataFields.forEach(function (field) { %>
+      <tr>
+        <td><%- field.name -%>
+        </td>
+        <td>
+          <% if (field.type === 'string') { %>
+              <input type="text"></input>
+          <% } %>
+        </td>
+      </tr>
+    <% }); %>
+  </tbody>
+</table>

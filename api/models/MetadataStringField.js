@@ -19,5 +19,9 @@ module.exports = {
       model: 'MetadataGroup',
       required: true
     }
+  },
+  customToJSON: function () {
+    this.type = 'string';
+    return this;
   }
 };

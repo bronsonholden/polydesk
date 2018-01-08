@@ -55,6 +55,9 @@ module.exports.routes = {
   'get /dashboard': 'DashboardController.dashboard',
   'get /documents': 'DocumentController.browse',
 
+  'get /metadatagroups': 'MetadataGroupController.groups',
+  'get /metadatagroups/:metadataGroup': 'MetadataGroupController.edit',
+
   //  ╔═╗╔═╗╦  ╔═╗╔╗╔╔╦╗╔═╗╔═╗╦╔╗╔╔╦╗╔═╗
   //  ╠═╣╠═╝║  ║╣ ║║║ ║║╠═╝║ ║║║║║ ║ ╚═╗
   //  ╩ ╩╩  ╩  ╚═╝╝╚╝═╩╝╩  ╚═╝╩╝╚╝ ╩ ╚═╝

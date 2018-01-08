@@ -8,6 +8,61 @@
 const assert = require('assert');
 
 module.exports = {
+  groups: (req, res) => {
+    MetadataGroup.find({
+      account: req.session.account
+    }).exec((err, metadataGroups) => {
+      if (err) {
+        return res.send(err);
+      }
+
+      res.view('pages/metadataGroups', {
+        metadataGroups: metadataGroups
+      });
+    });
+  },
+  edit: (req, res) => {
+    async.waterfall([
+      (callback) => {
+        MetadataGroup.findOne({
+          id: req.param('metadataGroup'),
+          account: req.session.account
+        }).exec((err, metadataGroup) => {
+          if (err) {
+            return res.send(err);
+          }
+
+          callback(null, metadataGroup, []);
+        });
+      },
+      (metadataGroup, metadataFields, callback) => {
+        MetadataStringField.find({
+          metadataGroup: metadataGroup.id
+        }).exec((err, stringFields) => {
+          if (err) {
+            return callback(err);
+          }
+
+          callback(null, metadataGroup, metadataFields.concat(stringFields));
+        });
+      },
+      (metadataGroup, metadataFields, callback) => {
+        callback(null, metadataGroup, metadataFields.map(f => f.toJSON()));
+      },
+      (metadataGroup, metadataFields, callback) => {
+        callback(null, metadataGroup, _.sortBy(metadataFields, 'fieldIndex'));
+      }
+    ], (err, metadataGroup, metadataFields) => {
+      if (err) {
+        return res.send(err);
+      }
+
+      res.view('pages/metadataGroupEdit', {
+        metadataGroup: metadataGroup,
+        metadataFields: metadataFields
+      });
+    });
+  },
   fields: (req, res) => {
     sails.getDatastore().transaction((db, callback) => {
       assert(req.session.account);
