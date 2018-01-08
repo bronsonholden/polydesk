@@ -3,14 +3,17 @@
   <tbody>
     <% metadataFields.forEach(function (field) { %>
       <tr>
-        <td><%- field.name -%>
+        <td><input type="text" value="<%- field.name -%>"></input>
         </td>
         <td>
-          <% if (field.type === 'string') { %>
-              <input type="text"></input>
-          <% } %>
+          <select value="<%- field.type -%>">
+            <option value="string">string</option>
+            <option value="decimal">decimal</option>
+          </select>
         </td>
       </tr>
     <% }); %>
   </tbody>
 </table>
+<br>
+<a href="<%- sails.getUrlFor('MetadataGroupController.groups') -%>">Back</a>
