@@ -8,7 +8,7 @@
 const async = require('async');
 
 module.exports = {
-	_config: {
+  _config: {
     actions: false,
     shortcuts: false
   },

@@ -9,7 +9,7 @@ const sails = require('sails');
 const passport = require('passport');
 
 module.exports = {
-	_config: {
+  _config: {
     actions: false,
     shortcuts: false,
     rest: false
