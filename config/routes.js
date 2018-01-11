@@ -58,6 +58,10 @@ module.exports.routes = {
   'get /metadatagroups': 'MetadataGroupController.groups',
   'get /metadatagroups/:metadataGroup': 'MetadataGroupController.edit',
 
+  'get /workflow': {
+    view: 'pages/rpd'
+  },
+
   //  ╔═╗╔═╗╦  ╔═╗╔╗╔╔╦╗╔═╗╔═╗╦╔╗╔╔╦╗╔═╗
   //  ╠═╣╠═╝║  ║╣ ║║║ ║║╠═╝║ ║║║║║ ║ ╚═╗
   //  ╩ ╩╩  ╩  ╚═╝╝╚╝═╩╝╩  ╚═╝╩╝╚╝ ╩ ╚═╝
