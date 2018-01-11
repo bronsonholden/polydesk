@@ -19,6 +19,11 @@ module.exports = {
       type: 'string',
       columnType: 'date',
       allowNull: true
+    },
+    token: {
+      type: 'string',
+      isUUID: true,
+      required: true
     }
   }
 };

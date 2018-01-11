@@ -1,3 +1,5 @@
+const uuid = require('uuid/v4');
+
 module.exports = {
   friendlyName: 'Send Activation Email',
   description: 'Sends an activation email for a new user',
@@ -69,7 +71,8 @@ module.exports = {
           Activation.create({
             user: user.id,
             email: inputs.email,
-            expires: inputs.expires
+            expires: inputs.expires,
+            token: uuid()
           }).usingConnection(db).fetch().exec((err, activation) => {
             if (err) {
               return callback(err);
