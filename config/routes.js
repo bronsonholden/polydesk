@@ -66,7 +66,9 @@ module.exports.routes = {
   'post /api/logout': 'RESTAuthController.logout',
   'post /api/usergroup/add': 'UserGroupController.add',
   'post /api/metadatagroup/:metadataGroup/fields': 'MetadataGroupController.fields',
-  'put /api/metadatagroup/:metadataGroup/fields': 'MetadataGroupController.fields'
+  'put /api/metadatagroup/:metadataGroup/fields': 'MetadataGroupController.fields',
+  'post /api/activation': 'ActivationController.create',
+  'get /api/activation/:activationToken': 'ActivationController.activate'
 
   //  ╦ ╦╔═╗╔╗ ╦ ╦╔═╗╔═╗╦╔═╔═╗
   //  ║║║║╣ ╠╩╗╠═╣║ ║║ ║╠╩╗╚═╗
