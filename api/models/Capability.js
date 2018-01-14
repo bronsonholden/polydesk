@@ -22,7 +22,8 @@ module.exports = {
         'can_login',
         'view_documents',
         'upload_documents',
-        'edit_metadata_groups'
+        'edit_metadata_groups',
+        'edit_workflows'
       ]
     }
   }

@@ -19,6 +19,10 @@ module.exports = {
     groups: {
       collection: 'UserGroup',
       via: 'account'
+    },
+    workflows: {
+      collection: 'Workflow',
+      via: 'account'
     }
   }
 };

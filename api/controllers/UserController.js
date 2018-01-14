@@ -77,7 +77,8 @@ module.exports = {
         (user, account, callback) => {
           var arr = [
             'view_documents',
-            'edit_metadata_groups'
+            'edit_metadata_groups',
+            'edit_workflows'
           ].map((cap) => {
             return {
               name: cap,
