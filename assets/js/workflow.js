@@ -1,39 +1,33 @@
 $(document).ready(function () {
-  var targetElement = $('body')[0];
+  function resize() {
+    $('#target').css({
+      'min-width': '100%',
+      'min-height': '100%'
+    });
 
-  Rpd.renderNext('svg', targetElement, {
-    style: 'blender',
-    inletAcceptsMultipleLinks: true,
-    fullPage: true,
-    linkForm: 'curve'
-  });
+    requestAnimationFrame(resize);
+  }
 
-  Rpd.channeltype('workflow/exec', {
-    adapt: val => val
-  });
+  resize();
 
-  Rpd.nodetype('workflow/start', {
-    outlets: {
-      '>': {
-        alias: 'done',
-        type: 'workflow/exec'
-      }
-    }
-  });
 
-  Rpd.nodetype('workflow/end', {
-    inlets: {
-      '>': {
-        alias: 'exec',
-        type: 'workflow/exec'
-      }
-    }
-  });
+  var container = $('#target')[0];
 
-  var patch = Rpd.addPatch('Test Patch');
-  patch.addNode('workflow/start');
-  var node = patch.addNode('workflow/end');
-  console.log(node);
+  var graph = new mxGraph(container);
 
-  patch.resizeCanvas();
+  new mxRubberband(graph);
+
+  graph.setPanning(true);
+  mxEvent.disableContextMenu(container);
+
+  var parent = graph.getDefaultParent();
+
+  graph.getModel().beginUpdate();
+  try {
+    var v1 = graph.insertVertex(parent, null, 'Hello', 20, 20, 80, 30);
+    var v2 = graph.insertVertex(parent, null, 'World', 200, 150, 80, 30);
+    var e1 = graph.insertEdge(parent, null, '', v1, v2);
+  } finally {
+    graph.getModel().endUpdate();
+  }
 });
