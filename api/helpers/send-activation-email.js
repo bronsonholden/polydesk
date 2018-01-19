@@ -12,7 +12,7 @@ module.exports = {
     },
     expires: {
       type: 'number',
-      defaultsTo: 3600
+      defaultsTo: sails.config.polydesk.defaultActivationExpires
     }
   },
   exits: {
