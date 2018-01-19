@@ -47,7 +47,7 @@ module.exports = {
             }
 
             callback();
-          })
+          });
         },
         (callback) => {
           MetadataGroup.findOne({
@@ -85,7 +85,7 @@ module.exports = {
         }
 
         callback(err, metadataGroup);
-      })
+      });
     }).intercept('E_MISSING', (err) => {
       exits.noSuchAccount(err);
     }).intercept('E_METADATAGROUP_EXISTS', (err) => {
