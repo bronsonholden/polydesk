@@ -17,7 +17,8 @@ module.exports = {
   },
   exits: {
     success: {
-      description: 'Activation instance'
+      outputFriendlyName: 'Activation instance',
+      outputDescription: 'The new activation instance'
     },
     error: {
       description: 'A server error occurred'
