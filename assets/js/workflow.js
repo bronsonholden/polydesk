@@ -19,6 +19,7 @@ $(document).ready(function () {
 
   graph.setPanning(true);
   graph.setConnectable(true);
+  graph.setHtmlLabels(true);
   mxEvent.disableContextMenu(container);
 
   var parent = graph.getDefaultParent();
@@ -51,10 +52,21 @@ $(document).ready(function () {
     return graph.connectionHandler.isConnectableCell(cell);
   }
 
-  try {
-    var v1 = graph.insertVertex(parent, null, 'Hello', 20, 20, 80, 30);
-    var v2 = graph.insertVertex(parent, null, 'World', 200, 150, 80, 30);
+  graph.getLabel = function (cell) {
+    if (this.getModel().isVertex(cell)) {
+      if (this.isCellCollapsed(cell)) {
+        return '<table style="overflow: hidden;" width="100%" height="100%" border="1" cellpadding="4"><tr><th>Table1</th></tr></table>';
+      } else {
+        return '<table style="overflow: hidden;" width="100%" height="100%" border="1" cellpadding="4"><tr colspan="2"><th>Table1</th></tr><tr><td>Column1</td><td>string</td></tr></table>';
+      }
+    }
+  }
 
+  try {
+    var v1 = graph.insertVertex(parent, null, 'Hello', 20, 20, 80, 30, 'align=left');
+    var v2 = graph.insertVertex(parent, null, 'World', 200, 150, 80, 30, 'align=left');
+    graph.updateCellSize(v1);
+    graph.updateCellSize(v2);
   } finally {
     graph.getModel().endUpdate();
   }
