@@ -20,6 +20,8 @@ $(document).ready(function () {
   graph.setPanning(true);
   graph.setConnectable(true);
   graph.setHtmlLabels(true);
+  graph.setAllowDanglingEdges(false);
+
   mxEvent.disableContextMenu(container);
 
   var parent = graph.getDefaultParent();
