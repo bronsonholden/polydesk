@@ -13,7 +13,7 @@ $(document).ready(function () {
 
   var container = $('#target')[0];
 
-  var graph = new mxGraph(container);
+  var graph = new WorkflowGraph(container);
 
   new mxRubberband(graph);
 
@@ -28,14 +28,6 @@ $(document).ready(function () {
 
   graph.getModel().beginUpdate();
 
-  graph.getAllConnectionConstraints = function (terminal) {
-    if (terminal && this.model.isVertex(terminal.cell)) {
-      return [
-        new mxConnectionConstraint(new mxPoint(1, 0), false, 'Exec')
-      ];
-    }
-  }
-
   mxConstraintHandler.prototype.intersects = function (icon, point, source, existingEdge) {
     return (!source || existingEdge) || mxUtils.intersects(icon.bounds, point);
   }
@@ -47,7 +39,7 @@ $(document).ready(function () {
   }
 
   graph.connectionHandler.isConnectableCell = function (cell) {
-    return false;
+    return true;
   }
 
   mxEdgeHandler.prototype.isConnectableCell = function (cell) {
@@ -66,7 +58,13 @@ $(document).ready(function () {
 
   try {
     var v1 = graph.insertVertex(parent, null, 'Hello', 20, 20, 80, 30, 'align=left');
+    v1.setConnectable(false);
     var v2 = graph.insertVertex(parent, null, 'World', 200, 150, 80, 30, 'align=left');
+    v2.setConnectable(false);
+
+    graph.insertTerminal(v1, null, 'Trigger', 'string', false, 0, 0.25, 16, 16, 'port;image=editors/images/overlays/flash.png;align=right;imageAlign=right;spacingRight=18', true);
+    graph.insertTerminal(v2, null, 'Trigger', 'string', true, 0, 0.25, 16, 16, 'port;image=editors/images/overlays/flash.png;align=right;imageAlign=right;spacingRight=18', true);
+
     graph.updateCellSize(v1);
     graph.updateCellSize(v2);
   } finally {
