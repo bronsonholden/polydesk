@@ -1,5 +1,27 @@
 function WorkflowGraph(container) {
-  return mxGraph.call(this, container);
+  mxGraph.call(this, container);
+
+  this.connectionHandler.targetConnectImage = true;
+
+  var style;
+
+  style = new Object();
+  style[mxConstants.STYLE_FONTCOLOR] = '#774400';
+  style[mxConstants.STYLE_PERIMETER] = mxPerimeter.RectanglePerimeter;
+  style[mxConstants.STYLE_PERIMETER_SPACING] = '6';
+  style[mxConstants.STYLE_ALIGN] = mxConstants.ALIGN_LEFT;
+  style[mxConstants.STYLE_VERTICAL_ALIGN] = mxConstants.ALIGN_MIDDLE;
+  style[mxConstants.STYLE_FONTSIZE] = '10';
+  style[mxConstants.STYLE_FONTSTYLE] = 2;
+  style[mxConstants.STYLE_IMAGE_WIDTH] = '16';
+  style[mxConstants.STYLE_IMAGE_HEIGHT] = '16';
+  this.getStylesheet().putCellStyle('port', style);
+
+  style = this.getStylesheet().getDefaultEdgeStyle();
+  style[mxConstants.STYLE_LABEL_BACKGROUNDCOLOR] = '#FFFFFF';
+  style[mxConstants.STYLE_STROKEWIDTH] = '1';
+  style[mxConstants.STYLE_ROUNDED] = true;
+  style[mxConstants.STYLE_EDGE] = mxEdgeStyle.EntityRelation;
 }
 
 WorkflowGraph.prototype = Object.create(mxGraph.prototype);
