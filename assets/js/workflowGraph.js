@@ -10,12 +10,28 @@ function WorkflowGraph(container) {
   style[mxConstants.STYLE_PERIMETER] = mxPerimeter.RectanglePerimeter;
   style[mxConstants.STYLE_PERIMETER_SPACING] = '6';
   style[mxConstants.STYLE_ALIGN] = mxConstants.ALIGN_LEFT;
+  style[mxConstants.STYLE_LABEL_POSITION] = mxConstants.ALIGN_RIGHT;
   style[mxConstants.STYLE_VERTICAL_ALIGN] = mxConstants.ALIGN_MIDDLE;
   style[mxConstants.STYLE_FONTSIZE] = '10';
   style[mxConstants.STYLE_FONTSTYLE] = 2;
+  style[mxConstants.ARROW_SPACING] = 5;
   style[mxConstants.STYLE_IMAGE_WIDTH] = '16';
   style[mxConstants.STYLE_IMAGE_HEIGHT] = '16';
-  this.getStylesheet().putCellStyle('port', style);
+  this.getStylesheet().putCellStyle('targetPort', style);
+
+  style = new Object();
+  style[mxConstants.STYLE_FONTCOLOR] = '#774400';
+  style[mxConstants.STYLE_PERIMETER] = mxPerimeter.RectanglePerimeter;
+  style[mxConstants.STYLE_PERIMETER_SPACING] = '6';
+  style[mxConstants.STYLE_ALIGN] = mxConstants.ALIGN_LEFT;
+  style[mxConstants.STYLE_LABEL_POSITION] = mxConstants.ALIGN_LEFT;
+  style[mxConstants.STYLE_VERTICAL_ALIGN] = mxConstants.ALIGN_MIDDLE;
+  style[mxConstants.STYLE_FONTSIZE] = '10';
+  style[mxConstants.STYLE_FONTSTYLE] = 2;
+  style[mxConstants.ARROW_SPACING] = 5;
+  style[mxConstants.STYLE_IMAGE_WIDTH] = '16';
+  style[mxConstants.STYLE_IMAGE_HEIGHT] = '16';
+  this.getStylesheet().putCellStyle('sourcePort', style);
 
   style = this.getStylesheet().getDefaultEdgeStyle();
   style[mxConstants.STYLE_LABEL_BACKGROUNDCOLOR] = '#FFFFFF';

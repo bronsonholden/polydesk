@@ -29,14 +29,14 @@ $(document).ready(function () {
   }
 
   try {
-    var v1 = graph.insertVertex(parent, null, 'Hello', 20, 20, 100, 50);
+    var v1 = graph.insertVertex(parent, null, 'Hello', 20, 20, 150, 50);
     v1.setConnectable(false);
-    var v2 = graph.insertVertex(parent, null, 'World', 200, 150, 100, 50);
+    var v2 = graph.insertVertex(parent, null, 'World', 200, 150, 150, 50);
     v2.setConnectable(false);
 
-    var port = graph.insertTerminal(v1, null, 'Trigger', 'string', false, 1, 0.5, 16, 16, 'port;image=editors/images/overlays/flash.png;align=right;imageAlign=right;spacingRight=18', true);
+    var port = graph.insertTerminal(v1, null, 'Source', 'string', false, 1, 0.5, 16, 16, 'sourcePort;align=right', true);
     port.geometry.offset = new mxPoint(-8, -8);
-    var port = graph.insertTerminal(v2, null, 'Trigger', 'string', true, 0, 0.5, 16, 16, 'port;image=editors/images/overlays/flash.png;align=right;imageAlign=right;spacingRight=18', true);
+    var port = graph.insertTerminal(v2, null, 'Target', 'string', true, 0, 0.5, 16, 16, 'targetPort;align=left', true);
     port.geometry.offset = new mxPoint(-8, -8);
   } finally {
     graph.getModel().endUpdate();
