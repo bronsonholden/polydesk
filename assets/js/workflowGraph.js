@@ -38,6 +38,15 @@ function WorkflowGraph(container) {
   style[mxConstants.STYLE_STROKEWIDTH] = '1';
   style[mxConstants.STYLE_ROUNDED] = true;
   style[mxConstants.STYLE_EDGE] = mxEdgeStyle.EntityRelation;
+
+  var graph = this;
+
+  this.connectionHandler.addListener(mxEvent.CONNECT, function (sender, evt) {
+    var edge = evt.getProperty('cell');
+
+    // TODO: Set edge color based on port type
+    graph.setCellStyles('strokeColor', '#aabbcc', [ edge ]);
+  });
 }
 
 WorkflowGraph.prototype = Object.create(mxGraph.prototype);
