@@ -43,9 +43,11 @@ function WorkflowGraph(container) {
 
   this.connectionHandler.addListener(mxEvent.CONNECT, function (sender, evt) {
     var edge = evt.getProperty('cell');
+    var source = graph.getModel().getTerminal(edge, true);
+    var target = graph.getModel().getTerminal(edge, false);
 
     // TODO: Set edge color based on port type
-    graph.setCellStyles('strokeColor', '#aabbcc', [ edge ]);
+    graph.setCellStyles('strokeColor', WorkflowTypeColor(source.getType()), [ edge ]);
   });
 }
 
