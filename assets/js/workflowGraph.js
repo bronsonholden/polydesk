@@ -82,6 +82,7 @@ WorkflowGraph.prototype.insertTerminal = function (parent, id, value, type, inpu
   terminal.setConnectable(true);
 
   this.addCell(terminal, parent);
+  this.setCellStyles('fillColor', WorkflowTypeColor(type), [ terminal ]);
 
   return terminal;
 }
