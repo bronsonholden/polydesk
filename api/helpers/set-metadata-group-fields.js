@@ -11,6 +11,11 @@ module.exports = {
       type: 'ref',
       description: 'The ordered metadata fields to set for the metadata group',
       required: true
+    },
+    put: {
+      type: 'bool',
+      description: 'Whether to remove existing fields not present in the given array',
+      defaultsTo: false
     }
   },
   exits: {
@@ -64,8 +69,75 @@ module.exports = {
       }
     }
 
-    // Stub
+    sails.getDatastore().transaction((db, callback) => {
+      async.waterfall([
+        (callback) => {
+          MetadataGroup.findOne({
+            id: inputs.metadataGroup
+          }).usingConnection(db).exec((err, metadataGroup) => {
+            if (err) {
+              return callback(err);
+            }
 
-    exits.success();
+            if (!metadataGroup) {
+              var e = new Error('No metadata group exists with that ID');
+              e.code = 'E_MISSING';
+              return callback(e);
+            }
+
+            callback(null, metadataGroup);
+          });
+        },
+        (metadataGroup, callback) => {
+          if (inputs.put) {
+            // With new field types, this would be an async waterfall
+            // operation, but might as well be a separate helper...
+            // clear-metadata-group-fields or similar
+            MetadataStringField.destroy({
+              metadataGroup: metadataGroup.id
+            }).usingConnection(db).exec((err, removed) => {
+              if (err) {
+                return callback(err);
+              }
+
+              callback(null, metadataGroup);
+            });
+          } else {
+            callback(null, metadataGroup);
+          }
+        },
+        (metadataGroup, callback) => {
+          async.eachOfSeries(inputs.metadataFields.filter(f => f.type === 'string'), (field, idx, callback) => {
+            MetadataStringField.create({
+              metadataGroup: inputs.metadataGroup,
+              name: field.name,
+              fieldIndex: idx
+            }).usingConnection(db).exec((err) => {
+              callback(err);
+            });
+          }, (err) => {
+            if (err) {
+              return callback(err);
+            }
+
+            callback(null, metadataGroup);
+          });
+        }
+      ], (err, metadataGroup) => {
+        if (err) {
+          return callback(err);
+        }
+
+        callback(null, metadataGroup);
+      });
+    }).intercept('E_MISSING', (err) => {
+      exits.noSuchMetadataGroup(err);
+    }).intercept('E_VALIDATION', (err) => {
+      exits.fieldValidation(err);
+    }).exec((err, metadataGroup) => {
+      if (!err) {
+        exits.success(metadataGroup);
+      }
+    });
   }
 };

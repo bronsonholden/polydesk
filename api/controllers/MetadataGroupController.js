@@ -64,87 +64,29 @@ module.exports = {
     });
   },
   fields: (req, res) => {
-    sails.getDatastore().transaction((db, callback) => {
-      assert(req.session.account);
-
-      async.waterfall([
-        (callback) => {
-          if (!req.param('metadataGroup')) {
-            var e = new Error('Metadata group ID is required');
-            e.code = 'E_MISSING_PARAM';
-            return callback(e);
-          }
-
-          callback();
-        },
-        (callback) => {
-          MetadataGroup.findOne({
-            id: req.param('metadataGroup'),
-            account: req.session.account
-          }).usingConnection(db).exec((err, metadataGroup) => {
-            if (err) {
-              return callback(err);
-            }
-
-            if (!metadataGroup) {
-              var e = new Error('Metadata group does not exist in this account');
-              e.code = 'E_MISSING';
-              return callback(e);
-            }
-
-            callback(null, metadataGroup);
-          });
-        },
-        (metadataGroup, callback) => {
-          // PUT requests overwrite any existing fields for the group
-          if (req.method === 'PUT') {
-            MetadataStringField.destroy({
-              metadataGroup: metadataGroup.id
-            }).usingConnection(db).exec((err, removed) => {
-              if (err) {
-                return callback(err);
-              }
-
-              callback(null, metadataGroup);
-            });
-          } else {
-            callback(null, metadataGroup);
-          }
-        },
-        (metadataGroup, callback) => {
-          async.eachOfSeries(req.body.fields.filter(f => f.type === 'string'), (field, idx, callback) => {
-            MetadataStringField.create({
-              metadataGroup: metadataGroup.id,
-              name: field.name,
-              fieldIndex: idx
-            }).usingConnection(db).exec((err) => {
-              callback(err);
-            });
-          }, (err) => {
-            if (err) {
-              return callback(err);
-            }
-
-            callback(null, metadataGroup);
-          });
-        }
-      ], (err, metadataGroup) => {
-        if (err) {
-          return callback(err);
-        }
-
-        callback(null, metadataGroup);
-      })
-    }).intercept('E_MISSING_PARAM', (err) => {
-      res.status(422).send({
-        message: err.message
-      });
-    }).intercept('E_MISSING', (err) => {
-      res.status(404).send({
-        message: err.message
-      });
-    }).exec((err, metadataGroup) => {
-      res.status(200).send(metadataGroup);
+    sails.helpers.setMetadataGroupFields.with({
+      metadataGroup: req.param('metadataGroup'),
+      metadataFields: req.body.fields,
+      put: req.method === 'PUT'
+    }).switch({
+      error: (err) => {
+        return res.status(500).send({
+          message: err.message
+        });
+      },
+      success: (metadataGroup) => {
+        return res.status(200).send(metadataGroup);
+      },
+      noSuchMetadataGroup: (err) => {
+        return res.status(404).send({
+          message: err.message
+        });
+      },
+      fieldValidation: (err) => {
+        return res.status(422).send({
+          message: err.message
+        });
+      }
     });
   },
   create: (req, res) => {
