@@ -20,13 +20,13 @@ module.exports.policies = {
   // '*': true,
 
   'DashboardController': {
-    '*': 'isAuthenticated',
+    '*': [ 'notBusy', 'isAuthenticated' ]
   },
   'DocumentController': {
-    'browse': 'canViewDocuments'
+    'browse': [ 'notBusy', 'canViewDocuments' ]
   },
   'MetadataGroupController': {
     '*': 'isAuthenticated',
-    'create': [ 'isAuthenticated', 'canEditMetadataGroups' ]
+    'create': [ 'notBusy', 'isAuthenticated', 'canEditMetadataGroups' ]
   }
 };

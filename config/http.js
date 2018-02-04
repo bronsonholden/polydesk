@@ -9,8 +9,6 @@
  * https://sailsjs.com/config/http
  */
 
-const tooBusy = require('node-toobusy');
-
 module.exports.http = {
 
   /****************************************************************************
@@ -32,7 +30,6 @@ module.exports.http = {
     ***************************************************************************/
 
     order: [
-      'notBusy',
       'cookieParser',
       'session',
       'passportInit',
@@ -59,16 +56,6 @@ module.exports.http = {
     //   var middlewareFn = skipper({ strict: true });
     //   return middlewareFn;
     // })(),
-
-    notBusy: (req, res, next) => {
-      if (tooBusy()) {
-        res.status(503).send({
-          message: 'The server is too busy'
-        });
-      } else {
-        next();
-      }
-    },
 
     passportInit: require('passport').initialize(),
     passportSession: require('passport').session()
