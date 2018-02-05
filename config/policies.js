@@ -26,7 +26,7 @@ module.exports.policies = {
     'browse': [ 'notBusy', 'canViewDocuments' ]
   },
   'MetadataGroupController': {
-    '*': 'isAuthenticated',
+    '*': [ 'notBusy', 'isAuthenticated' ],
     'create': [ 'notBusy', 'isAuthenticated', 'canEditMetadataGroups' ]
   }
 };
