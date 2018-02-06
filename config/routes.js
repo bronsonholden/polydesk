@@ -11,9 +11,7 @@
 module.exports.routes = {
 
 
-  //  ╦ ╦╔═╗╔╗ ╔═╗╔═╗╔═╗╔═╗╔═╗
-  //  ║║║║╣ ╠╩╗╠═╝╠═╣║ ╦║╣ ╚═╗
-  //  ╚╩╝╚═╝╚═╝╩  ╩ ╩╚═╝╚═╝╚═╝
+  // Webpages
 
   /***************************************************************************
   *                                                                          *
@@ -57,10 +55,7 @@ module.exports.routes = {
   'get /metadatagroups/:metadataGroup': 'MetadataGroupController.edit',
   'post /metadatagroups/:metadataGroup/fields': 'MetadataGroupController.fields',
 
-  //  ╔═╗╔═╗╦  ╔═╗╔╗╔╔╦╗╔═╗╔═╗╦╔╗╔╔╦╗╔═╗
-  //  ╠═╣╠═╝║  ║╣ ║║║ ║║╠═╝║ ║║║║║ ║ ╚═╗
-  //  ╩ ╩╩  ╩  ╚═╝╝╚╝═╩╝╩  ╚═╝╩╝╚╝ ╩ ╚═╝
-
+  // API endpoints
   'post /api/login': 'RESTAuthController.login',
   'post /api/logout': 'RESTAuthController.logout',
   'post /api/usergroup/add': 'UserGroupController.add',
@@ -69,14 +64,6 @@ module.exports.routes = {
   'post /api/activation': 'ActivationController.create',
   'get /api/activation/:activationToken': 'ActivationController.activate'
 
-  //  ╦ ╦╔═╗╔╗ ╦ ╦╔═╗╔═╗╦╔═╔═╗
-  //  ║║║║╣ ╠╩╗╠═╣║ ║║ ║╠╩╗╚═╗
-  //  ╚╩╝╚═╝╚═╝╩ ╩╚═╝╚═╝╩ ╩╚═╝
-
-
-  //  ╔╦╗╦╔═╗╔═╗
-  //  ║║║║╚═╗║
-  //  ╩ ╩╩╚═╝╚═╝
-
-
+  // Webhooks
+  // Misc
 };
