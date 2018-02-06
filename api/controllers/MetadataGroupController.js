@@ -16,7 +16,7 @@ module.exports = {
         return res.send(err);
       }
 
-      res.view('pages/metadataGroups', {
+      res.ok('pages/metadataGroups', {
         metadataGroups: metadataGroups
       });
     });
@@ -57,17 +57,35 @@ module.exports = {
         return res.send(err);
       }
 
-      res.view('pages/metadataGroupEdit', {
+      res.ok('pages/metadataGroupEdit', {
         metadataGroup: metadataGroup,
         metadataFields: metadataFields
       });
     });
   },
   fields: (req, res) => {
+    var put = req.method === 'PUT';
+
+    // req via web app comes in malformed
+    if (!_.has(req.body, 'fields')) {
+      // Updating via web always fully replaces existing field set
+      put = true;
+
+      const params = [
+        'name',
+        'type'
+      ];
+
+      // Ugh
+      req.body = {
+        fields: _.map(_.zip.apply(null, _.map(params, param => req.body[param])), obj => _.zipObject(params, obj))
+      }
+    }
+
     sails.helpers.setMetadataGroupFields.with({
       metadataGroup: req.param('metadataGroup'),
       metadataFields: req.body.fields,
-      put: req.method === 'PUT'
+      put: put
     }).switch({
       error: (err) => {
         return res.status(500).send({
@@ -75,7 +93,10 @@ module.exports = {
         });
       },
       success: (metadataGroup) => {
-        return res.status(200).send(metadataGroup);
+        return res.ok('pages/metadataGroupEdit', {
+          metadataGroup: metadataGroup,
+          metadataFields: req.body.fields
+        });
       },
       noSuchMetadataGroup: (err) => {
         return res.status(404).send({
@@ -100,7 +121,7 @@ module.exports = {
         });
       },
       success: (metadataGroup) => {
-        return res.status(201).send(metadataGroup);
+        return res.created('pages/metadataGroups', metadataGroup);
       },
       alreadyExists: (err) => {
         return res.status(409).send({

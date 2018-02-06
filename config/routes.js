@@ -55,6 +55,7 @@ module.exports.routes = {
 
   'get /metadatagroups': 'MetadataGroupController.groups',
   'get /metadatagroups/:metadataGroup': 'MetadataGroupController.edit',
+  'post /metadatagroups/:metadataGroup/fields': 'MetadataGroupController.fields',
 
   //  ╔═╗╔═╗╦  ╔═╗╔╗╔╔╦╗╔═╗╔═╗╦╔╗╔╔╦╗╔═╗
   //  ╠═╣╠═╝║  ║╣ ║║║ ║║╠═╝║ ║║║║║ ║ ╚═╗

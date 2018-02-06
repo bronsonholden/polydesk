@@ -1,19 +1,13 @@
 <h1><%- metadataGroup.name -%></h1>
-<table>
-  <tbody>
-    <% metadataFields.forEach(function (field) { %>
-      <tr>
-        <td><input type="text" value="<%- field.name -%>"></input>
-        </td>
-        <td>
-          <select value="<%- field.type -%>">
-            <option value="string">string</option>
-            <option value="decimal">decimal</option>
-          </select>
-        </td>
-      </tr>
-    <% }); %>
-  </tbody>
-</table>
-<br>
+<form method="POST" action="<%- sails.getUrlFor('MetadataGroupController.fields').replace(':metadataGroup', metadataGroup.id) -%>">
+  <% metadataFields.forEach(function (field) { %>
+    <input type="text" name="name" value="<%- field.name -%>"></input>
+    <select name="type" value="<%- field.type -%>">
+      <option value="string">string</option>
+      <option value="decimal">decimal</option>
+    </select>
+    <br>
+  <% }); %>
+  <input type="submit">
+</form>
 <a href="<%- sails.getUrlFor('MetadataGroupController.groups') -%>">Back</a>
