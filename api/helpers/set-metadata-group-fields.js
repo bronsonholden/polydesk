@@ -71,6 +71,9 @@ module.exports = {
 
     sails.getDatastore().transaction((db, callback) => {
       async.waterfall([
+        /**
+         * Check if the metadata group exists.
+         */
         (callback) => {
           MetadataGroup.findOne({
             id: inputs.metadataGroup
@@ -88,6 +91,10 @@ module.exports = {
             callback(null, metadataGroup);
           });
         },
+        /**
+         * If method is PUT, or request came via web, delete any existing
+         * field configuration, as it will be replaced.
+         */
         (metadataGroup, callback) => {
           if (inputs.put) {
             // With new field types, this would be an async waterfall
@@ -106,6 +113,9 @@ module.exports = {
             callback(null, metadataGroup);
           }
         },
+        /**
+         * Create String fields
+         */
         (metadataGroup, callback) => {
           async.eachOfSeries(inputs.metadataFields.filter(f => f.type === 'string'), (field, idx, callback) => {
             MetadataStringField.create({

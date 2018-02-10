@@ -32,6 +32,9 @@ module.exports = {
     // unique(account, name)
     sails.getDatastore().transaction((db, callback) => {
       async.waterfall([
+        /**
+         * Check if the account exists
+         */
         (callback) => {
           Account.findOne({
             id: inputs.account
@@ -49,6 +52,10 @@ module.exports = {
             callback();
           });
         },
+        /**
+         * Check if a metadata group with the given name already exists
+         * in that account.
+         */
         (callback) => {
           MetadataGroup.findOne({
             account: inputs.account,
@@ -67,6 +74,9 @@ module.exports = {
             callback();
           });
         },
+        /**
+         * Create the metadata group
+         */
         (callback) => {
           MetadataGroup.create({
             account: inputs.account,

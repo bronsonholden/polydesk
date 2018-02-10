@@ -33,6 +33,9 @@ module.exports = {
   fn: (inputs, exits) => {
     sails.getDatastore().transaction((db, callback) => {
       async.waterfall([
+        /**
+         * Check if the user exists
+         */
         (callback) => {
           User.findOne({
             email: inputs.email
@@ -50,6 +53,9 @@ module.exports = {
             callback(null, user);
           });
         },
+        /**
+         * Check if the user is already activated
+         */
         (user, callback) => {
           Activation.findOne({
             user: user.id,
@@ -68,6 +74,9 @@ module.exports = {
             callback(null, user);
           });
         },
+        /**
+         * Create an Activation instance
+         */
         (user, callback) => {
           Activation.create({
             user: user.id,
@@ -82,6 +91,9 @@ module.exports = {
             callback(null, activation);
           });
         },
+        /**
+         * Send the activation email
+         */
         (activation, callback) => {
           // All emails are stubs for now
           callback(null, activation);
