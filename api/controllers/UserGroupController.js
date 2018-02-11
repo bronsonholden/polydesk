@@ -94,80 +94,30 @@ module.exports = {
     });
   },
   create: (req, res) => {
-    // unique(account, name)
-    sails.getDatastore().transaction((db, callback) => {
-      assert(req.session.account);
+    assert(req.session.account);
 
-      async.waterfall([
-        (callback) => {
-          if (!req.param('name')) {
-            var e = new Error('User group name is required');
-            e.code = 'E_MISSING_PARAM';
-            return callback(e);
-          }
-
-          callback();
-        },
-        (callback) => {
-          UserGroup.findOne({
-            account: req.session.account,
-            name: req.param('name')
-          }).usingConnection(db).exec((err, userGroup) => {
-            if (err) {
-              return callback(err);
-            }
-
-            if (userGroup) {
-              var e = new Error('A user group with that name already exists in this account');
-              e.code = 'E_USERGROUP_EXISTS';
-              return callback(e);
-            }
-
-            callback();
-          });
-        },
-        (callback) => {
-          UserGroup.create({
-            account: req.session.account,
-            name: req.param('name')
-          }).usingConnection(db).fetch().exec((err, userGroup) => {
-            if (err) {
-              return callback(err);
-            }
-
-            callback(null, userGroup);
-          });
-        },
-        (userGroup, callback) => {
-          Account.addToCollection(req.session.account, 'groups', userGroup.id).usingConnection(db).exec((err) => {
-            if (err) {
-              return callback(err);
-            }
-
-            callback(null, userGroup);
-          });
-        }
-      ], (err, userGroup) => {
-        if (err) {
-          return callback(err);
-        }
-
-        callback(null, userGroup);
-      });
-    }).intercept('E_MISSING_PARAM', (err) => {
-      return res.status(422).send({
-        message: err.message
-      })
-    }).intercept('E_USERGROUP_EXISTS', (err) => {
-      return res.status(409).send({
-        message: err.message
-      });
-    }).intercept((err) => {
-      return res.status(500).send({
-        message: err.message
-      });
-    }).exec((err, userGroup) => {
-      res.status(201).send(userGroup);
+    sails.helpers.createUserGroup.with({
+      account: req.session.account,
+      name: req.param('name')
+    }).switch({
+      success: (userGroup) => {
+        return res.status(201).send(userGroup);
+      },
+      error: (err) => {
+        res.status(500).send({
+          message: err.message
+        });
+      },
+      alreadyExists: (err) => {
+        return res.status(409).send({
+          message: err.message
+        });
+      },
+      noSuchAccount: (err) => {
+        return res.status(404).send({
+          message: err.message
+        });
+      }
     });
   }
 };
