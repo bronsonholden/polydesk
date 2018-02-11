@@ -9,88 +9,30 @@ const assert = require('assert');
 
 module.exports = {
   add: (req, res) => {
-    sails.getDatastore().transaction((db, callback) => {
-      assert(req.session.account);
-      assert(req.param('user'));
-      assert(req.param('userGroup'));
+    assert(req.session.account);
 
-      async.waterfall([
-        (callback) => {
-          if (!req.param('user')) {
-            var e = new Error('User ID is required');
-            e.code = 'E_MISSING_PARAM';
-            return callback(e);
-          }
-
-          if (!req.param('userGroup')) {
-            var e = new Error('User group ID is required');
-            e.code = 'E_MISSING_PARAM';
-            return callback(e);
-          }
-
-          callback();
-        },
-        (callback) => {
-          User.findOne({
-            id: req.param('user')
-          }).populate('accounts', {
-            id: req.session.account
-          }).usingConnection(db).exec((err, user) => {
-            if (err) {
-              return callback(err);
-            }
-
-            if (!user) {
-              var e = new Error('User does not exist in this account');
-              e.code = 'E_MISSING';
-              return callback(e);
-            }
-
-            callback(null, user);
-          });
-        },
-        (user, callback) => {
-          UserGroup.findOne({
-            id: req.param('userGroup'),
-            account: req.session.account
-          }).usingConnection(db).exec((err, userGroup) => {
-            if (err) {
-              return callback(err);
-            }
-
-            if (!userGroup) {
-              var e = new Error('User group does not exist in this account');
-              e.code = 'E_MISSING';
-              return callback(e);
-            }
-
-            callback(null, user, userGroup);
-          });
-        }
-      ], (err, user, userGroup) => {
-        if (err) {
-          return callback(err);
-        }
-
-        callback(null, {
-          user: user,
-          userGroup: userGroup
+    sails.helpers.addUserToGroup.with({
+      user: req.param('user'),
+      userGroup: req.param('userGroup')
+    }).switch({
+      success: (user) => {
+        return res.status(200).send(user);
+      },
+      error: (err) => {
+        return res.status(500).send({
+          message: err.message
         });
-      });
-    }).intercept('E_MISSING', (err) => {
-      res.status(404).send({
-        message: err.message
-      });
-    }).intercept('E_MISSING_PARAM', (err) => {
-      res.status(422).send({
-        message: err.message
-      });
-    }).intercept((err) => {
-      res.status(500).send({
-        message: err.message
-      });
-    }).exec((err, result) => {
-      res.status(200).send(result);
+      },
+      noSuchUser: (err) => {
+        return res.status(404).send({
+          message: err.message
+        });
+      },
+      noSuchUserGroup: (err) => {
+        return res.status(404).send({
+          message: err.message
+        });
+      }
     });
   },
   create: (req, res) => {
