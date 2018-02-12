@@ -35,6 +35,23 @@ module.exports = {
     sails.getDatastore().transaction((db, callback) => {
       async.waterfall([
         (callback) => {
+          User.findOne({
+            id: inputs.user
+          }).usingConnection(db).exec((err, user) => {
+            if (err) {
+              return callback(err);
+            }
+
+            if (!user) {
+              var e = new Error('No user exists with that ID');
+              e.code = 'E_USER_NOEXISTS';
+              return callback(e);
+            }
+
+            callback();
+          })
+        },
+        (callback) => {
           UserGroup.findOne({
             id: inputs.userGroup
           }).usingConnection(db).exec((err, userGroup) => {
@@ -44,7 +61,7 @@ module.exports = {
 
             if (!userGroup) {
               var e = new Error('No user group exists with that ID');
-              e.code = 'E_MISSING_USERGROUP';
+              e.code = 'E_USERGROUP_NOEXISTS';
               return callback(e);
             }
 
@@ -86,11 +103,11 @@ module.exports = {
 
         callback(null, user);
       });
-    }).intercept('E_MISSING_USER', (err) => {
+    }).intercept('E_USER_NOEXISTS', (err) => {
       exits.noSuchUser({
         message: err.message
       });
-    }).intercept('E_MISSING_USERGROUP', (err) => {
+    }).intercept('E_USERGROUP_NOEXISTS', (err) => {
       exits.noSuchUserGroup({
         message: err.message
       });

@@ -11,7 +11,7 @@ module.exports = {
   add: (req, res) => {
     assert(req.session.account);
 
-    sails.helpers.addUserToGroup.with({
+    sails.helpers.addUserToUserGroup.with({
       user: req.param('user'),
       userGroup: req.param('userGroup')
     }).switch({
@@ -32,6 +32,11 @@ module.exports = {
         return res.status(404).send({
           message: err.message
         });
+      },
+      notInSameAccount: (err) => {
+        return res.status(409).send({
+          message: err.message
+        });
       }
     });
   },
@@ -50,7 +55,7 @@ module.exports = {
           message: err.message
         });
       },
-      alreadyExists: (err) => {
+      userGroupAlreadyExists: (err) => {
         return res.status(409).send({
           message: err.message
         });

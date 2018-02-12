@@ -24,7 +24,7 @@ module.exports = {
     noSuchAccount: {
       description: 'No account exists with that ID'
     },
-    alreadyExists: {
+    userGroupAlreadyExists: {
       description: 'A user group with that name already exists'
     }
   },
@@ -41,7 +41,7 @@ module.exports = {
 
             if (!account) {
               var e = new Error('No account with that ID exists');
-              e.code = 'E_MISSING';
+              e.code = 'E_ACCOUNT_NOEXISTS';
               return callback(e);
             }
 
@@ -59,7 +59,7 @@ module.exports = {
 
             if (userGroup) {
               var e = new Error('A user group with that name already exists in this account');
-              e.code = 'E_USERGROUP_EXISTS';
+              e.code = 'E_USERGROUP_ALREADYEXISTS';
               return callback(e);
             }
 
@@ -85,12 +85,12 @@ module.exports = {
 
         callback(null, userGroup);
       })
-    }).intercept('E_MISSING', (err) => {
+    }).intercept('E_ACCOUNT_NOEXISTS', (err) => {
       exits.noSuchAccount({
         message: err.message
       });
-    }).intercept('E_USERGROUP_EXISTS', (err) => {
-      exits.alreadyExists({
+    }).intercept('E_USERGROUP_ALREADYEXISTS', (err) => {
+      exits.userGroupAlreadyExists({
         message: err.message
       });
     }).exec((err, userGroup) => {

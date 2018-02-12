@@ -43,7 +43,7 @@ module.exports = {
 
     if (!_.isArray(inputs.metadataFields)) {
       var e = new Error('metadataFields must be an Array');
-      e.code = 'E_VALIDATION';
+      e.code = 'E_FIELDVALIDATION';
       return exits.fieldValidation(e);
     }
 
@@ -52,19 +52,19 @@ module.exports = {
 
       if (!_.isString(field[i].type)) {
         var e = new Error(`Field property \`type\' must be a string`);
-        e.code = 'E_VALIDATION';
+        e.code = 'E_FIELDVALIDATION';
         return exits.fieldValidation(e);
       }
 
       if (fieldTypes.indexOf(field[i].type) < 0) {
         var e = new Error(`Field property \`type\' must be one of: [ ${fieldTypes.join(', ')} ]`);
-        e.code = 'E_VALIDATION';
+        e.code = 'E_FIELDVALIDATION';
         return exits.fieldValidation(e);
       }
 
       if (!_.isString(field[i].name)) {
         var e = new Error(`Field property \`name\' must be a string`);
-        e.code = 'E_VALIDATION';
+        e.code = 'E_FIELDVALIDATION';
         return exits.fieldValidation(e);
       }
     }
@@ -84,7 +84,7 @@ module.exports = {
 
             if (!metadataGroup) {
               var e = new Error('No metadata group exists with that ID');
-              e.code = 'E_MISSING';
+              e.code = 'E_METADATAGROUP_NOEXISTS';
               return callback(e);
             }
 
@@ -140,9 +140,9 @@ module.exports = {
 
         callback(null, metadataGroup);
       });
-    }).intercept('E_MISSING', (err) => {
+    }).intercept('E_METADATAGROUP_NOEXISTS', (err) => {
       exits.noSuchMetadataGroup(err);
-    }).intercept('E_VALIDATION', (err) => {
+    }).intercept('E_FIELDVALIDATION', (err) => {
       exits.fieldValidation(err);
     }).exec((err, metadataGroup) => {
       if (!err) {

@@ -46,7 +46,7 @@ module.exports = {
 
             if (!user) {
               var e = new Error('No user exists with that email address');
-              e.code = 'E_MISSING';
+              e.code = 'E_USER_NOEXISTS';
               return callback(e);
             }
 
@@ -67,7 +67,7 @@ module.exports = {
 
             if (activation) {
               var e = new Error('That user is already activated');
-              e.code = 'E_ACTIVATED';
+              e.code = 'E_ALREADYACTIVATED';
               return callback(e);
             }
 
@@ -105,9 +105,9 @@ module.exports = {
 
         callback(null, activation);
       });
-    }).intercept('E_MISSING', (err) => {
+    }).intercept('E_USER_NOEXISTS', (err) => {
       exits.noSuchUser(err);
-    }).intercept('E_ACTIVATED', (err) => {
+    }).intercept('E_ALREADYACTIVATED', (err) => {
       exits.alreadyActivated(err);
     }).intercept((err) => {
       exits.error(err);
