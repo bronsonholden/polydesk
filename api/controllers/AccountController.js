@@ -10,5 +10,35 @@ module.exports = {
     actions: false,
     shortcuts: false,
     rest: true
+  },
+  addUser: (req, res) => {
+    sails.helpers.addUserToAccount.with({
+      user: req.param('user'),
+      account: req.session.account
+    }).switch({
+      success: (user) => {
+        return res.status(200).send(user);
+      },
+      error: (err) => {
+        return res.status(500).send({
+          message: err.message
+        });
+      },
+      noSuchUser: (err) => {
+        return res.status(404).send({
+          message: err.message
+        });
+      },
+      noSuchAccount: (err) => {
+        return res.status(404).send({
+          message: err.message
+        });
+      },
+      alreadyInAccount: (err) => {
+        return res.status(409).send({
+          message: err.message
+        });
+      }
+    });
   }
 };
