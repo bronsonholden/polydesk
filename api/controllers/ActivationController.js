@@ -10,10 +10,13 @@ module.exports = {
     sails.helpers.sendActivationEmail.with({
       email: req.param('email'),
       expires: 3600
-    }).switch({
+    }).intercept('E_INVALID_ARGINS', (err) => {
+       return 'One or more validation errors occurred';
+     }).switch({
       error: (err) => {
         res.status(500).send({
-          message: err.message
+          message: err.message,
+          problems: err.problems
         });
       },
       success: (activation) => {

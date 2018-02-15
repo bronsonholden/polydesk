@@ -14,13 +14,16 @@ module.exports = {
     sails.helpers.addUserToUserGroup.with({
       user: req.param('user'),
       userGroup: req.param('userGroup')
+    }).intercept('E_INVALID_ARGINS', (err) => {
+      return 'One or more validation errors occurred';
     }).switch({
       success: (user) => {
         return res.status(200).send(user);
       },
       error: (err) => {
         return res.status(500).send({
-          message: err.message
+          message: err.message,
+          problems: err.problems
         });
       },
       noSuchUser: (err) => {
@@ -46,13 +49,16 @@ module.exports = {
     sails.helpers.createUserGroup.with({
       account: req.session.account,
       name: req.param('name')
+    }).intercept('E_INVALID_ARGINS', (err) => {
+      return 'One or more validation errors occurred';
     }).switch({
       success: (userGroup) => {
         return res.status(201).send(userGroup);
       },
       error: (err) => {
         res.status(500).send({
-          message: err.message
+          message: err.message,
+          problems: err.problems
         });
       },
       userGroupAlreadyExists: (err) => {

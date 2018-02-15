@@ -15,13 +15,16 @@ module.exports = {
     sails.helpers.addUserToAccount.with({
       user: req.param('user'),
       account: req.session.account
+    }).intercept('E_INVALID_ARGINS', (err) => {
+      return 'One or more validation errors occurred';
     }).switch({
       success: (user) => {
         return res.status(200).send(user);
       },
       error: (err) => {
         return res.status(500).send({
-          message: err.message
+          message: err.message,
+          problems: err.problems
         });
       },
       noSuchUser: (err) => {

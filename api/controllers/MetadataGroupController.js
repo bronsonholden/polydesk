@@ -86,10 +86,13 @@ module.exports = {
       metadataGroup: req.param('metadataGroup'),
       metadataFields: req.body.fields,
       put: put
+    }).intercept('E_INVALID_ARGINS', (err) => {
+      return 'One or more validation errors occurred';
     }).switch({
       error: (err) => {
         return res.status(500).send({
-          message: err.message
+          message: err.message,
+          problems: err.problems
         });
       },
       success: (metadataGroup) => {
@@ -114,10 +117,13 @@ module.exports = {
     sails.helpers.createMetadataGroup.with({
       account: req.session.account,
       name: req.param('name')
+    }).intercept('E_INVALID_ARGINS', (err) => {
+      return 'One or more validation errors occurred';
     }).switch({
       error: (err) => {
         return res.status(500).send({
-          message: err.message
+          message: err.message,
+          problems: err.problems
         });
       },
       success: (metadataGroup) => {
