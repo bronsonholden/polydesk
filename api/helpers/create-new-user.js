@@ -144,17 +144,11 @@ module.exports = {
         callback(null, user);
       });
     }).intercept('E_ACCOUNT_ALREADYEXISTS', (err) => {
-      exits.accountAlreadyExists({
-        message: err.message
-      });
+      exits.accountAlreadyExists(err);
     }).intercept('E_USER_ALREADYEXISTS', (err) => {
-      exits.userAlreadyExists({
-        message: err.message
-      });
+      exits.userAlreadyExists(err);
     }).intercept((err) => {
-      exits.error({
-        message: err.message
-      });
+      exits.error(err);
     }).exec((err, user) => {
       if (!err) {
         exits.success(user);

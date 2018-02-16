@@ -49,7 +49,7 @@ module.exports = {
             }
 
             callback();
-          })
+          });
         },
         (callback) => {
           UserGroup.findOne({
@@ -104,17 +104,11 @@ module.exports = {
         callback(null, user);
       });
     }).intercept('E_USER_NOEXISTS', (err) => {
-      exits.noSuchUser({
-        message: err.message
-      });
+      exits.noSuchUser(err);
     }).intercept('E_USERGROUP_NOEXISTS', (err) => {
-      exits.noSuchUserGroup({
-        message: err.message
-      });
+      exits.noSuchUserGroup(err);
     }).intercept('E_NOTINSAMEACCOUNT', (err) => {
-      exits.notInSameAccount({
-        message: err.message
-      });
+      exits.notInSameAccount(err);
     }).intercept((err) => {
       exits.error(err);
     }).exec((err, user) => {
@@ -123,4 +117,4 @@ module.exports = {
       }
     });
   }
-}
+};

@@ -106,21 +106,13 @@ module.exports = {
         callback(null, user);
       });
     }).intercept('E_ALREADYINACCOUNT', (err) => {
-      exits.alreadyInAccount({
-        message: err.message
-      });
+      exits.alreadyInAccount(err);
     }).intercept('E_USER_NOEXISTS', (err) => {
-      exits.noSuchUser({
-        message: err.message
-      });
+      exits.noSuchUser(err);
     }).intercept('E_ACCOUNT_NOEXISTS', (err) => {
-      exits.noSuchAccount({
-        message: err.message
-      });
+      exits.noSuchAccount(err);
     }).intercept((err) => {
-      exits.error({
-        message: err.message
-      });
+      exits.error(err);
     }).exec((err, user) => {
       if (!err) {
         exits.success(user);

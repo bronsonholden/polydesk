@@ -86,13 +86,9 @@ module.exports = {
         callback(null, userGroup);
       })
     }).intercept('E_ACCOUNT_NOEXISTS', (err) => {
-      exits.noSuchAccount({
-        message: err.message
-      });
+      exits.noSuchAccount(err);
     }).intercept('E_USERGROUP_ALREADYEXISTS', (err) => {
-      exits.userGroupAlreadyExists({
-        message: err.message
-      });
+      exits.userGroupAlreadyExists(err);
     }).exec((err, userGroup) => {
       if (!err) {
         exits.success(userGroup);
