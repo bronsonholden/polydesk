@@ -67,7 +67,7 @@ require('sails').load({
         });
       },
       (pdfs, callback) => {
-        const gs = 'gswin64c'
+        const gs = process.platform === 'win32' ? 'gswin64c' : 'gs';
 
         async.eachSeries(pdfs, (pdf, callback) => {
           exec(`${gs} -sDEVICE=pngmonod -dBATCH -dSAFER -dNOPAUSE -dDownScaleFactor=3 -r1200 -q -sPAPERSIZE=a4 -sOutputFile=./documents/p%03d.png ./documents/${pdf}`, (err, stdin, stdout) => {
