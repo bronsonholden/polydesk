@@ -45,7 +45,6 @@ require('sails').load({
   async.until(() => {
     return shutdown === true;
   }, (callback) => {
-    sails.log.info('Working...');
     async.waterfall([
       (callback) => {
         fs.readdir('./documents', (err, contents) => {
