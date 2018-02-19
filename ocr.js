@@ -2,6 +2,7 @@ const fs = require('fs');
 const async = require('async');
 const readline = require('readline');
 const exec = require('child_process').exec;
+const skipper = require('skipper-disk');
 
 require('sails').load({
   hooks: {
@@ -24,6 +25,7 @@ require('sails').load({
     views: false
   }
 }, function (err, app) {
+  var adapter = skipper();
   var shutdown = false;
 
   if (process.platform === 'win32') {
@@ -47,13 +49,13 @@ require('sails').load({
   }, (callback) => {
     async.waterfall([
       (callback) => {
-        fs.readdir('./documents', (err, contents) => {
+        adapter.ls('./documents', (err, files) => {
           if (err) {
             return callback(err);
           }
 
-          callback(null, contents.filter((file) => {
-            if (fs.lstatSync('./documents/' + file).isDirectory()) {
+          callback(null, files.filter((file) => {
+            if (fs.lstatSync(file).isDirectory()) {
               return false;
             }
 
@@ -69,13 +71,13 @@ require('sails').load({
         const gs = process.platform === 'win32' ? 'gswin64c' : 'gs';
 
         async.eachSeries(pdfs, (pdf, callback) => {
-          exec(`${gs} -sDEVICE=pngmonod -dBATCH -dSAFER -dNOPAUSE -dDownScaleFactor=3 -r1200 -q -sPAPERSIZE=a4 -sOutputFile=./documents/p%03d.png ./documents/${pdf}`, (err, stdin, stdout) => {
+          exec(`${gs} -sDEVICE=pngmonod -dBATCH -dSAFER -dNOPAUSE -dDownScaleFactor=3 -r800 -q -sPAPERSIZE=a4 -sOutputFile=./documents/p%03d.png ${pdf}`, (err, stdin, stdout) => {
             if (err) {
               return callback(err);
             }
 
             sails.log.info('Converted ' + pdf + ' to pages');
-            fs.unlink('./documents/' + pdf, callback);
+            fs.unlink(pdf, callback);
           });
         }, callback);
       },
