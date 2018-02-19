@@ -25,7 +25,6 @@
     "node-toobusy": "^0.6.3",
     "passport": "^0.4.0",
     "passport-local": "^1.0.0",
-    "pdfjs-dist": "^2.0.359",
     "sails": "^1.0.0-45",
     "sails-hook-grunt": "^2.2.1",
     "sails-hook-orm": "^2.0.0-16",
