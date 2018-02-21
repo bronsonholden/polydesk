@@ -3,7 +3,9 @@ const async = require('async');
 const readline = require('readline');
 const path = require('path');
 const exec = require('child_process').exec;
-const skipper = require('skipper-disk');
+const uuidv4 = require('uuid/v4');
+const skipperDisk = require('skipper-disk');
+const skipperS3 = require('skipper-better-s3');
 
 require('sails').load({
   hooks: {
@@ -26,8 +28,13 @@ require('sails').load({
     views: false
   }
 }, function (err, app) {
-  var adapter = skipper();
+  var disk = skipperDisk();
+  var s3 = skipperS3(sails.config.datastores.s3);
   var shutdown = false;
+
+  if (!fs.existsSync('./.tmp/documents')) {
+    fs.mkdirSync('./.tmp/documents');
+  }
 
   if (process.platform === 'win32') {
     var rl = readline.createInterface({
@@ -50,12 +57,18 @@ require('sails').load({
   }, (callback) => {
     async.waterfall([
       (callback) => {
-        adapter.ls('./documents', (err, files) => {
+        disk.ls('./.tmp/documents', (err, files) => {
           if (err) {
             return callback(err);
           }
 
           callback(null, files.filter((file) => {
+            var ext = path.extname(file);
+
+            if (ext !== '.pdf') {
+              return false;
+            }
+
             if (fs.lstatSync(file).isDirectory()) {
               return false;
             }
@@ -83,7 +96,33 @@ require('sails').load({
                 }
 
                 sails.log.info('Converted ' + pdf + ' to pages');
-                fs.unlink(pdf, callback);
+                fs.unlink(pdf, (err) => {
+                  if (err) {
+                    return callback(err);
+                  }
+
+                  callback(null, tmp);
+                });
+              });
+            },
+            (tmp, callback) => {
+              var uid = uuidv4();
+              var dirname = `documents/${uid}/pages`;
+              var receiver = s3.receive({
+                dirname: dirname
+              });
+
+              disk.ls(tmp, (err, pages) => {
+                async.eachSeries(pages, (page, callback) => {
+                  receiver.write(fs.createReadStream(page), (err) => {
+                    if (err) {
+                      return callback(err);
+                    }
+
+                    sails.log.info(`Uploaded page ${page} to s3://${sails.config.datastores.s3.bucket}/${dirname}/`);
+                    callback();
+                  });
+                }, callback);
               });
             }
           ], callback);

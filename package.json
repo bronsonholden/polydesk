@@ -30,9 +30,10 @@
     "sails-hook-orm": "^2.0.0-16",
     "sails-hook-sockets": "^1.4.0",
     "sails-postgresql": "^1.0.0-12",
+    "skipper-better-s3": "^2.2.1",
     "socket.io-redis": "5.2.0",
     "tesseract.js": "^1.0.10",
-    "uuid": "^3.1.0"
+    "uuid": "^3.2.1"
   },
   "devDependencies": {},
   "scripts": {
