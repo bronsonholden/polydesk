@@ -5,7 +5,7 @@ const path = require('path');
 const exec = require('child_process').exec;
 const uuidv4 = require('uuid/v4');
 const skipperDisk = require('skipper-disk');
-const skipperS3 = require('skipper-better-s3');
+const skipperS3 = require('skipper-better-s3-alt');
 
 require('sails').load({
   hooks: {
