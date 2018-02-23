@@ -5,7 +5,7 @@
  * @help        :: See http://sailsjs.org/#!/documentation/concepts/Controllers
  */
 
-const skipperS3 = require('skipper-better-s3-alt');
+const skipperS3 = require('skipper-better-s3');
 const path = require('path');
 const uuid = require('uuid/v5');
 
