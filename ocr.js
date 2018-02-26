@@ -29,7 +29,7 @@ require('sails').load({
   }
 }, function (err, app) {
   var disk = skipperDisk();
-  var s3 = skipperS3(sails.config.datastores.s3);
+  var s3 = skipperS3(sails.config.ocr.s3);
   var shutdown = false;
 
   if (!fs.existsSync('./.tmp/documents')) {
@@ -57,72 +57,106 @@ require('sails').load({
   }, (callback) => {
     async.waterfall([
       (callback) => {
-        disk.ls('./.tmp/documents', (err, files) => {
+        s3.ls('queue/', (err, files) => {
           if (err) {
             return callback(err);
           }
 
-          callback(null, files.filter((file) => {
-            var ext = path.extname(file);
-
-            if (ext !== '.pdf') {
-              return false;
-            }
-
-            if (fs.lstatSync(file).isDirectory()) {
-              return false;
-            }
-
-            if (file.indexOf('.pdf') < 0) {
-              return false;
-            }
-
-            return true;
-          }));
+          callback(null, files.slice(1));
         });
       },
-      (pdfs, callback) => {
+      (files, callback) => {
         const gs = process.platform === 'win32' ? 'gswin64c' : 'gs';
 
-        async.eachSeries(pdfs, (pdf, callback) => {
+        async.eachSeries(files, (file, callback) => {
           async.waterfall([
             (callback) => {
-              fs.mkdtemp(path.join(__dirname, '.tmp/ocr-'), callback);
-            },
-            (tmp, callback) => {
-              exec(`${gs} -sDEVICE=pngmonod -dBATCH -dSAFER -dNOPAUSE -dDownScaleFactor=3 -r800 -q -sPAPERSIZE=a4 -sOutputFile=${tmp}/p%03d.png ${pdf}`, (err, stdin, stdout) => {
+              var tmp = path.join(__dirname, `.tmp/ocr-${path.basename(file, '.pdf')}`);
+
+              fs.mkdir(tmp, (err) => {
                 if (err) {
                   return callback(err);
                 }
 
-                sails.log.info('Converted ' + pdf + ' to pages');
-                fs.unlink(pdf, (err) => {
-                  if (err) {
-                    return callback(err);
-                  }
+                callback(null, tmp);
+              });
+            },
+            (tmp, callback) => {
+              var local = path.join(tmp, 'document.pdf');
+              var rs = s3.read(file);
+              var ws = fs.createWriteStream(local);
 
-                  callback(null, tmp);
-                });
+              rs.pipe(ws);
+              ws.on('finish', () => {
+                callback(null, tmp, local);
+              });
+            },
+            (tmp, local, callback) => {
+              exec(`${gs} -sDEVICE=jpeg -dBATCH -dSAFER -dNOPAUSE -dDownScaleFactor=3 -r1200 -q -sPAPERSIZE=a4 -sOutputFile=${tmp}/%d.jpg ${local}`, (err, stdin, stdout) => {
+                if (err) {
+                  return callback(err);
+                }
+
+                sails.log.info('Converted ' + local + ' to pages');
+                callback(null, tmp);
+              });
+            },
+            (tmp, callback) => {
+              s3.rm(file, (err, res) => {
+                if (err) {
+                  return callback(err);
+                }
+
+                callback(null, tmp);
               });
             },
             (tmp, callback) => {
               var uid = uuidv4();
-              var dirname = `documents/${uid}/pages`;
+              var dirname = `documents/${uid}`;
               var receiver = s3.receive({
-                dirname: dirname
+                dirname: dirname + '/pages'
               });
 
               disk.ls(tmp, (err, pages) => {
-                async.eachSeries(pages, (page, callback) => {
+                async.eachSeries(pages.filter(page => path.extname(page) === '.jpg'), (page, callback) => {
                   receiver.write(fs.createReadStream(page), (err) => {
                     if (err) {
                       return callback(err);
                     }
 
-                    sails.log.info(`Uploaded page ${page} to s3://${sails.config.datastores.s3.bucket}/${dirname}/`);
+                    sails.log.info(`Uploaded page ${page} to s3://${sails.config.ocr.s3.bucket}/${dirname}/`);
                     callback();
                   });
-                }, callback);
+                }, (err) => {
+                  if (err) {
+                    return callback(err);
+                  }
+
+                  callback(null, tmp, dirname);
+                });
+              });
+            },
+            (tmp, dirname, callback) => {
+              var local = path.join(tmp, 'document.pdf');
+              var receiver = s3.receive({
+                dirname: dirname
+              });
+
+              receiver.write(fs.createReadStream(local), (err) => {
+                if (err) {
+                  return callback(err)
+                }
+
+                callback(null, local);
+              });
+            },
+            (local, callback) => {
+              fs.unlink(local, (err) => {
+                if (err) {
+                  return callback(err);
+                }
+
+                callback();
               });
             }
           ], callback);

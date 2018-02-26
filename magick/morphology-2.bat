@@ -1,0 +1,1 @@
+magick 3.jpg -morphology Open Rectangle:1x5 4.jpg

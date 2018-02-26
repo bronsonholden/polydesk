@@ -1,0 +1,1 @@
+magick 1.jpg -threshold 25%% 2.jpg
