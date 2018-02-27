@@ -18,7 +18,7 @@ require('sails').load({
     http: false,
     i18n: false,
     logger: false,
-    orm: false,
+    orm: true,
     policies: false,
     pubsub: false,
     request: false,
@@ -29,7 +29,7 @@ require('sails').load({
   }
 }, function (err, app) {
   var disk = skipperDisk();
-  var s3 = skipperS3(sails.config.ocr.s3);
+  var s3 = skipperS3(sails.config.documents.s3);
   var shutdown = false;
 
   if (!fs.existsSync('./.tmp/documents')) {
