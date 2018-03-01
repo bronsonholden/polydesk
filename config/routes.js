@@ -63,8 +63,8 @@ module.exports.routes = {
   'put /api/metadatagroup/:metadataGroup/fields': 'MetadataGroupController.fields',
   'post /api/activation': 'ActivationController.create',
   'get /api/activation/:activationToken': 'ActivationController.activate',
-  'post /api/account/users': 'AccountController.addUser'
-
+  'post /api/account/users': 'AccountController.addUser',
+  'post /api/document': 'DocumentController.upload'
   // Webhooks
   // Misc
 };

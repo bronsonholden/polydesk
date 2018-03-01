@@ -1,4 +1,29 @@
 module.exports = {
+<<<<<<< HEAD
+=======
+
+  documents: {
+    s3: {
+      key: 'AKIAIXX3BC3JACSBRQKQ',
+      secret: '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',
+      bucket: 'polydesk-dev',
+      region: 'us-west-2'
+    },
+    sqs: {
+      queue: 'ocr-polydesk-dev.fifo',
+      url: 'https://sqs.us-west-2.amazonaws.com/641163449917/ocr-polydesk-dev.fifo'
+    }
+  },
+
+
+  /**************************************************************************
+  *                                                                         *
+  * Tell Sails what database(s) it should use in development.                *
+  *                                                                         *
+  * (https://sailsjs.com/config/datastores)                                 *
+  *                                                                         *
+  **************************************************************************/
+>>>>>>> ocr
   datastores: {
     default: {
       adapter: 'sails-postgresql',
