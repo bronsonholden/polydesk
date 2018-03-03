@@ -1,6 +1,4 @@
 module.exports = {
-<<<<<<< HEAD
-=======
 
   documents: {
     s3: {
@@ -23,7 +21,7 @@ module.exports = {
   * (https://sailsjs.com/config/datastores)                                 *
   *                                                                         *
   **************************************************************************/
->>>>>>> ocr
+
   datastores: {
     default: {
       adapter: 'sails-postgresql',
