@@ -119,7 +119,9 @@ module.exports = {
         (user, account, callback) => {
             var arr = [
               'view_documents',
-              'edit_metadata_groups'
+              'add_document_metadata_sets',
+              'update_document_metadata_sets',
+              'remove_document_metadata_sets'
             ].map((cap) => {
               return {
                 name: cap,

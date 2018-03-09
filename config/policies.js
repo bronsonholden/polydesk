@@ -23,10 +23,9 @@ module.exports.policies = {
     '*': [ 'notBusy', 'isAuthenticated' ]
   },
   'DocumentController': {
-    'browse': [ 'notBusy', 'canViewDocuments' ]
-  },
-  'MetadataGroupController': {
-    '*': [ 'notBusy', 'isAuthenticated' ],
-    'create': [ 'notBusy', 'isAuthenticated', 'canEditMetadataGroups' ]
+    'browse': [ 'notBusy', 'isAuthenticated', 'canViewDocuments' ],
+    'addMetadataSet': [ 'notBusy', 'isAuthenticated', 'canAddDocumentMetadataSets' ],
+    'updateMetadataSet': [ 'notBusy', 'isAuthenticated', 'canRemoveDocumentMetadataSets' ],
+    'removeMetadataSet': [ 'notBusy', 'isAuthenticated', 'canUpdateDocumentMetadataSets' ]
   }
 };
