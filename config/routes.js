@@ -51,7 +51,10 @@ module.exports.routes = {
   'get /dashboard': 'DashboardController.dashboard',
   'get /documents': 'DocumentController.browse',
 
-  // API endpoints
+  'get /workflow': {
+    view: 'pages/rpd'
+  },
+
   'post /api/login': 'RESTAuthController.login',
   'post /api/logout': 'RESTAuthController.logout',
   'post /api/usergroup/add': 'UserGroupController.add',
