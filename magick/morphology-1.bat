@@ -1,0 +1,1 @@
+magick 2.jpg -morphology Close Diamond 3.jpg

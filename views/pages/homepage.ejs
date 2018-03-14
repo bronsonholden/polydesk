@@ -1,2 +1,8 @@
-<h1>Polydesk</h1>
-<p>Welcome to Polydesk</p>
+<div class="container">
+  <h1>Polydesk</h1>
+  <p>Welcome to Polydesk</p>
+  <ul>
+    <li><a href="<%- sails.getUrlFor('AuthController.login') -%>">Login</a></li>
+    <li><a href="<%- sails.getUrlFor('UserController.create') -%>">Signup</a></li>
+  </ul>
+</div>

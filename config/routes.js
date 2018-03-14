@@ -11,9 +11,7 @@
 module.exports.routes = {
 
 
-  //  ╦ ╦╔═╗╔╗ ╔═╗╔═╗╔═╗╔═╗╔═╗
-  //  ║║║║╣ ╠╩╗╠═╝╠═╣║ ╦║╣ ╚═╗
-  //  ╚╩╝╚═╝╚═╝╩  ╩ ╩╚═╝╚═╝╚═╝
+  // Webpages
 
   /***************************************************************************
   *                                                                          *
@@ -24,9 +22,7 @@ module.exports.routes = {
   *                                                                          *
   ***************************************************************************/
 
-  '/': {
-    view: 'pages/homepage'
-  },
+  '/': 'HomepageController.home',
 
   /***************************************************************************
   *                                                                          *
@@ -39,21 +35,36 @@ module.exports.routes = {
   *                                                                          *
   ***************************************************************************/
 
+  'get /login': {
+    view: 'pages/login'
+  },
 
-  //  ╔═╗╔═╗╦  ╔═╗╔╗╔╔╦╗╔═╗╔═╗╦╔╗╔╔╦╗╔═╗
-  //  ╠═╣╠═╝║  ║╣ ║║║ ║║╠═╝║ ║║║║║ ║ ╚═╗
-  //  ╩ ╩╩  ╩  ╚═╝╝╚╝═╩╝╩  ╚═╝╩╝╚╝ ╩ ╚═╝
+  'get /signup': {
+    view: 'pages/signup'
+  },
 
+  'post /login': 'AuthController.login',
+  '/logout': 'AuthController.logout',
 
+  'post /signup': 'UserController.create',
 
-  //  ╦ ╦╔═╗╔╗ ╦ ╦╔═╗╔═╗╦╔═╔═╗
-  //  ║║║║╣ ╠╩╗╠═╣║ ║║ ║╠╩╗╚═╗
-  //  ╚╩╝╚═╝╚═╝╩ ╩╚═╝╚═╝╩ ╩╚═╝
+  'get /dashboard': 'DashboardController.dashboard',
+  'get /documents': 'DocumentController.browse',
 
+  'get /workflow': {
+    view: 'pages/rpd'
+  },
 
-  //  ╔╦╗╦╔═╗╔═╗
-  //  ║║║║╚═╗║
-  //  ╩ ╩╩╚═╝╚═╝
-
-
+  'post /api/login': 'RESTAuthController.login',
+  'post /api/logout': 'RESTAuthController.logout',
+  'post /api/usergroup/add': 'UserGroupController.add',
+  'post /api/activation': 'ActivationController.create',
+  'get /api/activation/:activationToken': 'ActivationController.activate',
+  'post /api/account/users': 'AccountController.addUser',
+  'post /api/document': 'DocumentController.upload',
+  'post /api/document/:documentId/metadata': 'DocumentController.updateMetadataSet',
+  'put /api/document/:documentId/metadata': 'DocumentController.addMetadataSet',
+  'delete /api/document/:documentId/metadata': 'DocumentController.removeMetadataSet'
+  // Webhooks
+  // Misc
 };

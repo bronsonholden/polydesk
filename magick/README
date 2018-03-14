@@ -1,0 +1,3 @@
+Temporary files. These will be integrated into a customizable script or set
+of scripts to preprocess documents into OCR-friendly images before sending
+them through Tesseract.
