@@ -51,20 +51,17 @@ module.exports.routes = {
   'get /dashboard': 'DashboardController.dashboard',
   'get /documents': 'DocumentController.browse',
 
-  'get /metadatagroups': 'MetadataGroupController.groups',
-  'get /metadatagroups/:metadataGroup': 'MetadataGroupController.edit',
-  'post /metadatagroups/:metadataGroup/fields': 'MetadataGroupController.fields',
-
   // API endpoints
   'post /api/login': 'RESTAuthController.login',
   'post /api/logout': 'RESTAuthController.logout',
   'post /api/usergroup/add': 'UserGroupController.add',
-  'post /api/metadatagroup/:metadataGroup/fields': 'MetadataGroupController.fields',
-  'put /api/metadatagroup/:metadataGroup/fields': 'MetadataGroupController.fields',
   'post /api/activation': 'ActivationController.create',
   'get /api/activation/:activationToken': 'ActivationController.activate',
   'post /api/account/users': 'AccountController.addUser',
-  'post /api/document': 'DocumentController.upload'
+  'post /api/document': 'DocumentController.upload',
+  'post /api/document/:documentId/metadata': 'DocumentController.updateMetadataSet',
+  'put /api/document/:documentId/metadata': 'DocumentController.addMetadataSet',
+  'delete /api/document/:documentId/metadata': 'DocumentController.removeMetadataSet'
   // Webhooks
   // Misc
 };

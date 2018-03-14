@@ -27,8 +27,8 @@ module.exports = {
 
     Document.create({
       name: path.basename(filename, ext),
-      filetype: ext
-    }).fetch().exec((err, document) => {
+      fileType: ext
+    }).fetch().exec((err, file) => {
       if (err) {
         return res.status(500).send({
           message: err.message
@@ -42,7 +42,7 @@ module.exports = {
         bucket: sails.config.s3.bucket,
         region: 'us-west-2',
         s3params: {
-          Key: 'queue/' + document.id + '.pdf'
+          Key: 'queue/' + file.id + '.pdf'
         }
       }, (err, files) => {
         if (err) {
@@ -53,6 +53,74 @@ module.exports = {
 
         res.status(200).send(files);
       });
+    });
+  },
+  addMetadataSet: (req, res) => {
+    sails.helpers.addObjectMetadataSet.with({
+      account: req.session.account,
+      object: req.param('documentId'),
+      objectType: 'document',
+      setName: req.body.setName,
+      metadata: req.body.metadata
+    }).switch({
+      success: (data) => {
+        return res.status(201).send(data);
+      },
+      error: (err) => {
+        return res.status(500).send({
+          message: err.message
+        });
+      },
+      invalidObjectType: (err) => {
+        return res.status(403).send({
+          message: err.message
+        });
+      }
+    });
+  },
+  updateMetadataSet: (req, res) => {
+    sails.helpers.updateObjectMetadataSet.with({
+      account: req.session.account,
+      object: req.param('documentId'),
+      objectType: 'document',
+      setName: req.body.setName,
+      metadata: req.body.metadata
+    }).switch({
+      success: (data) => {
+        return res.status(200).send(data);
+      },
+      error: (err) => {
+        return res.status(500).send({
+          message: err.message
+        });
+      },
+      invalidObjectType: (err) => {
+        return res.status(403).send({
+          message: err.message
+        });
+      }
+    });
+  },
+  removeMetadataSet: (req, res) => {
+    sails.helpers.removeObjectMetadataSet.with({
+      account: req.session.account,
+      object: req.param('documentId'),
+      objectType: 'document',
+      setName: req.body.setName
+    }).switch({
+      success: (data) => {
+        return res.status(200).send(data);
+      },
+      error: (err) => {
+        return res.status(500).send({
+          message: err.message
+        });
+      },
+      invalidObjectType: (err) => {
+        return res.status(403).send({
+          message: err.message
+        });
+      }
     });
   }
 };

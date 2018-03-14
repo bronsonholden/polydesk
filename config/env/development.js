@@ -13,6 +13,16 @@ module.exports = {
     }
   },
 
+  metadata: {
+    arangoDb: {
+      url: 'http://localhost:8529',
+      username: 'root',
+      password: 'arango',
+      database: 'metadata-polydesk-dev',
+      collection: 'metadata-sets-%account'
+    }
+  },
+
 
   /**************************************************************************
   *                                                                         *
