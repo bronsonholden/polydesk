@@ -1,9 +1,14 @@
-const AWS = require('aws-sdk');
+const arangoDb = require('arangojs');
 
 module.exports = {
   friendlyName: 'Remove Object Metadata Set',
   description: 'Remove a specified set of metadata from an object, regardless of content',
   inputs: {
+    account: {
+      type: 'number',
+      required: true,
+      description: 'The account ID to create metadata for'
+    },
     object: {
       type: 'number',
       required: true,
@@ -46,34 +51,31 @@ module.exports = {
       prefix = 'f';
       break;
     default:
-      console.log('asdf');
       return exits.invalidObjectType(new Error('The specified object type is invalid'));
     }
 
-    var dynamoDb = new AWS.DynamoDB({
-      accessKeyId: sails.config.metadata.dynamoDb.key,
-      secretAccessKey: sails.config.metadata.dynamoDb.secret,
-      region: 'us-west-2'
+    var db = new arangoDb.Database({
+      url: sails.config.metadata.arangoDb.url
     });
 
-    dynamoDb.deleteItem({
-      TableName: sails.config.metadata.dynamoDb.table,
-      Key: {
-        objectUid: {
-          S: `${prefix}${inputs.object}`
-        },
-        setName: {
-          S: inputs.setName
-        }
-      },
-      ReturnConsumedCapacity: 'TOTAL',
-      ReturnValues: 'ALL_OLD'
-    }, (err, data) => {
-      if (err) {
-        return exits.error(err);
-      }
+    db.useDatabase(sails.config.metadata.arangoDb.database);
+    db.useBasicAuth(sails.config.metadata.arangoDb.username, sails.config.metadata.arangoDb.password);
 
-      exits.success(data);
+    var collectionName = sails.config.metadata.arangoDb.collection.replace('%account', inputs.account);
+
+    const collection = db.collection(collectionName);
+
+    collection.remove({
+      _key: `${prefix}${inputs.object}`
+    }, {
+      waitForSync: true,
+      silent: false
+    }).catch((err) => {
+      exits.error(new Error(err.message));
+    }).then((document) => {
+      if (document) {
+        exits.success(document);
+      }
     });
   }
 };

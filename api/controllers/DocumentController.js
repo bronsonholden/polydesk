@@ -57,6 +57,7 @@ module.exports = {
   },
   addMetadataSet: (req, res) => {
     sails.helpers.addObjectMetadataSet.with({
+      account: req.session.account,
       object: req.param('documentId'),
       objectType: 'document',
       setName: req.body.setName,
@@ -66,15 +67,20 @@ module.exports = {
         return res.status(201).send(data);
       },
       error: (err) => {
-        return res.status(500).send(err);
+        return res.status(500).send({
+          message: err.message
+        });
       },
       invalidObjectType: (err) => {
-        return res.status(403).send(err);
+        return res.status(403).send({
+          message: err.message
+        });
       }
     });
   },
   updateMetadataSet: (req, res) => {
     sails.helpers.updateObjectMetadataSet.with({
+      account: req.session.account,
       object: req.param('documentId'),
       objectType: 'document',
       setName: req.body.setName,
@@ -84,15 +90,20 @@ module.exports = {
         return res.status(200).send(data);
       },
       error: (err) => {
-        return res.status(500).send(err);
+        return res.status(500).send({
+          message: err.message
+        });
       },
       invalidObjectType: (err) => {
-        return res.status(403).send(err);
+        return res.status(403).send({
+          message: err.message
+        });
       }
     });
   },
   removeMetadataSet: (req, res) => {
     sails.helpers.removeObjectMetadataSet.with({
+      account: req.session.account,
       object: req.param('documentId'),
       objectType: 'document',
       setName: req.body.setName
@@ -106,7 +117,9 @@ module.exports = {
         });
       },
       invalidObjectType: (err) => {
-        return res.status(403).send(err);
+        return res.status(403).send({
+          message: err.message
+        });
       }
     });
   }

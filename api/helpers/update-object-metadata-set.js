@@ -1,9 +1,14 @@
-const AWS = require('aws-sdk');
+const arangoDb = require('arangojs');
 
 module.exports = {
   friendlyName: 'Update Object Metadata Set',
   description: 'Updates a set of metadata for an object, leaving unspecified attributes unchanged and adding any new ones',
   inputs: {
+    account: {
+      type: 'number',
+      required: true,
+      description: 'The account ID to create metadata for'
+    },
     object: {
       type: 'number',
       required: true,
@@ -54,67 +59,43 @@ module.exports = {
       return exits.invalidObjectType(new Error('The specified object type is invalid'));
     }
 
-    var dynamoDb = new AWS.DynamoDB({
-      accessKeyId: sails.config.metadata.dynamoDb.key,
-      secretAccessKey: sails.config.metadata.dynamoDb.secret,
-      region: 'us-west-2'
+    var db = new arangoDb.Database({
+      url: sails.config.metadata.arangoDb.url
     });
 
-    var expressions = [ ];
-    var names = { };
-    var values = { };
+    db.useDatabase(sails.config.metadata.arangoDb.database);
+    db.useBasicAuth(sails.config.metadata.arangoDb.username, sails.config.metadata.arangoDb.password);
 
-    Object.keys(inputs.metadata).map((key, idx) => {
-      if (typeof(key) === 'string') {
-        var dkey = '#' + key;
-        var val = inputs.metadata[key];
+    var collectionName = sails.config.metadata.arangoDb.collection.replace('%account', inputs.account);
 
-        names['#' + key] = `$${key}`;
+    const collection = db.collection(collectionName);
+    var document = {};
 
-        switch (typeof(val)) {
-        case 'string':
-          values[':' + key] = {
-            S: val
-          };
-          break;
-        case 'boolean':
-          values[':' + key] = {
-            BOOL: val
-          };
-          break;
-        case 'number':
-          values[':' + key] = {
-            N: `${val}`
-          };
-          break;
-        default:
-          return;
-        }
+    Object.keys(inputs.metadata).forEach((key, index) => {
+      var val = inputs.metadata[key];
 
-        expressions.push(`#${key} = :${key}`);
+      switch (typeof(val)) {
+      case 'string':
+      case 'boolean':
+      case 'number':
+        document[key] = val;
+        break;
+      default:
+        return;
       }
     });
 
-    dynamoDb.updateItem({
-      TableName: sails.config.metadata.dynamoDb.table,
-      Key: {
-        objectUid: {
-          S: `${prefix}${inputs.object}`
-        },
-        setName: {
-          S: inputs.setName
-        }
-      },
-      UpdateExpression: 'SET ' + expressions.join(', '),
-      ExpressionAttributeNames: names,
-      ExpressionAttributeValues: values,
-      ReturnValues: 'ALL_NEW'
-    }, (err, data) => {
-      if (err) {
-        return exits.error(err);
+    collection.replace({
+      _key: `${prefix}${inputs.object}`
+    }, document, {
+      waitForSync: true,
+      silent: false
+    }).catch((err) => {
+      exits.error(new Error(err.message));
+    }).then((document) => {
+      if (document) {
+        exits.success(document);
       }
-
-      exits.success(data);
     });
   }
 };

@@ -25,7 +25,7 @@ module.exports.policies = {
   'DocumentController': {
     'browse': [ 'notBusy', 'isAuthenticated', 'canViewDocuments' ],
     'addMetadataSet': [ 'notBusy', 'isAuthenticated', 'canAddDocumentMetadataSets' ],
-    'updateMetadataSet': [ 'notBusy', 'isAuthenticated', 'canRemoveDocumentMetadataSets' ],
-    'removeMetadataSet': [ 'notBusy', 'isAuthenticated', 'canUpdateDocumentMetadataSets' ]
+    'updateMetadataSet': [ 'notBusy', 'isAuthenticated', 'canUpdateDocumentMetadataSets' ],
+    'removeMetadataSet': [ 'notBusy', 'isAuthenticated', 'canRemoveDocumentMetadataSets' ]
   }
 };

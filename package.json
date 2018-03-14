@@ -17,6 +17,7 @@
     "accelerate"
   ],
   "dependencies": {
+    "arangojs": "^6.2.0",
     "async": "2.0.1",
     "bcryptjs": "^2.4.3",
     "connect-redis": "3.2.0",

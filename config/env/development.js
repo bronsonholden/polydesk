@@ -14,10 +14,12 @@ module.exports = {
   },
 
   metadata: {
-    dynamoDb: {
-      key: 'AKIAITDRARWJDOWG67GA',
-      secret: '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',
-      table: 'metadata-sets-polydesk-dev'
+    arangoDb: {
+      url: 'http://localhost:8529',
+      username: 'root',
+      password: 'arango',
+      database: 'metadata-polydesk-dev',
+      collection: 'metadata-sets-%account'
     }
   },
 
