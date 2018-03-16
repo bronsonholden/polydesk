@@ -55,6 +55,13 @@ module.exports.routes = {
     view: 'pages/rpd'
   },
 
+  'get /viewer': {
+    view: 'pages/viewer',
+    locals: {
+      layout: 'layouts/viewer'
+    }
+  },
+
   'post /api/login': 'RESTAuthController.login',
   'post /api/logout': 'RESTAuthController.logout',
   'post /api/usergroup/add': 'UserGroupController.add',
