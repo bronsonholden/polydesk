@@ -13156,9 +13156,11 @@ function(e) {
                 toggleButton: document.getElementById("sidebarToggle"),
                 thumbnailButton: document.getElementById("viewThumbnail"),
                 outlineButton: document.getElementById("viewOutline"),
+                metadataButton: document.getElementById("viewMetadata"),
                 attachmentsButton: document.getElementById("viewAttachments"),
                 thumbnailView: document.getElementById("thumbnailView"),
                 outlineView: document.getElementById("outlineView"),
+                metadataView: document.getElementById("metadataView"),
                 attachmentsView: document.getElementById("attachmentsView")
             },
             findBar: {
@@ -13306,14 +13308,15 @@ function(e) {
             NONE: 0,
             THUMBS: 1,
             OUTLINE: 2,
-            ATTACHMENTS: 3
+            ATTACHMENTS: 3,
+            METADATA: 4
         },
         l = function() {
             function e(t) {
                 var n = arguments.length > 1 && void 0 !== arguments[1] ? arguments[1] : i.NullL10n;
                 ! function(e, t) {
                     if (!(e instanceof t)) throw new TypeError("Cannot call a class as a function")
-                }(this, e), this.isOpen = !1, this.active = s.THUMBS, this.isInitialViewSet = !1, this.onToggled = null, this.pdfViewer = t.pdfViewer, this.pdfThumbnailViewer = t.pdfThumbnailViewer, this.pdfOutlineViewer = t.pdfOutlineViewer, this.mainContainer = t.mainContainer, this.outerContainer = t.outerContainer, this.eventBus = t.eventBus, this.toggleButton = t.toggleButton, this.thumbnailButton = t.thumbnailButton, this.outlineButton = t.outlineButton, this.attachmentsButton = t.attachmentsButton, this.thumbnailView = t.thumbnailView, this.outlineView = t.outlineView, this.attachmentsView = t.attachmentsView, this.disableNotification = t.disableNotification || !1, this.l10n = n, this._addEventListeners()
+                }(this, e), this.isOpen = !1, this.active = s.THUMBS, this.isInitialViewSet = !1, this.onToggled = null, this.pdfViewer = t.pdfViewer, this.pdfThumbnailViewer = t.pdfThumbnailViewer, this.pdfOutlineViewer = t.pdfOutlineViewer, this.mainContainer = t.mainContainer, this.outerContainer = t.outerContainer, this.eventBus = t.eventBus, this.toggleButton = t.toggleButton, this.thumbnailButton = t.thumbnailButton, this.outlineButton = t.outlineButton, this.attachmentsButton = t.attachmentsButton, this.metadataButton = t.metadataButton, this.thumbnailView = t.thumbnailView, this.outlineView = t.outlineView, this.attachmentsView = t.attachmentsView, this.metadataView = t.metadataView, this.disableNotification = t.disableNotification || !1, this.l10n = n, this._addEventListeners()
             }
             return r(e, [{
                 key: "reset",
@@ -13340,15 +13343,48 @@ function(e) {
                             r = !1;
                         switch (e) {
                             case s.THUMBS:
-                                this.thumbnailButton.classList.add("toggled"), this.outlineButton.classList.remove("toggled"), this.attachmentsButton.classList.remove("toggled"), this.thumbnailView.classList.remove("hidden"), this.outlineView.classList.add("hidden"), this.attachmentsView.classList.add("hidden"), this.isOpen && n && (this._updateThumbnailViewer(), r = !0);
+                                this.thumbnailButton.classList.add("toggled");
+                                this.outlineButton.classList.remove("toggled");
+                                this.attachmentsButton.classList.remove("toggled");
+                                this.thumbnailView.classList.remove("hidden");
+                                this.metadataButton.classList.remove("toggled");
+                                this.outlineView.classList.add("hidden");
+                                this.attachmentsView.classList.add("hidden");
+                                this.metadataView.classList.add("hidden");
+                                this.isOpen && n && (this._updateThumbnailViewer(), r = !0);
                                 break;
                             case s.OUTLINE:
                                 if (this.outlineButton.disabled) return;
-                                this.thumbnailButton.classList.remove("toggled"), this.outlineButton.classList.add("toggled"), this.attachmentsButton.classList.remove("toggled"), this.thumbnailView.classList.add("hidden"), this.outlineView.classList.remove("hidden"), this.attachmentsView.classList.add("hidden");
+                                this.thumbnailButton.classList.remove("toggled");
+                                this.outlineButton.classList.add("toggled");
+                                this.attachmentsButton.classList.remove("toggled");
+                                this.metadataButton.classList.remove("toggled");
+                                this.thumbnailView.classList.add("hidden");
+                                this.outlineView.classList.remove("hidden");
+                                this.attachmentsView.classList.add("hidden");
+                                this.metadataView.classList.add("hidden");
                                 break;
                             case s.ATTACHMENTS:
                                 if (this.attachmentsButton.disabled) return;
-                                this.thumbnailButton.classList.remove("toggled"), this.outlineButton.classList.remove("toggled"), this.attachmentsButton.classList.add("toggled"), this.thumbnailView.classList.add("hidden"), this.outlineView.classList.add("hidden"), this.attachmentsView.classList.remove("hidden");
+                                this.thumbnailButton.classList.remove("toggled");
+                                this.outlineButton.classList.remove("toggled");
+                                this.attachmentsButton.classList.add("toggled");
+                                this.metadataButton.classList.remove("toggled");
+                                this.thumbnailView.classList.add("hidden");
+                                this.outlineView.classList.add("hidden");
+                                this.attachmentsView.classList.remove("hidden");
+                                this.metadataView.classList.add("hidden");
+                                break;
+                            case s.METADATA:
+                                // METADATA VIEW
+                                this.thumbnailButton.classList.remove("toggled");
+                                this.outlineButton.classList.remove("toggled");
+                                this.attachmentsButton.classList.remove("toggled");
+                                this.metadataButton.classList.add("toggled");
+                                this.thumbnailView.classList.add("hidden");
+                                this.outlineView.classList.add("hidden");
+                                this.attachmentsView.classList.add("hidden");
+                                this.metadataView.classList.remove("hidden");
                                 break;
                             default:
                                 return void console.error('PDFSidebar_switchView: "' + e + '" is an unsupported value.')
@@ -13451,6 +13487,8 @@ function(e) {
                         e.pdfOutlineViewer.toggleOutlineTree()
                     }), this.attachmentsButton.addEventListener("click", function() {
                         e.switchView(s.ATTACHMENTS)
+                    }), this.metadataButton.addEventListener("click", function() {
+                        e.switchView(s.METADATA)
                     }), this.eventBus.on("outlineloaded", function(t) {
                         var n = t.outlineCount;
                         e.outlineButton.disabled = !n, n ? e._showUINotification(s.OUTLINE) : e.active === s.OUTLINE && e.switchView(s.THUMBS)
@@ -14786,7 +14824,7 @@ function(e) {
         a = n(0),
         o = n(3),
         s = 1,
-        l = 98,
+        l = 286,
         u = function() {
             var e = null;
             return {
