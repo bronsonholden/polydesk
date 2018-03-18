@@ -12,6 +12,50 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+ 
+ #metadataView {
+  position: absolute;
+  width: 300px;
+  top: 0;
+  bottom: 0;
+  padding: 10px 0px 0;
+  overflow: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+#metadataView .metadataSet:first-child {
+  border-top: 0px solid #7f7f7f;
+}
+
+#metadataView .metadataSet:last-child {
+  border-bottom: 1px solid #7f7f7f;
+}
+
+.metadataTable {
+  width: 100%;
+  margin: 10px 0px 10px 0px;
+}
+
+.metadataTable tr {
+  width: 100%;
+}
+
+.metadataTable td {
+  padding: 0px 10px 5px 10px;
+}
+
+.metadataSet {
+  border-top: 1px solid #7f7f7f;
+  width: 100%;
+}
+
+.metadataTable .metadataField {
+  height: 25px;
+  box-sizing: border-box;
+  border-radius: 3px;
+  border: 1px solid #9f9f9f;
+  padding: 0px 3px 0px 3px;
+}
 
 .textLayer {
   position: absolute;
@@ -467,7 +511,7 @@ select {
   position: absolute;
   top: 0;
   bottom: 0;
-  width: 400px;
+  width: 300px;
   visibility: hidden;
   -webkit-transition-duration: 200ms;
   -webkit-transition-timing-function: ease;
@@ -478,12 +522,12 @@ select {
 html[dir='ltr'] #sidebarContainer {
   -webkit-transition-property: left;
   transition-property: left;
-  left: -400px;
+  left: -300px;
 }
 html[dir='rtl'] #sidebarContainer {
   -webkit-transition-property: right;
   transition-property: right;
-  right: -400px;
+  right: -300px;
 }
 
 #outerContainer.sidebarMoving > #sidebarContainer,
@@ -512,12 +556,12 @@ html[dir='rtl'] #outerContainer.sidebarOpen > #sidebarContainer {
 html[dir='ltr'] #outerContainer.sidebarOpen > #mainContainer {
   -webkit-transition-property: left;
   transition-property: left;
-  left: 400px;
+  left: 300px;
 }
 html[dir='rtl'] #outerContainer.sidebarOpen > #mainContainer {
   -webkit-transition-property: right;
   transition-property: right;
-  right: 400px;
+  right: 300px;
 }
 
 #sidebarContent {
@@ -526,7 +570,7 @@ html[dir='rtl'] #outerContainer.sidebarOpen > #mainContainer {
   overflow: auto;
   -webkit-overflow-scrolling: touch;
   position: absolute;
-  width: 400px;
+  width: 300px;
   background-color: hsla(0,0%,0%,.1);
 }
 html[dir='ltr'] #sidebarContent {
@@ -568,22 +612,26 @@ html[dir='rtl'] #viewerContainer {
 }
 
 #toolbarSidebar {
-  width: 400px;
+  width: 300px;
   height: 32px;
-  background-color: #8f8f8f; /* fallback */
+  background-color: #828282; /* fallback */
   background-image: url('/images/texture.png');
 }
 html[dir='ltr'] #toolbarSidebar {
+        /*
   box-shadow: inset -1px 0 0 rgba(0, 0, 0, 0.25),
               inset 0 -1px 0 hsla(0,0%,100%,.05),
               0 1px 0 hsla(0,0%,0%,.15),
               0 0 1px hsla(0,0%,0%,.1);
+              */
 }
-html[dir='rtl'] #toolbarSidebar {
+html[dir='rtl'] #to {
+        /*
   box-shadow: inset 1px 0 0 rgba(0, 0, 0, 0.25),
               inset 0 1px 0 hsla(0,0%,100%,.05),
               0 1px 0 hsla(0,0%,0%,.15),
               0 0 1px hsla(0,0%,0%,.1);
+              */
 }
 
 #toolbarContainer, .findbar, .secondaryToolbar {
@@ -593,18 +641,22 @@ html[dir='rtl'] #toolbarSidebar {
   background-image: url('/images/texture.png');;
 }
 html[dir='ltr'] #toolbarContainer, .findbar, .secondaryToolbar {
+  /*
   box-shadow: inset 1px 0 0 hsla(0,0%,100%,.08),
               inset 0 1px 1px hsla(0,0%,0%,.15),
               inset 0 -1px 0 hsla(0,0%,100%,.05),
               0 1px 0 hsla(0,0%,0%,.15),
               0 1px 1px hsla(0,0%,0%,.1);
+              */
 }
 html[dir='rtl'] #toolbarContainer, .findbar, .secondaryToolbar {
+  /*
   box-shadow: inset -1px 0 0 hsla(0,0%,100%,.08),
               inset 0 1px 1px hsla(0,0%,0%,.15),
               inset 0 -1px 0 hsla(0,0%,100%,.05),
               0 1px 0 hsla(0,0%,0%,.15),
               0 1px 1px hsla(0,0%,0%,.1);
+              */
 }
 
 #toolbarViewer {
@@ -740,7 +792,7 @@ html[dir='rtl'] .secondaryToolbar {
 
 #secondaryToolbarButtonContainer {
   max-width: 200px;
-  max-height: 400px;
+  max-height: 300px;
   overflow-y: auto;
   -webkit-overflow-scrolling: touch;
   margin-bottom: -4px;
@@ -1446,21 +1498,10 @@ html[dir='rtl'] .verticalToolbarSeparator {
 
 #thumbnailView {
   position: absolute;
-  width: 300px;
+  width: 200px;
   top: 0;
   bottom: 0;
-  margin-top: 1px;
   padding: 20px 50px 0;
-  overflow: auto;
-  -webkit-overflow-scrolling: touch;
-}
-
-#metadataView {
-  position: absolute;
-  width: 300px;
-  top: 0;
-  bottom: 0;
-  padding: 10px 40px 0;
   overflow: auto;
   -webkit-overflow-scrolling: touch;
 }
@@ -2230,7 +2271,8 @@ html[dir='rtl'] #documentPropertiesOverlay .row > * {
   }
   #sidebarContent {
     top: 32px;
-    background-color: #8f8f8f;
+    background-color: #aaaaaa;
+    background-image: url('/images/texture.png');
   }
 
   html[dir='ltr'] #outerContainer.sidebarOpen > #mainContainer {
