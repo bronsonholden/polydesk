@@ -58,13 +58,7 @@ module.exports.routes = {
     }
   },
 
-  'get /viewer/:document': {
-    view: 'pages/viewer',
-    skipAssets: true,
-    locals: {
-      layout: 'layouts/viewer'
-    }
-  },
+  'get /viewer/:document': 'DocumentController.view',
 
   'post /api/login': 'RESTAuthController.login',
   'post /api/logout': 'RESTAuthController.logout',

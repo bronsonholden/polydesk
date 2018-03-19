@@ -11379,7 +11379,7 @@ function(e) {
             q = zz.indexOf('?'),
             p = Math.min(a > -1 ? a : zz.length, q > -1 ? q : zz.length),
             r = (0, M.parseQueryString)(n);
-        t = "file" in r ? r.file : '/documents/' + zz.substring(zz.lastIndexOf('/') + 1, p) + '.pdf', oe(t);
+        t = document.getElementById('mainContainer').getAttribute('signed-url'), console.log(t), oe(t);
         var i = [],
             a = document.createElement("input");
         if (a.id = e.openFileInputName, a.className = "fileInput", a.setAttribute("type", "file"), a.oncontextmenu = M.noContextMenuHandler, document.body.appendChild(a), window.File && window.FileReader && window.FileList && window.Blob ? a.value = null : (e.toolbar.openFile.setAttribute("hidden", "true"), e.secondaryToolbar.openFileButton.setAttribute("hidden", "true")), a.addEventListener("change", function(e) {
@@ -12382,7 +12382,6 @@ function(e) {
         if (void 0 !== e) try {
             var t = new URL(window.location.href).origin || "null";
             if (se.indexOf(t) >= 0) return;
-            if (new URL(e, window.location.href).origin !== t) throw new Error("file origin does not match viewer's")
         } catch (e) {
             var n = e && e.message;
             throw ae.l10n.get("loading_error", null, "An error occurred while loading the PDF.").then(function(e) {

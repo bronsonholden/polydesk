@@ -71,48 +71,48 @@ require('sails').load({
         async.eachSeries(files, (file, callback) => {
           async.waterfall([
             (callback) => {
-              var tmp = path.join(__dirname, `.tmp/ocr-${path.basename(file, '.pdf')}`);
+              var id = path.basename(file, '.pdf');
+              var tmp = path.join(__dirname, `.tmp/ocr-${id}`);
 
               fs.mkdir(tmp, (err) => {
                 if (err) {
                   return callback(err);
                 }
 
-                callback(null, tmp);
+                callback(null, tmp, id);
               });
             },
-            (tmp, callback) => {
+            (tmp, id, callback) => {
               var local = path.join(tmp, 'document.pdf');
               var rs = s3.read(file);
               var ws = fs.createWriteStream(local);
 
               rs.pipe(ws);
               ws.on('finish', () => {
-                callback(null, tmp, local);
+                callback(null, tmp, id, local);
               });
             },
-            (tmp, local, callback) => {
+            (tmp, id, local, callback) => {
               exec(`${gs} -sDEVICE=jpeg -dBATCH -dSAFER -dNOPAUSE -dDownScaleFactor=3 -r1200 -q -sPAPERSIZE=a4 -sOutputFile=${tmp}/%d.jpg ${local}`, (err, stdin, stdout) => {
                 if (err) {
                   return callback(err);
                 }
 
                 sails.log.info('Converted ' + local + ' to pages');
-                callback(null, tmp);
+                callback(null, tmp, id);
               });
             },
-            (tmp, callback) => {
+            (tmp, id, callback) => {
               s3.rm(file, (err, res) => {
                 if (err) {
                   return callback(err);
                 }
 
-                callback(null, tmp);
+                callback(null, tmp, id);
               });
             },
-            (tmp, callback) => {
-              var uid = uuidv4();
-              var dirname = `documents/${uid}`;
+            (tmp, id, callback) => {
+              var dirname = `documents/${id}`;
               var receiver = s3.receive({
                 dirname: dirname + '/pages'
               });
@@ -124,7 +124,7 @@ require('sails').load({
                       return callback(err);
                     }
 
-                    sails.log.info(`Uploaded page ${page} to s3://${sails.config.ocr.s3.bucket}/${dirname}/`);
+                    sails.log.info(`Uploaded page ${page} to s3://${sails.config.documents.s3.bucket}/${dirname}/`);
                     callback();
                   });
                 }, (err) => {

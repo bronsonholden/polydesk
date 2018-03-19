@@ -1498,7 +1498,7 @@ html[dir='rtl'] .verticalToolbarSeparator {
 
 #thumbnailView {
   position: absolute;
-  width: 200px;
+  width: calc(100% - 100px);
   top: 0;
   bottom: 0;
   padding: 20px 50px 0;
@@ -1530,6 +1530,7 @@ html[dir='rtl'] .verticalToolbarSeparator {
   opacity: 0.8;
   z-index: 99;
   background-color: white;
+  display: block;
   background-clip: content-box;
 }
 
