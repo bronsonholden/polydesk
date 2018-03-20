@@ -118,10 +118,14 @@ module.exports = {
          */
         (user, account, callback) => {
             var arr = [
+              'can_login',
               'view_documents',
+              'upload_documents',
               'add_document_metadata_sets',
               'update_document_metadata_sets',
-              'remove_document_metadata_sets'
+              'remove_document_metadata_sets',
+              'edit_metadata_groups',
+              'edit_workflows'
             ].map((cap) => {
               return {
                 name: cap,

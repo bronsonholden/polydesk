@@ -13,6 +13,10 @@ module.exports = {
       type: 'string',
       required: true,
     },
+    account: {
+      model: 'Account',
+      required: true
+    },
     fileType: {
       type: 'string',
       required: true,

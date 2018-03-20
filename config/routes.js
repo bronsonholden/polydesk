@@ -52,8 +52,13 @@ module.exports.routes = {
   'get /documents': 'DocumentController.browse',
 
   'get /workflow': {
-    view: 'pages/rpd'
+    view: 'pages/rpd',
+    locals: {
+      layout: 'layouts/workflow'
+    }
   },
+
+  'get /viewer/:document': 'DocumentController.view',
 
   'post /api/login': 'RESTAuthController.login',
   'post /api/logout': 'RESTAuthController.logout',
