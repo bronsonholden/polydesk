@@ -93,7 +93,7 @@ require('sails').load({
               });
             },
             (tmp, id, local, callback) => {
-              exec(`${gs} -sDEVICE=jpeg -dBATCH -dSAFER -dNOPAUSE -dDownScaleFactor=3 -r1200 -q -sPAPERSIZE=a4 -sOutputFile=${tmp}/%d.jpg ${local}`, (err, stdin, stdout) => {
+              exec(`${gs} -sDEVICE=jpeg -dBATCH -dSAFER -dNOPAUSE -dDownScaleFactor=3 -r900 -q -sPAPERSIZE=a4 -sOutputFile=${tmp}/%d.jpg ${local}`, (err, stdin, stdout) => {
                 if (err) {
                   return callback(err);
                 }
