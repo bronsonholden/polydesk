@@ -147,11 +147,29 @@ require('sails').load({
                   return callback(err)
                 }
 
-                callback(null, local);
+                callback(null, tmp);
               });
             },
-            (local, callback) => {
-              fs.unlink(local, (err) => {
+            (tmp, callback) => {
+              fs.readdir(tmp, (err, list) => {
+                callback(err, tmp, list);
+              });
+            },
+            (tmp, list, callback) => {
+              async.eachSeries(list, (file, callback) => {
+                fs.unlink(path.join(tmp, file), (err) => {
+                  if (err) {
+                    return callback(err);
+                  }
+
+                  callback();
+                });
+              }, (err) => {
+                callback(err, tmp);
+              });
+            },
+            (tmp, callback) => {
+              fs.rmdir(tmp, (err) => {
                 if (err) {
                   return callback(err);
                 }
