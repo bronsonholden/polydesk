@@ -49,7 +49,12 @@ module.exports.routes = {
   'post /signup': 'UserController.create',
 
   'get /dashboard': 'DashboardController.dashboard',
+
+  'post /documents': 'DocumentController.upload',
   'get /documents': 'DocumentController.browse',
+  'get /upload': {
+    view: 'pages/upload'
+  },
 
   'get /workflow': {
     view: 'pages/rpd',
