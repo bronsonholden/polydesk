@@ -66,7 +66,7 @@ module.exports = {
     db.useDatabase(sails.config.metadata.arangoDb.database);
     db.useBasicAuth(sails.config.metadata.arangoDb.username, sails.config.metadata.arangoDb.password);
 
-    var collectionName = sails.config.metadata.arangoDb.collection.replace('%account', inputs.account);
+    var collectionName = sails.config.metadata.arangoDb.setsCollection.replace('%account', inputs.account);
 
     const collection = db.collection(collectionName);
     var document = {};
