@@ -1,8 +1,9 @@
+const _ = require('lodash');
 const arangoDb = require('arangojs');
 
 module.exports = {
-  friendlyName: 'Remove Object Metadata Set',
-  description: 'Remove a specified set of metadata from an object, regardless of content',
+  friendlyName: 'Get Object Metadata Sets',
+  description: 'Gets the metadata sets for an object',
   inputs: {
     account: {
       type: 'number',
@@ -12,12 +13,7 @@ module.exports = {
     object: {
       type: 'number',
       required: true,
-      description: 'The object ID to remove metadata from'
-    },
-    setName: {
-      type: 'string',
-      required: true,
-      description: 'The name of the metadata set'
+      description: 'The object ID to add metadata for'
     },
     objectType: {
       type: 'string',
@@ -30,8 +26,8 @@ module.exports = {
   },
   exits: {
     success: {
-      outputFriendlyName: 'Metadata Set',
-      outputDescription: 'The removed metadata set'
+      outputFriendlyName: 'Metadata Sets',
+      outputDescription: 'The sets of metadata'
     },
     error: {
       description: 'A server error occurred'
@@ -64,21 +60,43 @@ module.exports = {
     var collectionName = sails.config.metadata.arangoDb.collection.replace('%account', inputs.account);
 
     const collection = db.collection(collectionName);
+    var document = {
+      _object: `${prefix}${inputs.object}`
+    };
 
-    collection.removeByExample({
-      _object: `${prefix}${inputs.object}`,
-      _set: inputs.setName
-    }, {
-      waitForSync: true,
-      silent: false
-    }).catch((err) => {
-      exits.error(new Error(err.message));
-    }).then((res) => {
-      if (res) {
-        exits.success({
-          deleted: res.deleted
+    async.waterfall([
+      (callback) => {
+        db.query(`FOR d IN \`${collectionName}\` FILTER d._object == '${prefix}${inputs.object}' RETURN d`).catch((err) => {
+          callback(err);
+        }).then((cursor) => {
+          if (cursor) {
+            return callback(null, cursor);
+          }
         });
+      },
+      (cursor, callback) => {
+        var results = [];
+
+        cursor.each(val => results.push(val));
+        callback(null, results)
+      },
+      (results, callback) => {
+        var metadataSets = results.map((res) => {
+          var set = {};
+
+          Object.keys(res).filter(key => key.indexOf('$') === 0).forEach(key => set[key.slice(1)] = res[key]);
+
+          return set;
+        });
+
+        callback(null, metadataSets);
       }
+    ], (err, metadataSets) => {
+      if (err) {
+        exits.error(new Error(err.message));
+      }
+
+      exits.success(metadataSets);
     });
   }
 };

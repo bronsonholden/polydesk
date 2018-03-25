@@ -63,50 +63,20 @@ See https://github.com/adobe-type-tools/cmap-resources
           <div id="thumbnailView">
           </div>
           <div id="metadataView" class="hidden">
-            <div class="metadataSet">
-              <table class="metadataTable">
-                <tr>
-                  <td>Field 1</td>
-                </tr>
-                <tr>
-                  <td><input class="metadataField metadataStringField" type="string"></input>
-                </tr>
-                <tr>
-                  <td>Field 2</td>
-                </tr>
-                <tr>
-                  <td><input class="metadataField metadataStringField" type="string"></input>
-                </tr>
-                <tr>
-                  <td>Field 3</td>
-                </tr>
-                <tr>
-                  <td><input class="metadataField metadataStringField" type="string"></input>
-                </tr>
-              </table>
-            </div>
-            <div class="metadataSet">
-              <table class="metadataTable">
-                <tr>
-                  <td>Field 1</td>
-                </tr>
-                <tr>
-                  <td><input class="metadataField metadataStringField" type="string"></input>
-                </tr>
-                <tr>
-                  <td>Field 2</td>
-                </tr>
-                <tr>
-                  <td><input class="metadataField metadataStringField" type="string"></input>
-                </tr>
-                <tr>
-                  <td>Field 3</td>
-                </tr>
-                <tr>
-                  <td><input class="metadataField metadataStringField" type="string"></input>
-                </tr>
-              </table>
-            </div>
+            <% metadataSets.forEach(function (set) { %>
+              <div class="metadataSet">
+                <table class="metadataTable">
+                  <% Object.keys(set).forEach(function (key) { %>
+                    <tr>
+                      <td><%- key -%></td>
+                    </tr>
+                    <tr>
+                      <td><input class="metadataField metadataStringField" type="string" value="<%- set[key] -%>"></input>
+                    </tr>
+                  <% }); %>
+                </table>
+              </div>
+            <% }); %>
           </div>
           <div id="outlineView" class="hidden">
           </div>
@@ -114,7 +84,7 @@ See https://github.com/adobe-type-tools/cmap-resources
           </div>
         </div>
       </div>  <!-- sidebarContainer -->
-      
+
       <div id="mainContainer" signed-url="<%- documentUrl -%>">
         <div class="findbar hidden doorHanger" id="findbar">
           <div id="findbarInputContainer">

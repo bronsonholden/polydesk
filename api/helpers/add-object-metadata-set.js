@@ -70,7 +70,8 @@ module.exports = {
 
     const collection = db.collection(collectionName);
     var document = {
-      _key: `${prefix}${inputs.object}`
+      _object: `${prefix}${inputs.object}`,
+      _set: inputs.setName
     };
 
     Object.keys(inputs.metadata).forEach((key, index) => {
@@ -80,22 +81,61 @@ module.exports = {
       case 'string':
       case 'boolean':
       case 'number':
-        document[key] = val;
+        document['$' + key] = val;
         break;
       default:
         return;
       }
     });
 
-    collection.save(document, {
-      waitForSync: true,
-      silent: false
-    }).catch((err) => {
-      exits.error(new Error(err.message));
-    }).then((document) => {
-      if (document) {
-        exits.success(document);
+    async.waterfall([
+      (callback) => {
+        collection.byExample({
+          _object: `${prefix}${inputs.object}`,
+          _set: inputs.setName
+        }).catch((err) => {
+          callback(err);
+        }).then((cursor) => {
+          callback(null, cursor);
+        });
+      },
+      (cursor, callback) => {
+        if (cursor.hasNext()) {
+          var documents = cursor.map(v => v);
+
+          async.eachSeries(documents, (doc, callback) => {
+            collection.replace(doc, document, {
+              waitForSync: true,
+              silent: false
+            }).catch((err) => {
+              callback(err);
+            }).then((document) => {
+              if (document) {
+                callback(null, document);
+              }
+            });
+          }, (err) => {
+            callback(err, document);
+          });
+        } else {
+          collection.save(document, {
+            waitForSync: true,
+            silent: false
+          }).catch((err) => {
+            callback(err);
+          }).then((res) => {
+            if (res) {
+              callback(null, document);
+            }
+          });
+        }
       }
+    ], (err, document) => {
+      if (err) {
+        return exits.error(new Error(err.message));
+      }
+
+      exits.success(document);
     });
   }
 };

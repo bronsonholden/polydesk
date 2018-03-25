@@ -69,7 +69,10 @@ module.exports = {
     var collectionName = sails.config.metadata.arangoDb.collection.replace('%account', inputs.account);
 
     const collection = db.collection(collectionName);
-    var document = {};
+    var document = {
+      _object: `${prefix}${inputs.object}`,
+      _set: inputs.setName
+    };
 
     Object.keys(inputs.metadata).forEach((key, index) => {
       var val = inputs.metadata[key];
@@ -78,24 +81,59 @@ module.exports = {
       case 'string':
       case 'boolean':
       case 'number':
-        document[key] = val;
+        document['$' + key] = val;
         break;
       default:
         return;
       }
     });
 
-    collection.replace({
-      _key: `${prefix}${inputs.object}`
-    }, document, {
-      waitForSync: true,
-      silent: false
-    }).catch((err) => {
-      exits.error(new Error(err.message));
-    }).then((document) => {
-      if (document) {
-        exits.success(document);
+    async.waterfall([
+      (callback) => {
+        collection.byExample({
+          _object: `${prefix}${inputs.object}`,
+          _set: inputs.setName
+        }).catch((err) => {
+          callback(err);
+        }).then((cursor) => {
+          callback(null, cursor);
+        });
+      },
+      (cursor, callback) => {
+        if (cursor.hasNext()) {
+          var documents = cursor.map(v => v);
+
+          async.eachSeries(documents, (doc, callback) => {
+            collection.update(doc, document, {
+              waitForSync: true,
+              silent: false
+            }).catch((err) => {
+              callback(err);
+            }).then((document) => {
+              if (document) {
+                callback(null, document);
+              }
+            });
+          }, callback);
+        } else {
+          collection.save(document, {
+            waitForSync: true,
+            silent: false
+          }).catch((err) => {
+            callback(err);
+          }).then((document) => {
+            if (document) {
+              callback(null, document);
+            }
+          });
+        }
       }
+    ], (err) => {
+      if (err) {
+        return exits.error(new Error(err.message));
+      }
+
+      exits.success(document);
     });
   }
 };

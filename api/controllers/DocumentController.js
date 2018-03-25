@@ -20,23 +20,53 @@ module.exports = {
       bucket: sails.config.documents.s3.bucket
     });
 
-    Document.findOne({
-      account: req.session.account,
-      id: req.param('document'),
-    }).exec((err, doc) => {
+    async.waterfall([
+      (callback) => {
+        Document.findOne({
+          account: req.session.account,
+          id: req.param('document'),
+        }).exec((err, doc) => {
+          if (err) {
+            return callback(err);
+          }
+
+          if (!doc) {
+            return callback(new Error('No document exists with that ID in this account'));
+          }
+
+          return callback(null, doc);
+        });
+      },
+      (doc, callback) => {
+        sails.helpers.getObjectMetadata.with({
+          account: req.session.account,
+          object: doc.id,
+          objectType: 'document'
+        }).switch({
+          success: (metadataSets) => {
+            callback(null, metadataSets);
+          },
+          error: (err) => {
+            callback({
+              message: err.message
+            });
+          },
+          invalidObjectType: (err) => {
+            callback({
+              message: err.message
+            });
+          }
+        });
+      }
+    ], (err, metadataSets) => {
       if (err) {
         return res.status(500).send({
           message: err.message
         });
       }
 
-      if (!doc) {
-        return res.status(404).send({
-          message: 'No document exists with that ID in this account'
-        });
-      }
-
       return res.view('pages/viewer', {
+        metadataSets: metadataSets,
         layout: 'layouts/viewer',
         documentUrl: adapter.url('getObject', {
           s3params: {
