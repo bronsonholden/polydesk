@@ -101,7 +101,9 @@ module.exports = {
       },
       (cursor, callback) => {
         if (cursor.hasNext()) {
-          var documents = cursor.map(v => v);
+          var documents = [];
+
+          cursor.each(v => documents.push(v));
 
           async.eachSeries(documents, (doc, callback) => {
             collection.replace(doc, document, {
