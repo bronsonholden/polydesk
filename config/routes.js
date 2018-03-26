@@ -35,8 +35,10 @@ module.exports.routes = {
   *                                                                          *
   ***************************************************************************/
 
-  'get /login': {
-    view: 'pages/login'
+  'get /login': (req, res) => {
+    return res.view('pages/login', {
+      next: req.query.next
+    });
   },
 
   'get /signup': {

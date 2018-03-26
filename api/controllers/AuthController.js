@@ -32,7 +32,7 @@ module.exports = {
         req.session.user = user.id;
         req.session.account = user.defaultAccount;
 
-        res.redirect('/dashboard');
+        res.redirect(req.query.next || '/dashboard');
       });
     })(req, res);
   },

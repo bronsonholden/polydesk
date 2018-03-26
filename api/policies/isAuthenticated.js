@@ -5,7 +5,7 @@ module.exports = (req, res, next) => {
     next();
   } else {
     if (!req.wantsJSON) {
-      res.redirect('/login');
+      res.redirect('/login?next=' + req.path);
     } else {
       res.status(403).send({
         message: 'Login required'
