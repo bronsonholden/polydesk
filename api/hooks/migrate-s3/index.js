@@ -20,7 +20,7 @@ module.exports = (sails) => {
     initialize: (callback) => {
       async.waterfall([
         (callback) => {
-          if (process.env.NODE_ENV === 'production' || sails.config.documents.migrate !== 'drop') {
+          if (process.env.NODE_ENV === 'production' || _.get(sails, 'config.documents.migrate') !== 'drop') {
             return callback();
           }
 
