@@ -5,11 +5,12 @@
  */
 
 const AWS = require('aws-sdk');
+const _ = require('lodash');
 
 module.exports = (sails) => {
   return {
     initialize: (callback) => {
-      if (process.env.NODE_ENV === 'production') {
+      if (process.env.NODE_ENV === 'production' || !_.get(sails, 'config.polydesk.generateSampleData')) {
         return callback();
       }
 
