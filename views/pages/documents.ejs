@@ -1,5 +1,15 @@
 <h1>Documents</h1>
 <br>
+<table>
+  <% documents.forEach(function (doc) { %>
+    <tr>
+      <td><%- doc.id -%>
+      </td>
+      <td><a href="<%- doc.href -%>"><%- doc.name -%></a>
+      </td>
+    </tr>
+  <% }); %>
+</table>
 <ul>
   <li><a href="/upload">Upload Document</a></li>
   <li><a href="<%- sails.getUrlFor('DashboardController.dashboard') -%>">Back</a></li>

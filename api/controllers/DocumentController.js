@@ -11,7 +11,29 @@ const uuid = require('uuid/v4');
 
 module.exports = {
   browse: (req, res) => {
-    res.view('pages/documents');
+    Document.find({
+      skip: req.param('skip') || 0,
+      limit: req.param('limit') || 20,
+      sort: 'id ASC'
+    }).exec((err, documents) => {
+      if (err) {
+        return res.status(500).send({
+          message: err.message
+        });
+      }
+
+      documents = documents.map((doc) => {
+        return {
+          id: doc.id,
+          name: doc.name,
+          href: `/viewer/${doc.id}`
+        };
+      });
+
+      res.view('pages/documents', {
+        documents: documents
+      });
+    });
   },
   view: (req, res) => {
     var adapter = skipperS3({
@@ -67,6 +89,7 @@ module.exports = {
 
       return res.view('pages/viewer', {
         metadataSets: metadataSets,
+        id: req.param('document'),
         layout: 'layouts/viewer',
         documentUrl: adapter.url('getObject', {
           s3params: {
@@ -75,6 +98,58 @@ module.exports = {
           }
         })
       });
+    });
+  },
+  // Web-only action. Replaces metadata set in the viewer metadata tab
+  applyMetadata: (req, res) => {
+    var metadataSets = {};
+
+    Object.keys(req.body).forEach((key) => {
+      var splitIdx = key.match(/[^:]:[^:]/).index;
+      var setName = key.slice(0, splitIdx + 1);
+      var fieldName = key.slice(splitIdx + 2).replace(/::/g, ':');
+
+      if (!metadataSets.hasOwnProperty(setName)) {
+        metadataSets[setName] = {};
+      }
+
+      // TODO: Convert to number/boolean value as appropriate
+      //       For formulas, convert to object describing formula
+      //       Consider non-decimal notations. Do we retain or convert?
+
+      metadataSets[setName][fieldName] = req.body[key];
+    });
+
+    async.eachOf(metadataSets, (metadata, setName, callback) => {
+      sails.helpers.addObjectMetadataSet.with({
+        account: req.session.account,
+        object: req.param('document'),
+        objectType: 'document',
+        setName: setName,
+        metadata: metadata
+      }).switch({
+        success: (metadata) => {
+          callback();
+        },
+        error: (err) => {
+          callback({
+            message: err.message
+          });
+        },
+        invalidObjectType: (err) => {
+          callback({
+            message: err.message
+          });
+        }
+      });
+    }, (err) => {
+      if (err) {
+        return res.status(500).send({
+          message: err.message
+        });
+      }
+
+      res.redirect('/documents');
     });
   },
   upload: (req, res) => {

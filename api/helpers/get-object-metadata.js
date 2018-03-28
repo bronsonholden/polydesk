@@ -81,12 +81,14 @@ module.exports = {
         callback(null, results)
       },
       (results, callback) => {
-        var metadataSets = results.map((res) => {
+        var metadataSets = {};
+
+        results.map((res) => {
           var set = {};
 
           Object.keys(res).filter(key => key.indexOf('$') === 0).forEach(key => set[key.slice(1)] = res[key]);
 
-          return set;
+          metadataSets[res._set] = set;
         });
 
         callback(null, metadataSets);

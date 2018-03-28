@@ -66,6 +66,7 @@ module.exports.routes = {
   },
 
   'get /viewer/:document': 'DocumentController.view',
+  'post /viewer/:document/metadata': 'DocumentController.applyMetadata',
 
   'post /api/login': 'RESTAuthController.login',
   'post /api/logout': 'RESTAuthController.logout',

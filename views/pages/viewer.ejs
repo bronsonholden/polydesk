@@ -63,20 +63,26 @@ See https://github.com/adobe-type-tools/cmap-resources
           <div id="thumbnailView">
           </div>
           <div id="metadataView" class="hidden">
-            <% metadataSets.forEach(function (set) { %>
-              <div class="metadataSet">
-                <table class="metadataTable">
-                  <% Object.keys(set).forEach(function (key) { %>
-                    <tr>
-                      <td><%- key -%></td>
-                    </tr>
-                    <tr>
-                      <td><input class="metadataField metadataStringField" type="string" value="<%- set[key] -%>"></input>
-                    </tr>
-                  <% }); %>
-                </table>
-              </div>
-            <% }); %>
+            <form id="metadata" method="POST" action="/viewer/<%- id -%>/metadata" enctype="multipart/form-data">
+              <% Object.keys(metadataSets).forEach(function (setName) { %>
+              <% var set = metadataSets[setName]; %>
+                <fieldset class="metadataSet" name="<%- setName -%>">
+                  <legend><%- setName -%></legend>
+                  <table class="metadataTable">
+                    <% Object.keys(set).forEach(function (key) { %>
+                      <tr>
+                        <td><%- key -%></td>
+                      </tr>
+                      <tr>
+                        <td><input class="metadataField metadataStringField" name="<%- setName.replace(/:/g, '::') -%>:<%- key.replace(/:/g, '::') -%>" type="string" value="<%- set[key] -%>"></input>
+                      </tr>
+                    <% }); %>
+                  </table>
+                </fieldset>
+              <% }); %>
+              <br>
+              <input type="submit" value="Apply"/>
+            </form>
           </div>
           <div id="outlineView" class="hidden">
           </div>
