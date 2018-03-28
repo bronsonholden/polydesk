@@ -7,7 +7,14 @@ const uuidv4 = require('uuid/v4');
 const skipperDisk = require('skipper-disk');
 const skipperS3 = require('skipper-better-s3');
 
-require('sails').load({
+const sails = require('sails')
+
+if (typeof(process.env.NODE_ENV) !== 'string' || process.env.NODE_ENV.indexOf('ocr-') !== 0) {
+  sails.log.error(`It looks like the OCR worker wasn't executed in an appropriate environment. They are prefixed with 'ocr-<name>', e.g. 'ocr-development'. Retry the command prefixed with NODE_ENV=<your-ocr-env-here>`);
+  return process.exit(1);
+}
+
+sails.load({
   hooks: {
     blueprints: false,
     controllers: false,
