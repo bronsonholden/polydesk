@@ -70,13 +70,24 @@ See https://github.com/adobe-type-tools/cmap-resources
                   <legend><%- setName -%></legend>
                   <table class="metadataTable">
                     <% Object.keys(set).forEach(function (key) { %>
+                    <%  var type; %>
+                    <%  switch (set[key].type) {
+                        case 'N':
+                        case 'B':
+                        case 'F':
+                          type = 'string';
+                          break;
+                        default:
+                          break;
+                        } %>
+                    <% // Below tr is part of above Object.keys().forEach loop %>
                       <tr>
                         <td><%- key -%></td>
                       </tr>
                       <tr>
-                        <td><input class="metadataField metadataStringField" name="<%- setName.replace(/:/g, '::') -%>:<%- key.replace(/:/g, '::') -%>" type="string" value="<%- set[key] -%>"></input>
+                        <td><input class="metadataField metadataStringField" name="<%- set[key].type -%>:<%- setName.replace(/:/g, '::') -%>:<%- key.replace(/:/g, '::') -%>" type="<%- type -%>" value="<%- set[key].value -%>"></input>
                       </tr>
-                    <% }); %>
+                    <% }); // end Objects.keys().forEach loop %>
                   </table>
                 </fieldset>
               <% }); %>

@@ -105,9 +105,11 @@ module.exports = {
     var metadataSets = {};
 
     Object.keys(req.body).forEach((key) => {
-      var splitIdx = key.match(/[^:]:[^:]/).index;
-      var setName = key.slice(0, splitIdx + 1);
-      var fieldName = key.slice(splitIdx + 2).replace(/::/g, ':');
+      // Format for field names is <type>:<field name>:<field value>
+      // type is always a single character. Below calls to slice() account for this
+      var splitIdx = key.slice(2).match(/[^:]:[^:]/).index;
+      var setName = key.slice(2, splitIdx + 3);
+      var fieldName = key.slice(splitIdx + 4).replace(/::/g, ':');
 
       if (!metadataSets.hasOwnProperty(setName)) {
         metadataSets[setName] = {};
@@ -117,7 +119,10 @@ module.exports = {
       //       For formulas, convert to object describing formula
       //       Consider non-decimal notations. Do we retain or convert?
 
-      metadataSets[setName][fieldName] = req.body[key];
+      metadataSets[setName][fieldName] = {
+        type: key[0],
+        value: req.body[key]
+      };
     });
 
     async.eachOf(metadataSets, (metadata, setName, callback) => {

@@ -61,10 +61,18 @@ module.exports = (sails) => {
               objectType: 'document',
               setName: 'Test Set',
               metadata: {
-                'Field 1': 'Value 1',
-                'Field 2': 'Value 2',
-                'Field 3': true,
-                'Field 4': 1234
+                'Field 1': {
+                  type: 'S',
+                  value: 'StringValue'
+                },
+                'Field 2': {
+                  type: 'N',
+                  value: 125.38
+                },
+                'Field 3': {
+                  type: 'B',
+                  value: true
+                }
               }
             }).switch({
               success: (metadataSet) => {

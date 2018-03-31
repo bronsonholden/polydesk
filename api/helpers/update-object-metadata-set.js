@@ -77,11 +77,35 @@ module.exports = {
     Object.keys(inputs.metadata).forEach((key, index) => {
       var val = inputs.metadata[key];
 
-      switch (typeof(val)) {
-      case 'string':
-      case 'boolean':
-      case 'number':
-        document['$' + key] = val;
+      // TODO: D.R.Y.
+      switch (val.type) {
+      case 'S':
+        document['$' + key] = {
+          type: 'S',
+          value: val.value
+        };
+        break;
+      case 'B':
+        document['$' + key] = {
+          type: 'B',
+          value: val.value === 'true' ? true : false
+        };
+        break;
+      case 'N':
+        try {
+          var big = new BigNumber(val.value);
+          var n = big.toNumber();
+
+          document['$' + key] = {
+            type: 'N',
+            value: n
+          };
+        } catch (err) {
+          document['$' + key] = {
+            type: 'N',
+            value: 0
+          };
+        }
         break;
       default:
         return;
