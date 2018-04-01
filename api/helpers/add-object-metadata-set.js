@@ -108,6 +108,27 @@ module.exports = {
           };
         }
         break;
+      case 'P':
+        try {
+          var big = new BigNumber(val.value);
+
+          document['$' + key] = {
+            type: 'P',
+            value: val.value
+          };
+        } catch (err) {
+          document['$' + key] = {
+            type: 'P',
+            value: '0'
+          };
+        }
+        break;
+      case 'F':
+        document['$' + key] = {
+          type: 'F',
+          value: val.value
+        };
+        break;
       default:
         return;
       }

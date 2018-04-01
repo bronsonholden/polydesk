@@ -72,6 +72,23 @@ module.exports = (sails) => {
                 'Field 3': {
                   type: 'B',
                   value: true
+                },
+                'Field 4': {
+                  type: 'P',
+                  value: '3.14159265358979323846264338327950288419716939937510'
+                  // 2 * pi = 6.2831853071795864769252867665590057683943387987502
+                },
+                'Field 5': {
+                  type: 'F',
+                  value: '"Field 4" * 2'
+                },
+                'Field 6': {
+                  type: 'F',
+                  value: '"Field 7" + 1'
+                },
+                'Field 7': {
+                  type: 'F',
+                  value: '"Field 6" + 1'
                 }
               }
             }).switch({

@@ -54,11 +54,12 @@ module.exports.schema = {
         enum: [
           'S', // string
           'B', // boolean
-          'N', // number
+          'N', // number,
+          'P', // arbitrary precision number
         ]
       },
       value: {
-        type: [ 'string', 'number', 'boolean' ]
+        type: [ 'string', 'number', 'boolean', 'precision' ]
       }
     },
     oneOf: [
@@ -84,6 +85,14 @@ module.exports.schema = {
         },
         value: {
           type: 'boolean'
+        }
+      },
+      {
+        type: {
+          const: 'P'
+        },
+        value: {
+          type: 'string'
         }
       }
     ]
