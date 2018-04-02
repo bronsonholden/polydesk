@@ -343,7 +343,7 @@ module.exports = {
                 // Mark this as a calculation so we don't override formula string
                 set[fieldName].type = 'F';
               }
-            })
+            });
           });
 
           callback(null, metadataSets);
