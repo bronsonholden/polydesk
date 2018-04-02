@@ -89,6 +89,10 @@ module.exports = (sails) => {
                 'Field 7': {
                   type: 'F',
                   value: '"Field 6" + 1'
+                },
+                'Field 8': {
+                  type: 'F',
+                  value: '"Field 5" + 1'
                 }
               }
             }).switch({

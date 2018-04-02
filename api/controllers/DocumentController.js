@@ -102,27 +102,14 @@ module.exports = {
   },
   // Web-only action. Replaces metadata set in the viewer metadata tab
   applyMetadata: (req, res) => {
-    var metadataSets = {};
+    var metadataSets = req.body.metadataSets;
 
-    Object.keys(req.body).forEach((key) => {
-      // Format for field names is <type>:<field name>:<field value>
-      // type is always a single character. Below calls to slice() account for this
-      var splitIdx = key.slice(2).match(/[^:]:[^:]/).index;
-      var setName = key.slice(2, splitIdx + 3);
-      var fieldName = key.slice(splitIdx + 4).replace(/::/g, ':');
-
-      if (!metadataSets.hasOwnProperty(setName)) {
-        metadataSets[setName] = {};
-      }
-
-      // TODO: Convert to number/boolean value as appropriate
-      //       For formulas, convert to object describing formula
-      //       Consider non-decimal notations. Do we retain or convert?
-
-      metadataSets[setName][fieldName] = {
-        type: key[0],
-        value: req.body[key]
-      };
+    _.each(metadataSets, (set, setName) => {
+      _.each(set, (field, fieldName) => {
+        if (field.type === 'F') {
+          field.value = decodeURI(field.value);
+        }
+      });
     });
 
     async.eachOf(metadataSets, (metadata, setName, callback) => {
