@@ -1,4 +1,5 @@
 const arangoDb = require('arangojs');
+const BigNumber = require('bignumber.js');
 
 module.exports = {
   friendlyName: 'Add Object Metadata Set',
@@ -77,11 +78,56 @@ module.exports = {
     Object.keys(inputs.metadata).forEach((key, index) => {
       var val = inputs.metadata[key];
 
-      switch (typeof(val)) {
-      case 'string':
-      case 'boolean':
-      case 'number':
-        document['$' + key] = val;
+      // TODO: D.R.Y.
+      switch (val.type) {
+      case 'S':
+        document['$' + key] = {
+          type: 'S',
+          value: val.value
+        };
+        break;
+      case 'B':
+        document['$' + key] = {
+          type: 'B',
+          value: val.value === 'true' ? true : false
+        };
+        break;
+      case 'N':
+        try {
+          var big = new BigNumber(val.value);
+          var n = big.toNumber();
+
+          document['$' + key] = {
+            type: 'N',
+            value: n
+          };
+        } catch (err) {
+          document['$' + key] = {
+            type: 'N',
+            value: 0
+          };
+        }
+        break;
+      case 'P':
+        try {
+          var big = new BigNumber(val.value);
+
+          document['$' + key] = {
+            type: 'P',
+            value: val.value
+          };
+        } catch (err) {
+          document['$' + key] = {
+            type: 'P',
+            value: '0'
+          };
+        }
+        break;
+      case 'F':
+        document['$' + key] = {
+          type: 'F',
+          value: val.value
+        };
         break;
       default:
         return;

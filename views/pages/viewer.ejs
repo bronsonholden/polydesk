@@ -30,12 +30,39 @@ See https://github.com/adobe-type-tools/cmap-resources
 
 
     <link rel="stylesheet" href="/styles/viewer.css">
+    <!-- This snippet is used in production (included from viewer.html) -->
+    <link rel="resource" type="application/l10n" href="/locale/locale.properties">
+    <script src="/js/pdf.viewer.js"></script>
 
+    <script type="text/javascript">
+      $(document).ready(function () {
+        $('#metadataApply').click(function () {
+          var metadataSets = {};
 
+          $('.metadataField').each(function () {
+            var type = $(this).attr('fieldType');
+            var setName = $(this).attr('setName');
+            var fieldName = $(this).attr('fieldName');
+            var value = type === 'F' ? $(this).attr('formula') : $(this).val();
 
-<!-- This snippet is used in production (included from viewer.html) -->
-<link rel="resource" type="application/l10n" href="/locale/locale.properties">
-<script src="/js/pdf.viewer.js"></script>
+            if (!metadataSets[setName]) {
+              metadataSets[setName] = {};
+            }
+
+            metadataSets[setName][fieldName] = {
+              type: type,
+              value: value
+            }
+          });
+
+          io.socket.post(window.location.pathname + '/metadata', {
+            metadataSets: metadataSets
+          }, function (data, res) {
+            window.location.pathname = res.headers.location;
+          })
+        });
+      });
+    </script>
 
   </head>
 
@@ -70,18 +97,30 @@ See https://github.com/adobe-type-tools/cmap-resources
                   <legend><%- setName -%></legend>
                   <table class="metadataTable">
                     <% Object.keys(set).forEach(function (key) { %>
+                    <% var type; %>
+                    <% switch (set[key].type) {
+                       case 'N':
+                       case 'B':
+                       case 'F':
+                         type = 'string';
+                         break;
+                       default:
+                         break;
+                       } %>
+                    <% // Below tr is part of above Object.keys().forEach loop %>
                       <tr>
                         <td><%- key -%></td>
                       </tr>
                       <tr>
-                        <td><input class="metadataField metadataStringField" name="<%- setName.replace(/:/g, '::') -%>:<%- key.replace(/:/g, '::') -%>" type="string" value="<%- set[key] -%>"></input>
+                        <td><input class="metadataField metadataStringField" fieldType="<%- set[key].type -%>" setName="<%- setName -%>" fieldName="<%- key -%>" type="<%- type -%>" value="<%- set[key].calculated || set[key].value -%>" formula="<%- set[key].type === 'F' ? encodeURI(set[key].value) : '' -%>"></input>
+                        </td>
                       </tr>
-                    <% }); %>
+                    <% }); // end Objects.keys().forEach loop %>
                   </table>
                 </fieldset>
               <% }); %>
               <br>
-              <input type="submit" value="Apply"/>
+              <button id="metadataApply" type="button" value="Apply">Apply</button>
             </form>
           </div>
           <div id="outlineView" class="hidden">

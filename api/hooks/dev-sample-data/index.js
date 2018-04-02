@@ -61,10 +61,39 @@ module.exports = (sails) => {
               objectType: 'document',
               setName: 'Test Set',
               metadata: {
-                'Field 1': 'Value 1',
-                'Field 2': 'Value 2',
-                'Field 3': true,
-                'Field 4': 1234
+                'Field 1': {
+                  type: 'S',
+                  value: 'StringValue'
+                },
+                'Field 2': {
+                  type: 'N',
+                  value: 125.38
+                },
+                'Field 3': {
+                  type: 'B',
+                  value: true
+                },
+                'Field 4': {
+                  type: 'P',
+                  value: '3.14159265358979323846264338327950288419716939937510'
+                  // 2 * pi = 6.2831853071795864769252867665590057683943387987502
+                },
+                'Field 5': {
+                  type: 'F',
+                  value: '"Field 4" * 2'
+                },
+                'Field 6': {
+                  type: 'F',
+                  value: '"Field 7" + 1'
+                },
+                'Field 7': {
+                  type: 'F',
+                  value: '"Field 6" + 1'
+                },
+                'Field 8': {
+                  type: 'F',
+                  value: '"Field 5" + 1'
+                }
               }
             }).switch({
               success: (metadataSet) => {
