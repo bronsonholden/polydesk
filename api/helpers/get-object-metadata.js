@@ -121,64 +121,6 @@ module.exports = {
               }
             });
 
-            var evaluateUnaryPrecision = (big, op) => {
-              switch (op) {
-              case '+':
-                return big;
-              case '-':
-                return big.negated();
-              }
-            }
-
-            var evaluateUnaryNumber = (value, op) => {
-              switch (op) {
-              case '+':
-                return value;
-              case '-':
-                return -value;
-              }
-            }
-
-            var evaluateBinaryNumber = (lval, rval, op) => {
-              switch (op) {
-              case '*':
-                return lval * rval;
-              case '+':
-                return lval + rval;
-              case '-':
-                return lval - rval;
-              default:
-                return null;
-              }
-            }
-
-            var evaluateBinaryPrecision = (lval, rval, op) => {
-              var res;
-
-              lval = new BigNumber(lval.value);
-              rval = new BigNumber(rval.value);
-
-              switch (op) {
-              case '*':
-                res = lval.times(rval);
-                break;
-              case '+':
-                res = lval.plus(rval);
-                break;
-              case '-':
-                res = lval.minus(rval);
-                break;
-              default:
-                res = lval;
-                break;
-              }
-
-              return {
-                type: 'P',
-                value: res.toString()
-              };
-            }
-
             var evaluateExpressionNode = (node) => {
               switch (node.type) {
               case 'Literal':
@@ -193,9 +135,9 @@ module.exports = {
 
                   switch (field.type) {
                   case 'N':
-                    return evaluateUnaryNumber(field.value, node.operator);
+                    return sails.helpers.evaluateUnaryNumber(field.value, node.operator);
                   case 'P':
-                    return evaluateUnaryPrecision(field.value, node.operator);
+                    return sails.helpers.evaluateUnaryPrecision(field.value, node.operator);
                   default:
                     return null;
                   }
@@ -204,7 +146,7 @@ module.exports = {
 
                   switch (typeof(value)) {
                   case 'number':
-                    return evaluateUnaryNumber(field.value, node.operator);
+                    return sails.helpers.evaluateUnaryNumber(field.value, node.operator);
                   default:
                     return null;
                   }
@@ -250,10 +192,10 @@ module.exports = {
                 right = normalize(right);
 
                 var fn = {
-                  'N,N': evaluateBinaryNumber,
-                  'N,P': evaluateBinaryPrecision,
-                  'P,N': evaluateBinaryPrecision,
-                  'P,P': evaluateBinaryPrecision
+                  'N,N': sails.helpers.evaluateBinaryNumber,
+                  'N,P': sails.helpers.evaluateBinaryPrecision,
+                  'P,N': sails.helpers.evaluateBinaryPrecision,
+                  'P,P': sails.helpers.evaluateBinaryPrecision
                 };
 
                 var spec = `${left.type},${right.type}`;
