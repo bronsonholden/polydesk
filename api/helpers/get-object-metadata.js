@@ -109,66 +109,16 @@ module.exports = {
               }
             });
 
-            // Map formula names to expression objects
-            var expressions = {};
-            // Map of formulas to calculated results
             var results = {};
-
-            // For each formula, build a list of other columns it references.
-            // Then we try to detect circular references
-            Object.keys(formulas).forEach((fieldName) => {
-              var refs = [];
-              var expr = jsep(formulas[fieldName]);
-
-              var fn = (depth, node) => {
-                // Max depth of 2 for now
-                if (depth > 2) {
-                  throw new Error('Maximum formula depth exceeded: ' + depth);
-                }
-
-                // If a field identifier
-                if (node.raw && node.type === 'Literal' && node.raw[0] === '"' && node.raw.slice(-1) === '"') {
-                  node.isField = true;
-                  refs.push(node.value);
-                }
-
-                // For unary expressions
-                if (node.argument) {
-                  fn(depth + 1, node.argument);
-                }
-
-                // For binary expressions
-                if (node.left && node.right) {
-                  fn(depth + 1, node.left);
-                  fn(depth + 1, node.right);
-                }
-              }
-
-              // Save expression for later, when we do calculations
-              expressions[fieldName] = expr;
-              fn(1, expr);
-
-              // Map formula field name to array of field names it references
-              formulas[fieldName] = refs;
+            var expressions = sails.helpers.filterOutCircularFormulas(formulas, {
+              maxDepth: 2
             });
 
-            // Now check for circular references
-            _.each(formulas, (refs, formula) => {
-              _.each(refs, (ref) => {
-                var other = formulas[ref];
-
-                if (other && other.indexOf(formula) > -1) {
-                  // Remove circular formulas (don't calculate them)
-                  results[formula] = null;
-                  results[ref] = null;
-                  delete formulas[formula];
-                  delete formulas[ref];
-                  delete expressions[formulas];
-                  delete expressions[ref];
-
-                  sails.log.warn('Circular reference found in formula');
-                }
-              });
+            _.each(formulas, (formula, fieldName) => {
+              if (!_.has(expressions, fieldName)) {
+                // Circular formulas, or those removed due to referencing circular formulas, have null result
+                results[fieldName] = null;
+              }
             });
 
             var evaluateUnaryPrecision = (big, op) => {
