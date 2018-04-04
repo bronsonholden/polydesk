@@ -15,8 +15,8 @@ module.exports = {
   },
   exits: {
     success: {
-      outputFriendlyName: 'Expression Tree Dictionary',
-      outputDescription: 'Dictionary of all expression trees for non-circular formulas'
+      outputFriendlyName: 'References and Expressions',
+      outputDescription: 'Dictionaries of all expressions for non-circular formulas, and lists of formulas they reference'
     }
   },
   fn: (inputs, exits) => {
@@ -77,6 +77,9 @@ module.exports = {
       });
     });
 
-    exits.success(expressions);
+    exits.success({
+      expressions: expressions,
+      formulaReferences: formulaReferences
+    });
   }
 };

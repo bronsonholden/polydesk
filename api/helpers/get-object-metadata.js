@@ -110,9 +110,12 @@ module.exports = {
             });
 
             var results = {};
-            var expressions = sails.helpers.filterOutCircularFormulas(formulas, {
+            var filter = sails.helpers.filterOutCircularFormulas(formulas, {
               maxDepth: 2
             });
+
+            var expressions = filter.expressions;
+            var formulaReferences = filter.formulaReferences;
 
             _.each(formulas, (formula, fieldName) => {
               if (!_.has(expressions, fieldName)) {
@@ -120,64 +123,6 @@ module.exports = {
                 results[fieldName] = null;
               }
             });
-
-            var evaluateUnaryPrecision = (big, op) => {
-              switch (op) {
-              case '+':
-                return big;
-              case '-':
-                return big.negated();
-              }
-            }
-
-            var evaluateUnaryNumber = (value, op) => {
-              switch (op) {
-              case '+':
-                return value;
-              case '-':
-                return -value;
-              }
-            }
-
-            var evaluateBinaryNumber = (lval, rval, op) => {
-              switch (op) {
-              case '*':
-                return lval * rval;
-              case '+':
-                return lval + rval;
-              case '-':
-                return lval - rval;
-              default:
-                return null;
-              }
-            }
-
-            var evaluateBinaryPrecision = (lval, rval, op) => {
-              var res;
-
-              lval = new BigNumber(lval.value);
-              rval = new BigNumber(rval.value);
-
-              switch (op) {
-              case '*':
-                res = lval.times(rval);
-                break;
-              case '+':
-                res = lval.plus(rval);
-                break;
-              case '-':
-                res = lval.minus(rval);
-                break;
-              default:
-                res = lval;
-                break;
-              }
-
-              return {
-                type: 'P',
-                value: res.toString()
-              };
-            }
 
             var evaluateExpressionNode = (node) => {
               switch (node.type) {
@@ -191,20 +136,27 @@ module.exports = {
                 if (node.argument.isField) {
                   var field = set[node.argument.value];
 
+                  // If we're referencing a formula, it has already been calculated,
+                  // so pull the result and base our calculation off of whatever type the result is
+                  if (field.type === 'F') {
+                    field = results[node.argument.value];
+                  }
+
                   switch (field.type) {
                   case 'N':
-                    return evaluateUnaryNumber(field.value, node.operator);
+                    return sails.helpers.evaluateUnaryNumber(field, node.operator);
                   case 'P':
-                    return evaluateUnaryPrecision(field.value, node.operator);
+                    return sails.helpers.evaluateUnaryPrecision(field, node.operator);
                   default:
                     return null;
                   }
                 } else {
-                  var value = node.argument.value;
-
                   switch (typeof(value)) {
                   case 'number':
-                    return evaluateUnaryNumber(field.value, node.operator);
+                    return sails.helpers.evaluateUnaryNumber({
+                      type: 'N',
+                      value: node.argument.value
+                    }, node.operator);
                   default:
                     return null;
                   }
@@ -214,52 +166,40 @@ module.exports = {
                 var left = evaluateExpressionNode(node.left);
                 var right = evaluateExpressionNode(node.right);
 
-                var normalize = (operand) => {
-                  switch (typeof(operand)) {
-                  case 'string':
-                    operand = {
-                      type: 'S',
-                      value: operand
-                    };
-                    break;
-                  case 'number':
-                    operand = {
-                      type: 'N',
-                      value: operand
-                    }
-                    break;
-                  case 'boolean':
-                    operand = {
-                      type: 'B',
-                      value: operand
-                    }
-                    break;
-                  default:
-                    break;
+                left = sails.helpers.normalizeFormulaOperand(left);
+                right = sails.helpers.normalizeFormulaOperand(right);
+
+                var adapter = {
+                  'N,N': (lval, rval, operator) => {
+                    return sails.helpers.evaluateBinaryNumber(lval, rval, operator)
+                  },
+                  'N,P': (lval, rval, operator) => {
+                    var tmp = new BigNumber(lval.value);
+
+                    // Cast native number to precision
+                    return sails.helpers.evaluateBinaryPrecision({
+                      type: 'P',
+                      value: tmp.toString()
+                    }, rval, operator);
+                  },
+                  'P,N': (lval, rval, operator) => {
+                    var tmp = new BigNumber(rval.value);
+
+                    // Cast native number to precision
+                    return sails.helpers.evaluateBinaryPrecision(lval, {
+                      type: 'P',
+                      value: tmp.toString()
+                    }, operator);
+                  },
+                  'P,P': (lval, rval, operator) => {
+                    return sails.helpers.evaluateBinaryPrecision(lval, rval, operator);
                   }
-
-                  return operand;
-                }
-
-                // Get compatible rightvals for the current leftval
-                // Get compatible leftvals for the current rightval
-                // Intersect, then do some sort of preference? N op P => P or similar?
-                // Call eval functions, return result.
-
-                left = normalize(left);
-                right = normalize(right);
-
-                var fn = {
-                  'N,N': evaluateBinaryNumber,
-                  'N,P': evaluateBinaryPrecision,
-                  'P,N': evaluateBinaryPrecision,
-                  'P,P': evaluateBinaryPrecision
                 };
 
                 var spec = `${left.type},${right.type}`;
 
-                if (fn[spec]) {
-                  return fn[spec](left, right, node.operator);
+                if (adapter[spec]) {
+                  return adapter[spec](left, right, node.operator);
                 } else {
                   return null;
                 }
@@ -275,8 +215,10 @@ module.exports = {
               }
 
               // Evaluate all referenced formulas
-              _.each(formulas[fieldName], (ref) => {
-                evaluateFormula(ref, expressions[ref]);
+              _.each(formulaReferences[fieldName], (ref) => {
+                if (expressions[ref]) {
+                  evaluateFormula(ref, expressions[ref]);
+                }
               });
 
               results[fieldName] = evaluateExpressionNode(expr);
