@@ -4,11 +4,11 @@ module.exports = {
   sync: true,
   inputs: {
     lval: {
-      type: 'number',
+      type: 'ref',
       required: true
     },
     rval: {
-      type: 'number',
+      type: 'ref',
       required: true
     },
     operator: {
@@ -27,15 +27,24 @@ module.exports = {
     }
   },
   fn: (inputs, exits) => {
-    switch (op) {
+    switch (inputs.operator) {
     case '*':
-      return inputs.lval * inputs.rval;
+      return exits.success({
+        type: 'N',
+        value: inputs.lval.value * inputs.rval.value
+      });
     case '+':
-      return inputs.lval + inputs.rval;
+      return exits.success({
+        type: 'N',
+        value: inputs.lval.value + inputs.rval.value
+      });
     case '-':
-      return inputs.lval - inputs.rval;
+      return exits.success({
+        type: 'N',
+        value: inputs.lval.value - inputs.rval.value
+      });
     default:
-      return null;
+      return exits.success(null);
     }
   }
 };

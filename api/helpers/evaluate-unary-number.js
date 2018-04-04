@@ -22,11 +22,17 @@ module.exports = {
     }
   },
   fn: (inputs, exits) => {
-    switch (op) {
+    switch (inputs.operator) {
     case '+':
-      return exits.success(inputs.operand);
+      return exits.success({
+        type: 'N',
+        value: inputs.operand.value
+      });
     case '-':
-      return exits.success(-inputs.operand);
+      return exits.success({
+        type: 'N',
+        value: -inputs.operand.value
+      });
     default:
       return exits.success(null);
     }

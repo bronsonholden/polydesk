@@ -73,26 +73,42 @@ module.exports = (sails) => {
                   type: 'B',
                   value: true
                 },
-                'Field 4': {
+                'pi': {
                   type: 'P',
                   value: '3.14159265358979323846264338327950288419716939937510'
                   // 2 * pi = 6.2831853071795864769252867665590057683943387987502
                 },
-                'Field 5': {
+                '2pi': {
                   type: 'F',
-                  value: '"Field 4" * 2'
+                  value: '"pi" * 2'
                 },
-                'Field 6': {
+                'circular 1': {
                   type: 'F',
-                  value: '"Field 7" + 1'
+                  value: '"circular 2" + 1'
                 },
-                'Field 7': {
+                'circular 2': {
                   type: 'F',
-                  value: '"Field 6" + 1'
+                  value: '"circular 1" + 1'
                 },
-                'Field 8': {
+                '2pi+1': {
                   type: 'F',
-                  value: '"Field 5" + 1'
+                  value: '"2pi" + 1'
+                },
+                '-(2pi+1)': {
+                  type: 'F',
+                  value: '-"2pi+1"'
+                },
+                '1+1': {
+                  type: 'F',
+                  value: '1 + 1'
+                },
+                'next+1': {
+                  type: 'F',
+                  value: '"next" + 1'
+                },
+                'next': {
+                  type: 'N',
+                  value: 1
                 }
               }
             }).switch({

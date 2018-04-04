@@ -1,3 +1,5 @@
+const BigNumber = require('bignumber.js');
+
 module.exports = {
   friendlyName: 'Evaluate Binary Precision',
   description: 'Evaluates a binary operation on two precision metadata values',
@@ -32,7 +34,7 @@ module.exports = {
     lval = new BigNumber(inputs.lval.value);
     rval = new BigNumber(inputs.rval.value);
 
-    switch (op) {
+    switch (inputs.operator) {
     case '*':
       res = lval.times(rval);
       break;
@@ -47,9 +49,9 @@ module.exports = {
       break;
     }
 
-    return {
+    exits.success({
       type: 'P',
       value: res.toString()
-    };
+    });
   }
 };

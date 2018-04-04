@@ -1,3 +1,5 @@
+const BigNumber = require('bignumber.js');
+
 module.exports = {
   friendlyName: 'Evaluate Unary Precision',
   description: 'Evaluates a unary operation on a precision metadata value',
@@ -22,11 +24,19 @@ module.exports = {
     }
   },
   fn: (inputs, exits) => {
-    switch (op) {
+    var operand = new BigNumber(inputs.operand.value);
+
+    switch (inputs.operator) {
     case '+':
-      return exits.success(inputs.operand);
+      return exits.success({
+        type: 'P',
+        value: operand.toString()
+      });
     case '-':
-      return exits.success(inputs.operand.negated());
+      return exits.success({
+        type: 'P',
+        value: operand.negated().toString()
+      });
     default:
       return exits.success(null);
     }
