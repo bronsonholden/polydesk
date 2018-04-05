@@ -109,6 +109,18 @@ module.exports = (sails) => {
                 'next': {
                   type: 'N',
                   value: 1
+                },
+                'pi/2': {
+                  type: 'F',
+                  value: '"pi" / 2'
+                },
+                'pi%2': {
+                  type: 'F',
+                  value: '"pi" % 2'
+                },
+                'pi^2': {
+                  type: 'F',
+                  value: '"pi" ^ 2'
                 }
               }
             }).switch({

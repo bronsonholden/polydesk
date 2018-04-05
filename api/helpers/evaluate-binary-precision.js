@@ -18,7 +18,10 @@ module.exports = {
       enum: [
         '+',
         '-',
-        '*'
+        '*',
+        '/',
+        '%',
+        '^'
       ]
     }
   },
@@ -43,6 +46,15 @@ module.exports = {
       break;
     case '-':
       res = lval.minus(rval);
+      break;
+    case '/':
+      res = lval.dividedBy(rval);
+      break;
+    case '%':
+      res = lval.dividedToIntegerBy(rval);
+      break;
+    case '^':
+      res = lval.exponentiatedBy(rval.toNumber());
       break;
     default:
       res = lval;

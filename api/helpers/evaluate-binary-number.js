@@ -16,7 +16,10 @@ module.exports = {
       enum: [
         '+',
         '-',
-        '*'
+        '*',
+        '/',
+        '%',
+        '^'
       ]
     }
   },
@@ -42,6 +45,21 @@ module.exports = {
       return exits.success({
         type: 'N',
         value: inputs.lval.value - inputs.rval.value
+      });
+    case '/':
+      return exits.success({
+        type: 'N',
+        value: inputs.lval.value / inputs.rval.value
+      });
+    case '%':
+      return exits.success({
+        type: 'N',
+        value: inputs.lval.value % inputs.rval.value
+      });
+    case '^':
+      return exits.success({
+        type: 'N',
+        value: inputs.lval.value ** inputs.rval.value
       });
     default:
       return exits.success(null);
