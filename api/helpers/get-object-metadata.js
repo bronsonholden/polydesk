@@ -98,147 +98,56 @@ module.exports = {
       (metadataSets, callback) => {
         try {
           var formulas = {};
+          var context = {
+            metadataSets: metadataSets,
+            formulaResults: {},
+            formulaStack: [],
+            setStack: []
+          }
 
-          // Populate formulas with any metadata field that is a formula
-          Object.keys(metadataSets).forEach((setName) => {
-            var set = metadataSets[setName];
+          _.each(metadataSets, (set, setName) => {
+            context.setStack.push(setName);
 
-            Object.keys(set).forEach((fieldName) => {
-              if (set[fieldName].type === 'F') {
-                formulas[fieldName] = set[fieldName].value;
-              }
-            });
-
-            var results = {};
-            var filter = sails.helpers.filterOutCircularFormulas(formulas, {
-              maxDepth: 2
-            });
-
-            var expressions = filter.expressions;
-            var formulaReferences = filter.formulaReferences;
-
-            _.each(formulas, (formula, fieldName) => {
-              if (!_.has(expressions, fieldName)) {
-                // Circular formulas, or those removed due to referencing circular formulas, have null result
-                results[fieldName] = null;
-              }
-            });
-
-            var evaluateExpressionNode = (node) => {
-              switch (node.type) {
-              case 'Literal':
-                if (node.isField) {
-                  return results[node.value] || set[node.value];
-                } else {
-                  return node.value;
-                }
-              case 'UnaryExpression':
-                if (node.argument.isField) {
-                  var field = set[node.argument.value];
-
-                  // If we're referencing a formula, it has already been calculated,
-                  // so pull the result and base our calculation off of whatever type the result is
-                  if (field.type === 'F') {
-                    field = results[node.argument.value];
-                  }
-
-                  switch (field.type) {
-                  case 'N':
-                    return sails.helpers.evaluateUnaryNumber(field, node.operator);
-                  case 'P':
-                    return sails.helpers.evaluateUnaryPrecision(field, node.operator);
-                  default:
-                    return null;
-                  }
-                } else {
-                  switch (typeof(value)) {
-                  case 'number':
-                    return sails.helpers.evaluateUnaryNumber({
-                      type: 'N',
-                      value: node.argument.value
-                    }, node.operator);
-                  default:
-                    return null;
-                  }
-                }
-                break;
-              case 'BinaryExpression':
-                var left = evaluateExpressionNode(node.left);
-                var right = evaluateExpressionNode(node.right);
-
-                left = sails.helpers.normalizeFormulaOperand(left);
-                right = sails.helpers.normalizeFormulaOperand(right);
-
-                var adapter = {
-                  'N,N': (lval, rval, operator) => {
-                    return sails.helpers.evaluateBinaryNumber(lval, rval, operator)
-                  },
-                  'N,P': (lval, rval, operator) => {
-                    var tmp = new BigNumber(lval.value);
-
-                    // Cast native number to precision
-                    return sails.helpers.evaluateBinaryPrecision({
-                      type: 'P',
-                      value: tmp.toString()
-                    }, rval, operator);
-                  },
-                  'P,N': (lval, rval, operator) => {
-                    var tmp = new BigNumber(rval.value);
-
-                    // Cast native number to precision
-                    return sails.helpers.evaluateBinaryPrecision(lval, {
-                      type: 'P',
-                      value: tmp.toString()
-                    }, operator);
-                  },
-                  'P,P': (lval, rval, operator) => {
-                    return sails.helpers.evaluateBinaryPrecision(lval, rval, operator);
-                  }
-                };
-
-                var spec = `${left.type},${right.type}`;
-
-                if (adapter[spec]) {
-                  return adapter[spec](left, right, node.operator);
-                } else {
-                  return null;
-                }
-              default:
-                return null;
-              }
-            };
-
-            var evaluateFormula = (fieldName, expr) => {
-              // If already calculated, or removed due to being circular
-              if (results.hasOwnProperty(fieldName) || !formulas[fieldName]) {
-                return;
-              }
-
-              // Evaluate all referenced formulas
-              _.each(formulaReferences[fieldName], (ref) => {
-                if (expressions[ref]) {
-                  evaluateFormula(ref, expressions[ref]);
-                }
+            _.each(set, (field, fieldName) => {
+              context.formulaStack.push({
+                set: setName,
+                field: fieldName
               });
 
-              results[fieldName] = evaluateExpressionNode(expr);
-            };
+              // If the field is a formula that hasn't already been calculated
+              if (field.type === 'F' && !_.has(context.formulaResults, [ setName, fieldName ])) {
+                var result = sails.helpers.evaluateExpressionNode(jsep(field.value), context);
 
-            _.each(expressions, (expr, fieldName) => {
-              evaluateFormula(fieldName, expr);
-            });
+                // Since we did evaluated a formula, set calculated to value
+                if (result) {
+                  result = _.mapKeys(result, (value, key) => {
+                    if (key === 'value') {
+                      return 'calculated';
+                    } else {
+                      return key;
+                    }
+                  });
+                }
 
-            _.each(results, (result, fieldName) => {
-              // Could be null due to circular ref, or invalid formula
-              if (result) {
-                set[fieldName].calculated = result.value;
-                // Mark this as a calculation so we don't override formula string
-                set[fieldName].type = 'F';
+                _.set(context.formulaResults, [ setName, fieldName ], result);
               }
+
+              context.formulaStack.pop();
             });
+
+            context.setStack.pop();
           });
 
-          callback(null, metadataSets);
+          var result = _.mergeWith(metadataSets, context.formulaResults, (objValue, srcValue, key, object, source, stack) => {
+            // Circular or invalid formulas result in null, but frontend needs a value to display
+            if (!srcValue) {
+              return {
+                value: ''
+              };
+            }
+          });
+
+          callback(null, result);
         } catch (err) {
           callback(err);
         }

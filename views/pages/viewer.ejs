@@ -112,7 +112,7 @@ See https://github.com/adobe-type-tools/cmap-resources
                         <td><%- key -%></td>
                       </tr>
                       <tr>
-                        <td><input class="metadataField metadataStringField" fieldType="<%- set[key].type -%>" setName="<%- setName -%>" fieldName="<%- key -%>" type="<%- type -%>" value="<%- set[key].calculated || set[key].value -%>" formula="<%- set[key].type === 'F' ? encodeURI(set[key].value) : '' -%>"></input>
+                        <td><input class="metadataField metadataStringField" fieldType="<%- set[key].type -%>" setName="<%- setName -%>" fieldName="<%- key -%>" type="<%- type -%>" value="<%- set[key].err || set[key].calculated || set[key].value -%>" formula="<%- set[key].type === 'F' ? encodeURI(set[key].value) : '' -%>"></input>
                         </td>
                       </tr>
                     <% }); // end Objects.keys().forEach loop %>

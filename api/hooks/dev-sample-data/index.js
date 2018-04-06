@@ -80,23 +80,27 @@ module.exports = (sails) => {
                 },
                 '2pi': {
                   type: 'F',
-                  value: '"pi" * 2'
+                  value: 'field("pi") * 2'
                 },
                 'circular 1': {
                   type: 'F',
-                  value: '"circular 2" + 1'
+                  value: 'field("circular 2") + 1'
                 },
                 'circular 2': {
                   type: 'F',
-                  value: '"circular 1" + 1'
+                  value: 'field("circular 1") + 1'
+                },
+                'circular 3': {
+                  type: 'F',
+                  value: 'field("circular 1") * 5'
                 },
                 '2pi+1': {
                   type: 'F',
-                  value: '"2pi" + 1'
+                  value: 'field("2pi") + 1'
                 },
                 '-(2pi+1)': {
                   type: 'F',
-                  value: '-"2pi+1"'
+                  value: '-field("2pi+1")'
                 },
                 '1+1': {
                   type: 'F',
@@ -104,7 +108,7 @@ module.exports = (sails) => {
                 },
                 'next+1': {
                   type: 'F',
-                  value: '"next" + 1'
+                  value: 'field("next") + 1'
                 },
                 'next': {
                   type: 'N',
@@ -112,15 +116,15 @@ module.exports = (sails) => {
                 },
                 'pi/2': {
                   type: 'F',
-                  value: '"pi" / 2'
+                  value: 'field("pi") / 2'
                 },
                 'pi%2': {
                   type: 'F',
-                  value: '"pi" % 2'
+                  value: 'field("pi") % 2'
                 },
                 'pi^2': {
                   type: 'F',
-                  value: '"pi" ^ 2'
+                  value: 'field("pi") ^ 2'
                 }
               }
             }).switch({
