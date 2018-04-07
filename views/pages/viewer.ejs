@@ -91,34 +91,55 @@ See https://github.com/adobe-type-tools/cmap-resources
           </div>
           <div id="metadataView" class="hidden">
             <form id="metadata" method="POST" action="/viewer/<%- id -%>/metadata" enctype="multipart/form-data">
-              <% Object.keys(metadataSets).forEach(function (setName) { %>
-              <% var set = metadataSets[setName]; %>
+              <%
+              Object.keys(metadataSets).forEach(function (setName) {
+              var set = metadataSets[setName];
+              %>
                 <fieldset class="metadataSet" name="<%- setName -%>">
                   <legend><%- setName -%></legend>
                   <table class="metadataTable">
-                    <% Object.keys(set).forEach(function (key) { %>
-                    <% var type; %>
-                    <% switch (set[key].type) {
-                       case 'N':
-                       case 'B':
-                       case 'F':
-                         type = 'string';
-                         break;
-                       default:
-                         break;
-                       } %>
-                    <% // Below tr is part of above Object.keys().forEach loop %>
+                    <%
+                    Object.keys(set).forEach(function (key) {
+                    %>
+
                       <tr>
                         <td><%- key -%></td>
                       </tr>
-                      <tr>
-                        <td><input class="metadataField metadataStringField" fieldType="<%- set[key].type -%>" setName="<%- setName -%>" fieldName="<%- key -%>" type="<%- type -%>" value="<%- set[key].err || set[key].calculated || set[key].value -%>" formula="<%- set[key].type === 'F' ? encodeURI(set[key].value) : '' -%>"></input>
-                        </td>
-                      </tr>
-                    <% }); // end Objects.keys().forEach loop %>
+
+                      <%
+                      switch (set[key].type) {
+                      case 'N':
+                      case 'P':
+                      case 'S':
+                      case 'B':
+                      case 'F':
+                      %>
+                        <tr>
+                          <td><input class="metadataField metadataStringField" fieldType="<%- set[key].type -%>" setName="<%- setName -%>" fieldName="<%- key -%>" type="string" value="<%- set[key].err || set[key].calculated || set[key].value -%>" formula="<%- set[key].type === 'F' ? encodeURI(set[key].value) : '' -%>"></input>
+                          </td>
+                        </tr>
+                      <%
+                        break;
+                      case 'NL':
+                        set[key].value.forEach(function (val) {
+                      %>
+                          <tr>
+                            <td><input class="metadataField metadataStringField" fieldType="<%- val.type -%>" setName="<%- setName -%>" fieldName="<%- key -%>" type="string" value="<%- val -%>"></input>
+                            </td>
+                          </tr>
+                      <%
+                        });
+                        break;
+                      default:
+                        break;
+                      }
+                    });
+                    %>
                   </table>
                 </fieldset>
-              <% }); %>
+              <%
+              });
+              %>
               <br>
               <button id="metadataApply" type="button" value="Apply">Apply</button>
             </form>

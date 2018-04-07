@@ -154,7 +154,7 @@ module.exports = {
       }
     ], (err, metadataSets) => {
       if (err) {
-        return exits.error(new Error(err.message));
+        return exits.error(err);
       }
 
       exits.success(metadataSets);

@@ -129,6 +129,12 @@ module.exports = {
           value: val.value
         };
         break;
+      case 'NL':
+        document['$' + key] = {
+          type: 'NL',
+          value: val.value
+        };
+        break;
       default:
         return;
       }

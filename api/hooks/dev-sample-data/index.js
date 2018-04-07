@@ -131,6 +131,40 @@ module.exports = (sails) => {
               success: (metadataSet) => {
                 sails.log.info('Created sample document metadata set');
 
+                callback(null, user, doc);
+              },
+              error: (err) => {
+                callback({
+                  message: err.message
+                });
+              },
+              invalidObjectType: (err) => {
+                callback({
+                  message: err.message
+                });
+              }
+            })
+          },
+          (user, doc, callback) => {
+            sails.helpers.addObjectMetadataSet.with({
+              account: user.defaultAccount,
+              object: doc.id,
+              objectType: 'document',
+              setName: 'Test Repeating Attributes',
+              metadata: {
+                'numbers': {
+                  type: 'NL',
+                  value: [ 1, 2, 3, 4 ]
+                },
+                'sum(numbers)': {
+                  type: 'F',
+                  value: 'sum(field("numbers")) + sum(field("numbers")) + 2'
+                }
+              }
+            }).switch({
+              success: (metadataSet) => {
+                sails.log.info('Created sample document metadata set');
+
                 callback();
               },
               error: (err) => {

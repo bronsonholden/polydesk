@@ -21,6 +21,12 @@ module.exports = {
     }
   },
   fn: (inputs, exits) => {
+    if (!inputs.node) {
+      return exits.success({
+        err: 'Invalid expression node'
+      });
+    }
+
     switch (inputs.node.type) {
     case 'CallExpression':
       return exits.success(sails.helpers.evaluateCallExpression(inputs.node.callee.name, inputs.node.arguments, inputs.context));
@@ -28,6 +34,12 @@ module.exports = {
       return exits.success(sails.helpers.normalizeFormulaOperand(inputs.node.value));
     case 'UnaryExpression':
       var operand = sails.helpers.evaluateExpressionNode(inputs.node.argument, inputs.context);
+
+      if (!operand) {
+        return exits.success({
+          err: 'Invalid operand type: ' + typeof(operand)
+        })
+      }
 
       switch (operand.type) {
       case 'N':
@@ -42,6 +54,12 @@ module.exports = {
     case 'BinaryExpression':
       var left = sails.helpers.evaluateExpressionNode(inputs.node.left, inputs.context);
       var right = sails.helpers.evaluateExpressionNode(inputs.node.right, inputs.context);
+
+      if (!left || !right) {
+        return exits.success({
+          err: 'Invalid arguments for operator ' + inputs.node.operator
+        });
+      }
 
       if (left.err) {
         return exits.success({
