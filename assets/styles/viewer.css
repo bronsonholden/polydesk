@@ -34,6 +34,10 @@
   border-right: 0px solid transparent;
 }
 
+.metadataSet legend {
+  margin-left: 10px;
+}
+
 .metadataTable tr {
   width: 100%;
 }
