@@ -118,17 +118,6 @@ module.exports = {
               if (field.type === 'F' && !_.has(context.formulaResults, [ setName, fieldName ])) {
                 var result = sails.helpers.evaluateExpressionNode(jsep(field.value), context);
 
-                // Since we did evaluated a formula, set calculated to value
-                if (result) {
-                  result = _.mapKeys(result, (value, key) => {
-                    if (key === 'value') {
-                      return 'calculated';
-                    } else {
-                      return key;
-                    }
-                  });
-                }
-
                 _.set(context.formulaResults, [ setName, fieldName ], result);
               }
 
@@ -136,6 +125,17 @@ module.exports = {
             });
 
             context.setStack.pop();
+          });
+
+          // Mark all formula calculated results as a formula, so we don't overwrite them with data
+          _.each(context.formulaResults, (set, setName) => {
+            _.each(set, (field, fieldName) => {
+              field.type = 'F';
+              field.calculated = field.value;
+              // We have to remove this key or it will overwrite the formula string with its calculated value
+              // when we merge with metadataSets below.
+              delete field.value;
+            });
           });
 
           var result = _.mergeWith(metadataSets, context.formulaResults, (objValue, srcValue, key, object, source, stack) => {
