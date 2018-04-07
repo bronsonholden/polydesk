@@ -158,7 +158,7 @@ module.exports = (sails) => {
                 },
                 'sum(numbers)': {
                   type: 'F',
-                  value: 'sum(field("numbers")) + sum(field("numbers")) + 2'
+                  value: 'sum(field("numbers"))'
                 }
               }
             }).switch({
