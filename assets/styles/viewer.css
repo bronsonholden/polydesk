@@ -42,16 +42,30 @@
   width: 100%;
 }
 
-.metadataTable td {
-  padding: 0px 10px 5px 10px;
+.metadataTable td:first-child {
+  padding-left: 10px;
+}
+
+.metadataTable td:last-child {
+  padding-right: 10px;
 }
 
 .metadataTable .metadataField {
+  width: 100%;
   height: 25px;
   box-sizing: border-box;
   border-radius: 3px;
-  border: 1px solid #9f9f9f;
+  border: 1px solid #6f6f6f;
   padding: 0px 3px 0px 3px;
+  margin-bottom: 10px;
+}
+
+.metadataTable .metadataField.metadataRepeatingField {
+  margin-bottom: 0px;
+}
+
+.metadataRepeatingFieldAdd, .metadataRepeatingFieldRemove {
+  font-weight: bold;
 }
 
 .textLayer {
@@ -563,7 +577,7 @@ html[dir='rtl'] #outerContainer.sidebarOpen > #mainContainer {
 
 #sidebarContent {
   top: 32px;
-  bottom: 0;
+  bottom: 52px;
   overflow: auto;
   -webkit-overflow-scrolling: touch;
   position: absolute;
@@ -614,6 +628,16 @@ html[dir='rtl'] #viewerContainer {
   background-color: #828282; /* fallback */
   background-image: url('/images/texture.png');
 }
+
+#sidebarFooter {
+  width: 300px;
+  height: 52px;
+  bottom: 0px;
+  position: fixed;
+  background-color: #828282; /* fallback */
+  background-image: url('/images/texture.png');
+}
+
 html[dir='ltr'] #toolbarSidebar {
         /*
   box-shadow: inset -1px 0 0 rgba(0, 0, 0, 0.25),
@@ -2269,6 +2293,7 @@ html[dir='rtl'] #documentPropertiesOverlay .row > * {
   }
   #sidebarContent {
     top: 32px;
+    bottom: 52px;
     background-color: #aaaaaa;
     background-image: url('/images/texture.png');
   }

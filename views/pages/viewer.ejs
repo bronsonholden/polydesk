@@ -134,11 +134,11 @@ See https://github.com/adobe-type-tools/cmap-resources
       <div id="sidebarContainer">
         <div id="toolbarSidebar">
           <div class="splitToolbarButton toggled">
-            <button id="viewThumbnail" class="toolbarButton toggled" title="Show Thumbnails" tabindex="2" data-l10n-id="thumbs">
-               <span data-l10n-id="thumbs_label">Thumbnails</span>
-            </button>
-            <button id="viewMetadata" class="toolbarButton" title="Show Document Metadata" tabindex="3" data-l10n-id="metadata">
+            <button id="viewMetadata" class="toolbarButton" title="Show Document Metadata" tabindex="2" data-l10n-id="metadata">
                <span data-l10n-id="metadata_label">Document Outline</span>
+            </button>
+            <button id="viewThumbnail" class="toolbarButton toggled" title="Show Thumbnails" tabindex="3" data-l10n-id="thumbs">
+               <span data-l10n-id="thumbs_label">Thumbnails</span>
             </button>
             <button id="viewOutline" class="toolbarButton" title="Show Document Outline (double-click to expand/collapse all items)" tabindex="3" data-l10n-id="document_outline">
                <span data-l10n-id="document_outline_label">Document Outline</span>
@@ -193,18 +193,20 @@ See https://github.com/adobe-type-tools/cmap-resources
                         set[key].value.forEach(function (val, idx, arr) {
                       %>
                           <tr>
-                            <td><input class="metadataField metadataStringField" fieldType="<%- set[key].type -%>" setName="<%- setName -%>" valueIndex="<%- idx -%>" fieldName="<%- key -%>" type="string" value="<%- val -%>"></input>
+                            <td><input class="metadataField metadataRepeatingField metadataStringField" fieldType="<%- set[key].type -%>" setName="<%- setName -%>" valueIndex="<%- idx -%>" fieldName="<%- key -%>" type="string" value="<%- val -%>"></input>
                             </td>
                             <td>
-                              <button class="metadataRepeatingFieldRemove" setName="<%- setName -%>" fieldName="<%- key -%>" valueIndex="<%- idx -%>" type="button">-</button>
+                              <button class="toolbarButton textButton metadataRepeatingFieldRemove" setName="<%- setName -%>" fieldName="<%- key -%>" valueIndex="<%- idx -%>" type="button">-</button>
                             </td>
                           </tr>
                       <%
                         });
                       %>
                           <tr>
+                            <td>&nbsp;
+                            </td>
                             <td>
-                              <button class="metadataRepeatingFieldAdd" setName="<%- setName -%>" fieldName="<%- key -%>" nextIndex="<%- set[key].value.length -%>" type="button">+</button>
+                              <button class="toolbarButton textButton metadataRepeatingFieldAdd" setName="<%- setName -%>" fieldName="<%- key -%>" nextIndex="<%- set[key].value.length -%>" type="button">+</button>
                             </td>
                           </tr>
                       <%
@@ -219,14 +221,21 @@ See https://github.com/adobe-type-tools/cmap-resources
               <%
               });
               %>
-              <br>
-              <button id="metadataApply" type="button" value="Apply">Apply</button>
             </form>
           </div>
           <div id="outlineView" class="hidden">
           </div>
           <div id="attachmentsView" class="hidden">
           </div>
+        </div>
+        <div id="sidebarFooter">
+          <table class="metadataTable">
+            <tr>
+              <td>
+                <button id="metadataApply" class="overlayButton" title="Apply Metadata">Apply</button>
+              </td>
+            </tr>
+          </table>
         </div>
       </div>  <!-- sidebarContainer -->
 
