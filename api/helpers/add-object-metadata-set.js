@@ -130,10 +130,20 @@ module.exports = {
         };
         break;
       case 'NL':
-        document['$' + key] = {
-          type: 'NL',
-          value: val.value
-        };
+        try {
+          document['$' + key] = {
+            type: 'NL',
+            value: val.value.map((n) => {
+              var big = new BigNumber(n);
+              return big.toNumber();
+            })
+          };
+        } catch (err) {
+          document['$' + key] = {
+            type: 'NL',
+            value: []
+          };
+        }
         break;
       default:
         return;

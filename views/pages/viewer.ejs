@@ -36,6 +36,43 @@ See https://github.com/adobe-type-tools/cmap-resources
 
     <script type="text/javascript">
       $(document).ready(function () {
+        $(document).on('click', '.metadataRepeatingFieldAdd', function () {
+          var setName = $(this).attr('setName');
+          var fieldName = $(this).attr('fieldName');
+          var nextIndex = parseInt($(this).attr('nextIndex'));
+
+          $(this).attr('nextIndex', nextIndex + 1);
+
+          var row = $(`input[fieldName="${fieldName}"][setName="${setName}"][valueIndex="${nextIndex - 1}"]`).closest('tr');
+          var newRow = row.clone();
+          var newField = $(newRow).find('input');
+
+          newField.val('');
+          newField.attr('valueIndex', nextIndex);
+
+          row.after(newRow);
+        });
+
+        $(document).on('click', '.metadataRepeatingFieldRemove', function () {
+          var setName = $(this).attr('setName');
+          var fieldName = $(this).attr('fieldName');
+          var row = $(this).closest('tr');
+
+          // Don't delete last element
+          if ($(`input[fieldName="${fieldName}"][setName="${setName}"]`).length < 2) {
+            return;
+          }
+
+          var idx = 0;
+
+          row.remove();
+          $(`input[fieldName="${fieldName}"][setName="${setName}"]`).each(function () {
+            $(this).attr('valueIndex', idx++);
+          });
+
+          $(`.metadataRepeatingFieldAdd[fieldName="${fieldName}"][setName="${setName}"]`).attr('nextIndex', idx);
+        });
+
         $('#metadataApply').click(function () {
           var metadataSets = {};
 
@@ -43,15 +80,40 @@ See https://github.com/adobe-type-tools/cmap-resources
             var type = $(this).attr('fieldType');
             var setName = $(this).attr('setName');
             var fieldName = $(this).attr('fieldName');
-            var value = type === 'F' ? $(this).attr('formula') : $(this).val();
+            var value = $(this).val();
 
             if (!metadataSets[setName]) {
               metadataSets[setName] = {};
             }
 
-            metadataSets[setName][fieldName] = {
-              type: type,
-              value: value
+            switch (type) {
+            case 'F':
+              metadataSets[setName][fieldName] = {
+                type: type,
+                value: $(this).attr('formula')
+              };
+              break;
+            case 'NL':
+              if (!metadataSets[setName][fieldName]) {
+                metadataSets[setName][fieldName] = {
+                  type: type,
+                  value: []
+                };
+              }
+
+              if (!value) {
+                value = 0;
+              }
+
+              metadataSets[setName][fieldName].value.push(value);
+
+              break;
+            default:
+              metadataSets[setName][fieldName] = {
+                type: type,
+                value: value
+              };
+              break;
             }
           });
 
@@ -128,14 +190,24 @@ See https://github.com/adobe-type-tools/cmap-resources
                       <%
                         break;
                       case 'NL':
-                        set[key].value.forEach(function (val) {
+                        set[key].value.forEach(function (val, idx, arr) {
                       %>
                           <tr>
-                            <td><input class="metadataField metadataStringField" fieldType="<%- val.type -%>" setName="<%- setName -%>" fieldName="<%- key -%>" type="string" value="<%- val -%>"></input>
+                            <td><input class="metadataField metadataStringField" fieldType="<%- set[key].type -%>" setName="<%- setName -%>" valueIndex="<%- idx -%>" fieldName="<%- key -%>" type="string" value="<%- val -%>"></input>
+                            </td>
+                            <td>
+                              <button class="metadataRepeatingFieldRemove" setName="<%- setName -%>" fieldName="<%- key -%>" valueIndex="<%- idx -%>" type="button">-</button>
                             </td>
                           </tr>
                       <%
                         });
+                      %>
+                          <tr>
+                            <td>
+                              <button class="metadataRepeatingFieldAdd" setName="<%- setName -%>" fieldName="<%- key -%>" nextIndex="<%- set[key].value.length -%>" type="button">+</button>
+                            </td>
+                          </tr>
+                      <%
                         break;
                       default:
                         break;
