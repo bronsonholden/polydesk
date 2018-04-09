@@ -85,6 +85,7 @@ module.exports = {
       (results, callback) => {
         var metadataSets = {};
 
+        // Build set dictionary, return unsorted array of metadata set names
         var metadataOrdering = results.map((res) => {
           var set = {};
 
@@ -98,6 +99,7 @@ module.exports = {
           };
         });
 
+        // Now sort the set names
         metadataOrdering = metadataOrdering.sort((a, b) => {
           return a.order - b.order;
         }).map(o => o.setName);
