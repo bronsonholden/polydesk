@@ -85,17 +85,26 @@ module.exports = {
       (results, callback) => {
         var metadataSets = {};
 
-        results.map((res) => {
+        var metadataOrdering = results.map((res) => {
           var set = {};
 
           Object.keys(res).filter(key => key.indexOf('$') === 0).forEach(key => set[key.slice(1)] = res[key]);
 
           metadataSets[res._set] = set;
+
+          return {
+            setName: res._set,
+            order: res._order
+          };
         });
 
-        callback(null, metadataSets);
+        metadataOrdering = metadataOrdering.sort((a, b) => {
+          return a.order - b.order;
+        }).map(o => o.setName);
+
+        callback(null, metadataSets, metadataOrdering);
       },
-      (metadataSets, callback) => {
+      (metadataSets, metadataOrdering, callback) => {
         try {
           var formulas = {};
           var context = {
@@ -144,6 +153,13 @@ module.exports = {
               return {
                 value: ''
               };
+            }
+          });
+
+          result = _.mapValues(result, (set, setName) => {
+            return {
+              fields: set,
+              order: metadataOrdering.indexOf(setName)
             }
           });
 

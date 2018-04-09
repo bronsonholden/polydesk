@@ -60,27 +60,33 @@ module.exports = (sails) => {
               object: doc.id,
               objectType: 'document',
               setName: 'Test Set',
+              order: 0,
               metadata: {
                 'Field 1': {
                   type: 'S',
-                  value: 'StringValue'
+                  value: 'StringValue',
+                  order: 0
                 },
                 'Field 2': {
                   type: 'N',
-                  value: 125.38
+                  value: 125.38,
+                  order: 1
                 },
                 'Field 3': {
                   type: 'B',
-                  value: true
+                  value: true,
+                  order: 2
                 },
                 'pi': {
                   type: 'P',
-                  value: '3.14159265358979323846264338327950288419716939937510'
+                  value: '3.14159265358979323846264338327950288419716939937510',
+                  order: 3
                   // 2 * pi = 6.2831853071795864769252867665590057683943387987502
                 },
                 '2pi': {
                   type: 'F',
-                  value: 'field("pi") * 2'
+                  value: 'field("pi") * 2',
+                  order: 4
                 },
                 'circular 1': {
                   type: 'F',
@@ -96,35 +102,43 @@ module.exports = (sails) => {
                 },
                 '2pi+1': {
                   type: 'F',
-                  value: 'field("2pi") + 1'
+                  value: 'field("2pi") + 1',
+                  order: 8
                 },
                 '-(2pi+1)': {
                   type: 'F',
-                  value: '-field("2pi+1")'
+                  value: '-field("2pi+1")',
+                  order: 9
                 },
                 '1+1': {
                   type: 'F',
-                  value: '1 + 1'
+                  value: '1 + 1',
+                  order: 10
                 },
                 'next+1': {
                   type: 'F',
-                  value: 'field("next") + 1'
+                  value: 'field("next") + 1',
+                  order: 11
                 },
                 'next': {
                   type: 'N',
-                  value: 1
+                  value: 1,
+                  order: 12
                 },
                 'pi/2': {
                   type: 'F',
-                  value: 'field("pi") / 2'
+                  value: 'field("pi") / 2',
+                  order: 13
                 },
                 'pi%2': {
                   type: 'F',
-                  value: 'field("pi") % 2'
+                  value: 'field("pi") % 2',
+                  order: 14
                 },
                 'pi^2': {
                   type: 'F',
-                  value: 'field("pi") ^ 2'
+                  value: 'field("pi") ^ 2',
+                  order: 15
                 }
               }
             }).switch({
@@ -151,14 +165,17 @@ module.exports = (sails) => {
               object: doc.id,
               objectType: 'document',
               setName: 'Test Repeating Attributes',
+              order: 1,
               metadata: {
                 'numbers': {
                   type: 'NL',
-                  value: [ 1, 2, 3, 4 ]
+                  value: [ 1, 2, 3, 4 ],
+                  order: 0
                 },
                 'sum(numbers)': {
                   type: 'F',
-                  value: 'sum(field("numbers"))'
+                  value: 'sum(field("numbers"))',
+                  order: 1
                 }
               }
             }).switch({

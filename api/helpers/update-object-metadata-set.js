@@ -19,6 +19,11 @@ module.exports = {
       required: true,
       description: 'The name of the metadata set'
     },
+    order: {
+      type: 'number',
+      required: true,
+      description: 'The ordering of the metadata set'
+    },
     metadata: {
       type: 'json',
       required: true,
@@ -71,7 +76,8 @@ module.exports = {
     const collection = db.collection(collectionName);
     var document = {
       _object: `${prefix}${inputs.object}`,
-      _set: inputs.setName
+      _set: inputs.setName,
+      _order: inputs.order
     };
 
     Object.keys(inputs.metadata).forEach((key, index) => {
@@ -82,13 +88,15 @@ module.exports = {
       case 'S':
         document['$' + key] = {
           type: 'S',
-          value: val.value
+          value: val.value,
+          order: val.order
         };
         break;
       case 'B':
         document['$' + key] = {
           type: 'B',
-          value: val.value === 'true' ? true : false
+          value: val.value === 'true' ? true : false,
+          order: val.order
         };
         break;
       case 'N':
@@ -98,12 +106,14 @@ module.exports = {
 
           document['$' + key] = {
             type: 'N',
-            value: n
+            value: n,
+            order: val.order
           };
         } catch (err) {
           document['$' + key] = {
             type: 'N',
-            value: 0
+            value: 0,
+            order: val.order
           };
         }
         break;
@@ -113,20 +123,41 @@ module.exports = {
 
           document['$' + key] = {
             type: 'P',
-            value: val.value
+            value: val.value,
+            order: val.order
           };
         } catch (err) {
           document['$' + key] = {
             type: 'P',
-            value: '0'
+            value: '0',
+            order: val.order
           };
         }
         break;
       case 'F':
         document['$' + key] = {
           type: 'F',
-          value: val.value
+          value: val.value,
+          order: val.order
         };
+        break;
+      case 'NL':
+        try {
+          document['$' + key] = {
+            type: 'NL',
+            value: val.value.map((n) => {
+              var big = new BigNumber(n);
+              return big.toNumber();
+            }),
+            order: val.order
+          };
+        } catch (err) {
+          document['$' + key] = {
+            type: 'NL',
+            value: [],
+            order: val.order
+          };
+        }
         break;
       default:
         return;

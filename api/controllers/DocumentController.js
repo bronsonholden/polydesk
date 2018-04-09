@@ -103,6 +103,7 @@ module.exports = {
   // Web-only action. Replaces metadata set in the viewer metadata tab
   applyMetadata: (req, res) => {
     var metadataSets = req.body.metadataSets;
+    var metadataOrdering = req.body.metadataOrdering;
 
     _.each(metadataSets, (set, setName) => {
       _.each(set, (field, fieldName) => {
@@ -113,11 +114,18 @@ module.exports = {
     });
 
     async.eachOf(metadataSets, (metadata, setName, callback) => {
+      var order = metadataOrdering.indexOf(setName);
+
+      if (order < 0) {
+        return callback(new Error('Metadata set not ordered'));
+      }
+
       sails.helpers.addObjectMetadataSet.with({
         account: req.session.account,
         object: req.param('document'),
         objectType: 'document',
         setName: setName,
+        order: order,
         metadata: metadata
       }).switch({
         success: (metadata) => {
