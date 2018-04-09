@@ -36,6 +36,8 @@ See https://github.com/adobe-type-tools/cmap-resources
 
     <script type="text/javascript">
       $(document).ready(function () {
+        $('.metadataFieldButton').hide();
+
         $(document).on('click', '.metadataRepeatingFieldAdd', function () {
           var setName = $(this).attr('setName');
           var fieldName = $(this).attr('fieldName');
@@ -200,7 +202,7 @@ See https://github.com/adobe-type-tools/cmap-resources
                     %>
 
                       <tr>
-                        <td><%- key -%></td>
+                        <td colspan="3" class="metadataFieldLabel"><%- key -%></td>
                       </tr>
 
                       <%
@@ -211,7 +213,17 @@ See https://github.com/adobe-type-tools/cmap-resources
                       case 'B':
                       %>
                         <tr>
-                          <td><input class="metadataField metadataStringField" fieldType="<%- set[key].type -%>" fieldOrder="<%- set[key].order -%>" setName="<%- setName -%>" fieldName="<%- key -%>" type="string" value="<%- set[key].err || set[key].value -%>"></input>
+                          <td class="metadataFieldButton">
+                            <button type="button" class="toolbarButton textButton metadataFieldMoveUp">
+                              <img src="/images/metadataField-moveUp.png"/>
+                            </button>
+                          </td>
+                          <td class="metadataFieldButton">
+                            <button type="button" class="toolbarButton textButton metadataFieldMoveDown">
+                              <img src="/images/metadataField-moveDown.png"/>
+                            </button>
+                          </td>
+                          <td class="metdataFieldInput"><input class="metadataField metadataStringField" fieldType="<%- set[key].type -%>" fieldOrder="<%- set[key].order -%>" setName="<%- setName -%>" fieldName="<%- key -%>" type="string" value="<%- set[key].err || set[key].value -%>"></input>
                           </td>
                         </tr>
                       <%
@@ -219,6 +231,16 @@ See https://github.com/adobe-type-tools/cmap-resources
                       case 'F':
                       %>
                         <tr>
+                          <td class="metadataFieldButton">
+                            <button type="button" class="toolbarButton textButton metadataFieldMoveUp">
+                              <img src="/images/metadataField-moveUp.png"/>
+                            </button>
+                          </td>
+                          <td class="metadataFieldButton">
+                            <button type="button" class="toolbarButton textButton metadataFieldMoveDown">
+                              <img src="/images/metadataField-moveDown.png"/>
+                            </button>
+                          </td>
                           <td><input class="metadataField metadataStringField" fieldType="<%- set[key].type -%>" fieldOrder="<%- set[key].order -%>" setName="<%- setName -%>" fieldName="<%- key -%>" type="string" value="<%- set[key].err || set[key].calculated -%>" formula="<%- encodeURI(set[key].value) -%>"></input>
                           </td>
                         </tr>
@@ -228,6 +250,16 @@ See https://github.com/adobe-type-tools/cmap-resources
                         set[key].value.forEach(function (val, idx, arr) {
                       %>
                           <tr>
+                            <td class="metadataFieldButton">
+                              <button type="button" class="toolbarButton textButton metadataFieldMoveUp">
+                                <img src="/images/metadataField-moveUp.png"/>
+                              </button>
+                            </td>
+                            <td class="metadataFieldButton">
+                              <button type="button" class="toolbarButton textButton metadataFieldMoveDown">
+                                <img src="/images/metadataField-moveDown.png"/>
+                              </button>
+                            </td>
                             <td><input class="metadataField metadataRepeatingField metadataStringField" fieldType="<%- set[key].type -%>" fieldOrder="<%- set[key].order -%>" setName="<%- setName -%>" valueIndex="<%- idx -%>" fieldName="<%- key -%>" type="string" value="<%- val -%>"></input>
                             </td>
                             <td>

@@ -32,6 +32,8 @@
   border-bottom: 0px solid transparent;
   border-left: 0px solid transparent;
   border-right: 0px solid transparent;
+  padding-left: 10px;
+  padding-right: 10px;
 }
 
 .metadataSet legend {
@@ -40,14 +42,6 @@
 
 .metadataTable tr {
   width: 100%;
-}
-
-.metadataTable td:first-child {
-  padding-left: 10px;
-}
-
-.metadataTable td:last-child {
-  padding-right: 10px;
 }
 
 .metadataTable .metadataField {
@@ -60,7 +54,21 @@
   margin-bottom: 10px;
 }
 
-.metadataTable .metadataField.metadataRepeatingField {
+.metadataFieldButton {
+  white-space: nowrap;
+  width: 1%;
+}
+
+.metdataFieldInput {
+  width: 99%;
+}
+
+.metadataFieldLabel {
+  padding-top: 10px;
+}
+
+.metadataTable .metadataField {
+  display: flex;
   margin-bottom: 0px;
 }
 
