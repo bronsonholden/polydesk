@@ -84,6 +84,18 @@ See https://github.com/adobe-type-tools/cmap-resources
           next.find('.metadataField').attr('fieldOrder', myOrder);
         });
 
+        $(document).on('click', '.metadataFieldDelete', function () {
+          var table = $(this).closest('table');
+
+          $(this).closest('tbody').remove();
+
+          var order = 0;
+
+          table.find('tbody').each(function () {
+            $(this).find('.metadataField').attr('fieldOrder', order++);
+          });
+        });
+
         $(document).on('click', '.metadataRepeatingFieldAdd', function () {
           var setName = $(this).attr('setName');
           var fieldName = $(this).attr('fieldName');
