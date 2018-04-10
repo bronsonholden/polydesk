@@ -55,11 +55,33 @@ See https://github.com/adobe-type-tools/cmap-resources
         });
 
         $(document).on('click', '.metadataFieldMoveUp', function () {
-          // Move the field up
+          var my = $(this).closest('tbody');
+          var myOrder = my.find('.metadataField').attr('fieldOrder');
+          var prev = my.prev('tbody');
+          var prevOrder = prev.find('.metadataField').attr('fieldOrder');
+
+          if (prev.length !== 1) {
+            return;
+          }
+
+          my.insertBefore(prev);
+          my.find('.metadataField').attr('fieldOrder', prevOrder);
+          prev.find('.metadataField').attr('fieldOrder', myOrder);
         });
 
         $(document).on('click', '.metadataFieldMoveDown', function () {
-          // Move the field down
+          var my = $(this).closest('tbody');
+          var myOrder = my.find('.metadataField').attr('fieldOrder');
+          var next = my.next('tbody');
+          var nextOrder = next.find('.metadataField').attr('fieldOrder');
+
+          if (next.length !== 1) {
+            return;
+          }
+
+          my.insertAfter(next);
+          my.find('.metadataField').attr('fieldOrder', nextOrder);
+          next.find('.metadataField').attr('fieldOrder', myOrder);
         });
 
         $(document).on('click', '.metadataRepeatingFieldAdd', function () {
@@ -106,7 +128,7 @@ See https://github.com/adobe-type-tools/cmap-resources
             var type = $(this).attr('fieldType');
             var setName = $(this).attr('setName');
             var fieldName = $(this).attr('fieldName');
-            var order = $(this).attr('fieldOrder');
+            var order = parseInt($(this).attr('fieldOrder'));
             var value = $(this).val();
 
             if (!metadataSets[setName]) {
