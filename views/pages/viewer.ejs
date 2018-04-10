@@ -36,6 +36,66 @@ See https://github.com/adobe-type-tools/cmap-resources
 
     <script type="text/javascript">
       $(document).ready(function () {
+
+        // Listen for clicks to options button on each field
+        $(document).on('click', '.metadataFieldOptionsButton', function () {
+          // We use each, but there's only one option menu per field
+          $(this).siblings('.metadataOptionsMenu').each(function () {
+            // If the menu isn't open, open it and add a once-only listener to close it when anything is clicked
+            if ($(this).hasClass('hidden')) {
+              $(this).removeClass('hidden');
+
+              var _this = $(this);
+
+              $(document).one('click', function () {
+                _this.addClass('hidden');
+              });
+            }
+          });
+        });
+
+        $(document).on('click', '.metadataFieldMoveUp', function () {
+          var my = $(this).closest('tbody');
+          var myOrder = my.find('.metadataField').attr('fieldOrder');
+          var prev = my.prev('tbody');
+          var prevOrder = prev.find('.metadataField').attr('fieldOrder');
+
+          if (prev.length !== 1) {
+            return;
+          }
+
+          my.insertBefore(prev);
+          my.find('.metadataField').attr('fieldOrder', prevOrder);
+          prev.find('.metadataField').attr('fieldOrder', myOrder);
+        });
+
+        $(document).on('click', '.metadataFieldMoveDown', function () {
+          var my = $(this).closest('tbody');
+          var myOrder = my.find('.metadataField').attr('fieldOrder');
+          var next = my.next('tbody');
+          var nextOrder = next.find('.metadataField').attr('fieldOrder');
+
+          if (next.length !== 1) {
+            return;
+          }
+
+          my.insertAfter(next);
+          my.find('.metadataField').attr('fieldOrder', nextOrder);
+          next.find('.metadataField').attr('fieldOrder', myOrder);
+        });
+
+        $(document).on('click', '.metadataFieldDelete', function () {
+          var table = $(this).closest('table');
+
+          $(this).closest('tbody').remove();
+
+          var order = 0;
+
+          table.find('tbody').each(function () {
+            $(this).find('.metadataField').attr('fieldOrder', order++);
+          });
+        });
+
         $(document).on('click', '.metadataRepeatingFieldAdd', function () {
           var setName = $(this).attr('setName');
           var fieldName = $(this).attr('fieldName');
@@ -80,7 +140,7 @@ See https://github.com/adobe-type-tools/cmap-resources
             var type = $(this).attr('fieldType');
             var setName = $(this).attr('setName');
             var fieldName = $(this).attr('fieldName');
-            var order = $(this).attr('fieldOrder');
+            var order = parseInt($(this).attr('fieldOrder'));
             var value = $(this).val();
 
             if (!metadataSets[setName]) {
@@ -198,9 +258,31 @@ See https://github.com/adobe-type-tools/cmap-resources
 
                     orderedFields.forEach(function (key) {
                     %>
-
+                    <tbody>
                       <tr>
-                        <td><%- key -%></td>
+                        <td class="metadataFieldLabel">
+                          <%- key -%>
+                        </td>
+                        <td class="metadataFieldButton">
+                          <button type="button" class="toolbarButton metadataFieldOptionsButton">
+                            <b>...</b>
+                          </button>
+                          <div class="secondaryToolbar hidden doorHangerRight metadataOptionsMenu">
+                            <div>
+                              <button type="button" class="secondaryToolbarButton metadataFieldOption metadataFieldMoveUp" title="Move Up">
+                                <span>Move Up</span>
+                              </button>
+                              <br>
+                              <button type="button" class="secondaryToolbarButton metadataFieldOption metadataFieldMoveDown" title="Move Down">
+                                <span>Move Down</span>
+                              </button>
+                              <div class="horizontalToolbarSeparator"></div>
+                              <button type="button" class="secondaryToolbarButton metadataFieldOption metadataFieldDelete" title="Delete">
+                                <span>Delete</span>
+                              </button>
+                            </div>
+                          </div>  <!-- secondaryToolbar -->
+                        </td>
                       </tr>
 
                       <%
@@ -211,7 +293,7 @@ See https://github.com/adobe-type-tools/cmap-resources
                       case 'B':
                       %>
                         <tr>
-                          <td><input class="metadataField metadataStringField" fieldType="<%- set[key].type -%>" fieldOrder="<%- set[key].order -%>" setName="<%- setName -%>" fieldName="<%- key -%>" type="string" value="<%- set[key].err || set[key].value -%>"></input>
+                          <td colspan="2" class="metdataFieldInput"><input class="metadataField metadataStringField" fieldType="<%- set[key].type -%>" fieldOrder="<%- set[key].order -%>" setName="<%- setName -%>" fieldName="<%- key -%>" type="string" value="<%- set[key].err || set[key].value -%>"></input>
                           </td>
                         </tr>
                       <%
@@ -219,7 +301,7 @@ See https://github.com/adobe-type-tools/cmap-resources
                       case 'F':
                       %>
                         <tr>
-                          <td><input class="metadataField metadataStringField" fieldType="<%- set[key].type -%>" fieldOrder="<%- set[key].order -%>" setName="<%- setName -%>" fieldName="<%- key -%>" type="string" value="<%- set[key].err || set[key].calculated -%>" formula="<%- encodeURI(set[key].value) -%>"></input>
+                          <td colspan="2"><input class="metadataField metadataStringField" fieldType="<%- set[key].type -%>" fieldOrder="<%- set[key].order -%>" setName="<%- setName -%>" fieldName="<%- key -%>" type="string" value="<%- set[key].err || set[key].calculated -%>" formula="<%- encodeURI(set[key].value) -%>"></input>
                           </td>
                         </tr>
                       <%
@@ -251,11 +333,13 @@ See https://github.com/adobe-type-tools/cmap-resources
                       }
                     });
                     %>
+                    </tbody>
                   </table>
                 </fieldset>
               <%
               });
               %>
+              <div style="height:300px;">&nbsp;</div>
             </form>
           </div>
           <div id="outlineView" class="hidden">
