@@ -36,7 +36,31 @@ See https://github.com/adobe-type-tools/cmap-resources
 
     <script type="text/javascript">
       $(document).ready(function () {
-        $('.metadataFieldButton').hide();
+
+        // Listen for clicks to options button on each field
+        $(document).on('click', '.metadataFieldOptionsButton', function () {
+          // We use each, but there's only one option menu per field
+          $(this).siblings('.metadataOptionsMenu').each(function () {
+            // If the menu isn't open, open it and add a once-only listener to close it when anything is clicked
+            if ($(this).hasClass('hidden')) {
+              $(this).removeClass('hidden');
+
+              var _this = $(this);
+
+              $(document).one('click', function () {
+                _this.addClass('hidden');
+              });
+            }
+          });
+        });
+
+        $(document).on('click', '.metadataFieldMoveUp', function () {
+          // Move the field up
+        });
+
+        $(document).on('click', '.metadataFieldMoveDown', function () {
+          // Move the field down
+        });
 
         $(document).on('click', '.metadataRepeatingFieldAdd', function () {
           var setName = $(this).attr('setName');
@@ -200,9 +224,31 @@ See https://github.com/adobe-type-tools/cmap-resources
 
                     orderedFields.forEach(function (key) {
                     %>
-
+                    <tbody>
                       <tr>
-                        <td colspan="3" class="metadataFieldLabel"><%- key -%></td>
+                        <td class="metadataFieldLabel">
+                          <%- key -%>
+                        </td>
+                        <td class="metadataFieldButton">
+                          <button type="button" class="toolbarButton metadataFieldOptionsButton">
+                            <b>...</b>
+                          </button>
+                          <div class="secondaryToolbar hidden doorHangerRight metadataOptionsMenu">
+                            <div>
+                              <button type="button" class="secondaryToolbarButton metadataFieldOption metadataFieldMoveUp" title="Move Up">
+                                <span>Move Up</span>
+                              </button>
+                              <br>
+                              <button type="button" class="secondaryToolbarButton metadataFieldOption metadataFieldMoveDown" title="Move Down">
+                                <span>Move Down</span>
+                              </button>
+                              <div class="horizontalToolbarSeparator"></div>
+                              <button type="button" class="secondaryToolbarButton metadataFieldOption metadataFieldDelete" title="Delete">
+                                <span>Delete</span>
+                              </button>
+                            </div>
+                          </div>  <!-- secondaryToolbar -->
+                        </td>
                       </tr>
 
                       <%
@@ -213,17 +259,7 @@ See https://github.com/adobe-type-tools/cmap-resources
                       case 'B':
                       %>
                         <tr>
-                          <td class="metadataFieldButton">
-                            <button type="button" class="toolbarButton textButton metadataFieldMoveUp">
-                              <img src="/images/metadataField-moveUp.png"/>
-                            </button>
-                          </td>
-                          <td class="metadataFieldButton">
-                            <button type="button" class="toolbarButton textButton metadataFieldMoveDown">
-                              <img src="/images/metadataField-moveDown.png"/>
-                            </button>
-                          </td>
-                          <td class="metdataFieldInput"><input class="metadataField metadataStringField" fieldType="<%- set[key].type -%>" fieldOrder="<%- set[key].order -%>" setName="<%- setName -%>" fieldName="<%- key -%>" type="string" value="<%- set[key].err || set[key].value -%>"></input>
+                          <td colspan="2" class="metdataFieldInput"><input class="metadataField metadataStringField" fieldType="<%- set[key].type -%>" fieldOrder="<%- set[key].order -%>" setName="<%- setName -%>" fieldName="<%- key -%>" type="string" value="<%- set[key].err || set[key].value -%>"></input>
                           </td>
                         </tr>
                       <%
@@ -231,17 +267,7 @@ See https://github.com/adobe-type-tools/cmap-resources
                       case 'F':
                       %>
                         <tr>
-                          <td class="metadataFieldButton">
-                            <button type="button" class="toolbarButton textButton metadataFieldMoveUp">
-                              <img src="/images/metadataField-moveUp.png"/>
-                            </button>
-                          </td>
-                          <td class="metadataFieldButton">
-                            <button type="button" class="toolbarButton textButton metadataFieldMoveDown">
-                              <img src="/images/metadataField-moveDown.png"/>
-                            </button>
-                          </td>
-                          <td><input class="metadataField metadataStringField" fieldType="<%- set[key].type -%>" fieldOrder="<%- set[key].order -%>" setName="<%- setName -%>" fieldName="<%- key -%>" type="string" value="<%- set[key].err || set[key].calculated -%>" formula="<%- encodeURI(set[key].value) -%>"></input>
+                          <td colspan="2"><input class="metadataField metadataStringField" fieldType="<%- set[key].type -%>" fieldOrder="<%- set[key].order -%>" setName="<%- setName -%>" fieldName="<%- key -%>" type="string" value="<%- set[key].err || set[key].calculated -%>" formula="<%- encodeURI(set[key].value) -%>"></input>
                           </td>
                         </tr>
                       <%
@@ -250,16 +276,6 @@ See https://github.com/adobe-type-tools/cmap-resources
                         set[key].value.forEach(function (val, idx, arr) {
                       %>
                           <tr>
-                            <td class="metadataFieldButton">
-                              <button type="button" class="toolbarButton textButton metadataFieldMoveUp">
-                                <img src="/images/metadataField-moveUp.png"/>
-                              </button>
-                            </td>
-                            <td class="metadataFieldButton">
-                              <button type="button" class="toolbarButton textButton metadataFieldMoveDown">
-                                <img src="/images/metadataField-moveDown.png"/>
-                              </button>
-                            </td>
                             <td><input class="metadataField metadataRepeatingField metadataStringField" fieldType="<%- set[key].type -%>" fieldOrder="<%- set[key].order -%>" setName="<%- setName -%>" valueIndex="<%- idx -%>" fieldName="<%- key -%>" type="string" value="<%- val -%>"></input>
                             </td>
                             <td>
@@ -283,6 +299,7 @@ See https://github.com/adobe-type-tools/cmap-resources
                       }
                     });
                     %>
+                    </tbody>
                   </table>
                 </fieldset>
               <%

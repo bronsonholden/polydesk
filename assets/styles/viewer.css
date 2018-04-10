@@ -55,6 +55,7 @@
 }
 
 .metadataFieldButton {
+  position: relative;
   white-space: nowrap;
   width: 1%;
 }
@@ -74,6 +75,24 @@
 
 .metadataRepeatingFieldAdd, .metadataRepeatingFieldRemove {
   font-weight: bold;
+}
+
+.secondaryToolbar.metadataOptionsMenu {
+  right: 0px;
+  position: absolute;
+  display: inline-block;
+  background-color: #828282; /* fallback */
+  background-image: url('/images/texture.png');
+  z-index: 10000;
+  height: auto;
+  min-width: 180px;
+  padding: 4px 6px 0px 6px;
+  margin: 4px 2px 4px 2px;
+  color: hsl(0,0%,85%);
+  font-size: 12px;
+  line-height: 14px;
+  text-align: left;
+  cursor: default;
 }
 
 .textLayer {
@@ -1429,6 +1448,14 @@ html[dir="rtl"] .secondaryToolbarButton > span {
 
 .secondaryToolbarButton.documentProperties::before {
   content: url('/images/secondaryToolbarButton-documentProperties.png');
+}
+
+.metadataFieldMoveUp::before {
+  content: url('/images/metadataField-moveUp.png');
+}
+
+.metadataFieldMoveDown::before {
+  content: url('/images/metadataField-moveDown.png');
 }
 
 .verticalToolbarSeparator {
