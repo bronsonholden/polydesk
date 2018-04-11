@@ -113,36 +113,62 @@ module.exports = {
       });
     });
 
-    async.eachOf(metadataSets, (metadata, setName, callback) => {
-      var order = metadataOrdering.indexOf(setName);
+    // TODO: Transaction? Or add sets, then remove sets not updated?
+    async.waterfall([
+      (callback) => {
+        sails.helpers.removeAllObjectMetadataSets.with({
+          account: req.session.account,
+          object: req.param('document'),
+          objectType: 'document'
+        }).switch({
+          success: (metadata) => {
+            callback();
+          },
+          error: (err) => {
+            callback({
+              message: err.message
+            });
+          },
+          invalidObjectType: (err) => {
+            callback({
+              message: err.message
+            });
+          }
+        });
+      },
+      (callback) => {
+        async.eachOf(metadataSets, (metadata, setName, callback) => {
+          var order = metadataOrdering.indexOf(setName);
 
-      if (order < 0) {
-        return callback(new Error('Metadata set not ordered'));
+          if (order < 0) {
+            return callback(new Error('Metadata set not ordered'));
+          }
+
+          sails.helpers.addObjectMetadataSet.with({
+            account: req.session.account,
+            object: req.param('document'),
+            objectType: 'document',
+            setName: setName,
+            order: order,
+            metadata: metadata
+          }).switch({
+            success: (metadata) => {
+              callback();
+            },
+            error: (err) => {
+              callback({
+                message: err.message
+              });
+            },
+            invalidObjectType: (err) => {
+              callback({
+                message: err.message
+              });
+            }
+          });
+        }, callback);
       }
-
-      sails.helpers.addObjectMetadataSet.with({
-        account: req.session.account,
-        object: req.param('document'),
-        objectType: 'document',
-        setName: setName,
-        order: order,
-        metadata: metadata
-      }).switch({
-        success: (metadata) => {
-          callback();
-        },
-        error: (err) => {
-          callback({
-            message: err.message
-          });
-        },
-        invalidObjectType: (err) => {
-          callback({
-            message: err.message
-          });
-        }
-      });
-    }, (err) => {
+    ], (err) => {
       if (err) {
         return res.status(500).send({
           message: err.message

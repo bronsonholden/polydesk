@@ -38,7 +38,7 @@ See https://github.com/adobe-type-tools/cmap-resources
       $(document).ready(function () {
 
         // Listen for clicks to options button on each field
-        $(document).on('click', '.metadataFieldOptionsButton', function () {
+        $(document).on('click', '.metadataOptionsButton', function () {
           // We use each, but there's only one option menu per field
           $(this).siblings('.metadataOptionsMenu').each(function () {
             // If the menu isn't open, open it and add a once-only listener to close it when anything is clicked
@@ -54,10 +54,52 @@ See https://github.com/adobe-type-tools/cmap-resources
           });
         });
 
+        $(document).on('click', '.metadataSetMoveUp', function () {
+          var my = $(this).closest('fieldset');
+          var myOrder = my.attr('order');
+          var prev = my.prev('fieldset');
+          var prevOrder = prev.attr('order');
+
+          if (prev.length !== 1) {
+            return;
+          }
+
+          my.insertBefore(prev);
+          my.attr('order', prevOrder);
+          prev.attr('order', myOrder);
+        });
+
+        $(document).on('click', '.metadataSetMoveDown', function () {
+          var my = $(this).closest('fieldset');
+          var myOrder = my.attr('order');
+          var next = my.next('fieldset');
+          var nextOrder = next.attr('order');
+
+          if (next.length !== 1) {
+            return;
+          }
+
+          my.insertAfter(next);
+          my.attr('order', nextOrder);
+          next.attr('order', myOrder);
+        });
+
+        $(document).on('click', '.metadataSetDelete', function () {
+          var view = $(this).closest('form');
+
+          $(this).closest('fieldset').remove();
+
+          var idx = 0;
+
+          $(view).find('fieldset').each(function () {
+            $(this).attr('order', idx++);
+          });
+        });
+
         $(document).on('click', '.metadataFieldMoveUp', function () {
-          var my = $(this).closest('tbody');
+          var my = $(this).closest('tbody.metadataFieldSection');
           var myOrder = my.find('.metadataField').attr('fieldOrder');
-          var prev = my.prev('tbody');
+          var prev = my.prev('tbody.metadataFieldSection');
           var prevOrder = prev.find('.metadataField').attr('fieldOrder');
 
           if (prev.length !== 1) {
@@ -70,9 +112,9 @@ See https://github.com/adobe-type-tools/cmap-resources
         });
 
         $(document).on('click', '.metadataFieldMoveDown', function () {
-          var my = $(this).closest('tbody');
+          var my = $(this).closest('tbody.metadataFieldSection');
           var myOrder = my.find('.metadataField').attr('fieldOrder');
-          var next = my.next('tbody');
+          var next = my.next('tbody.metadataFieldSection');
           var nextOrder = next.find('.metadataField').attr('fieldOrder');
 
           if (next.length !== 1) {
@@ -241,8 +283,35 @@ See https://github.com/adobe-type-tools/cmap-resources
                 var set = metadataSets[setName].fields;
               %>
                 <fieldset class="metadataSet" name="<%- setName -%>" order="<%- setOrder -%>">
-                  <legend><%- setName -%></legend>
+                  <legend></legend>
                   <table class="metadataTable">
+                    <tbody class="metadataSetHeader">
+                      <tr>
+                        <td>
+                          <h4><%- setName -%></h4>
+                        </td>
+                        <td class="metadataViewButton">
+                          <button type="button" class="toolbarButton metadataOptionsButton">
+                            <b>...</b>
+                          </button>
+                          <div class="secondaryToolbar hidden doorHangerRight metadataOptionsMenu">
+                            <div>
+                              <button type="button" class="secondaryToolbarButton metadataOption metadataSetMoveUp" title="Move Up">
+                                <span>Move Up</span>
+                              </button>
+                              <br>
+                              <button type="button" class="secondaryToolbarButton metadataOption metadataSetMoveDown" title="Move Down">
+                                <span>Move Down</span>
+                              </button>
+                              <div class="horizontalToolbarSeparator"></div>
+                              <button type="button" class="secondaryToolbarButton metadataOption metadataSetDelete" title="Delete">
+                                <span>Delete</span>
+                              </button>
+                            </div>
+                          </div>  <!-- secondaryToolbar -->
+                        </td>
+                      </tr>
+                    </tbody>
                     <%
                     var orderedFields = Object.keys(set).sort(function (a, b) {
                       if (typeof(set[a].order) === 'number' && typeof(set[b].order) !== 'number') {
@@ -258,26 +327,26 @@ See https://github.com/adobe-type-tools/cmap-resources
 
                     orderedFields.forEach(function (key) {
                     %>
-                    <tbody>
+                    <tbody class="metadataFieldSection">
                       <tr>
                         <td class="metadataFieldLabel">
                           <%- key -%>
                         </td>
-                        <td class="metadataFieldButton">
-                          <button type="button" class="toolbarButton metadataFieldOptionsButton">
+                        <td class="metadataViewButton">
+                          <button type="button" class="toolbarButton metadataOptionsButton">
                             <b>...</b>
                           </button>
                           <div class="secondaryToolbar hidden doorHangerRight metadataOptionsMenu">
                             <div>
-                              <button type="button" class="secondaryToolbarButton metadataFieldOption metadataFieldMoveUp" title="Move Up">
+                              <button type="button" class="secondaryToolbarButton metadataOption metadataFieldMoveUp" title="Move Up">
                                 <span>Move Up</span>
                               </button>
                               <br>
-                              <button type="button" class="secondaryToolbarButton metadataFieldOption metadataFieldMoveDown" title="Move Down">
+                              <button type="button" class="secondaryToolbarButton metadataOption metadataFieldMoveDown" title="Move Down">
                                 <span>Move Down</span>
                               </button>
                               <div class="horizontalToolbarSeparator"></div>
-                              <button type="button" class="secondaryToolbarButton metadataFieldOption metadataFieldDelete" title="Delete">
+                              <button type="button" class="secondaryToolbarButton metadataOption metadataFieldDelete" title="Delete">
                                 <span>Delete</span>
                               </button>
                             </div>
