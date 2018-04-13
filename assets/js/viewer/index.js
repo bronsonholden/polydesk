@@ -1,6 +1,6 @@
 let pdfDocument;
 let PAGE_HEIGHT;
-const DEFAULT_SCALE = 1.33;
+const DEFAULT_SCALE = 3;
 
 pdfjsLib.workerSrc = './pdf.worker.js';
 pdfjsLib.getDocument('/documents/sample.pdf').then(pdf => {
@@ -16,6 +16,7 @@ pdfjsLib.getDocument('/documents/sample.pdf').then(pdf => {
     let viewport = pdfPage.getViewport(DEFAULT_SCALE);
     PAGE_HEIGHT = viewport.height;
     document.body.style.width = `${viewport.width}px`;
+    $('.page').height(`${PAGE_HEIGHT}px`);
   });
 });
 
@@ -51,8 +52,8 @@ function loadPage(pageNum) {
     let canvasContext = canvas.getContext('2d');
     let viewport = pdfPage.getViewport(DEFAULT_SCALE);
 
-    canvas.width = viewport.width * 2;
-    canvas.height = viewport.height * 2;
+    canvas.width = viewport.width;
+    canvas.height = viewport.height;
     page.style.width = `${viewport.width}px`;
     page.style.height = `${viewport.height}px`;
     wrapper.style.width = `${viewport.width}px`;
@@ -80,9 +81,12 @@ function loadPage(pageNum) {
   });
 }
 
-inView('.page').on('enter', function () {
-  setTimeout(function () {
-    loadPage($(this).attr('data-page-number'));
+$(window).scroll(function () {
+  $('.page[data-loaded="false"]').each(function () {
+    if ($(this).offset().top - PAGE_HEIGHT < $(window).scrollTop() + window.innerHeight) {
+      console.log('loading ' + 1);
+      $(this).attr('data-loaded', 'true');
+      loadPage(parseInt($(this).attr('data-page-number')));
+    }
   });
-  console.log($(this).attr)
 });

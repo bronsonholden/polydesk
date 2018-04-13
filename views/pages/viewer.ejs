@@ -1,28 +1,15 @@
-<!DOCTYPE html>
-<html>
-  <head>
-    <title>Bootstrap PDF Viewer</title>
-    <!-- Twitter Bootstrap -->
-    <link rel="stylesheet" href="/styles/bootstrap.min.css">
-    <!-- Viewer -->
-    <link rel="stylesheet" href="/styles/viewer.css">
-  </head>
-  <body>
-    <!-- Popper.js -->
-    <script src="https://unpkg.com/popper.js/dist/umd/popper.min.js"></script>
-    <!-- in-view.js -->
-    <script src="/dependencies/in-view.min.js"></script>
-    <!-- Twitter Bootstrap -->
-    <script src="/dependencies/bootstrap.min.js"></script>
-
-    <!-- Bootstrap PDF Viewer -->
-    <div id="viewer" class="pdf-viewer" data-url="/documents/sample.pdf">
-      <div class="textLayer">
+<!-- Bootstrap PDF Viewer -->
+<div id="viewer" class="pdf-viewer" data-url="/documents/sample.pdf">
+  <div id="search" class="modal" role="dialog">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">Search</h5>
+        </div>
+        <div class="modal-body">
+          <input id="search-input" type="text" placeholder="Enter your search text"></input>
+        </div>
       </div>
     </div>
-
-    <script src="/js/pdf.min.js"></script>
-
-    <script src="/js/viewer.js"></script>
-  </body>
-</html>
+  </div>
+</div>

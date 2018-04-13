@@ -1,12 +1,11 @@
-
 .textLayer {
+  position: absolute;
   left: 0;
   top: 0;
   right: 0;
   bottom: 0;
   line-height: 1.0;
   opacity: 1;
-  user-select: contain;
 }
 
 .textLayer > div {
@@ -17,17 +16,17 @@
           transform-origin: 0% 0%;
 }
 
-::selection {
+.textLayer ::selection {
     background: rgba(90, 125, 255, 0.7);
     color: transparent;
 }
 
-::-webkit-selection {
+.textLayer ::-webkit-selection {
     background: rgba(90, 125, 255, 0.7);
     color: transparent;
 }
 
-:::-moz-selection {
+.textLayer ::-moz-selection {
     background: rgba(90, 125, 255, 0.7);
     color: transparent;
 }
