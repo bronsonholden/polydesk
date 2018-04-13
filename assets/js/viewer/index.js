@@ -84,7 +84,6 @@ function loadPage(pageNum) {
 $(window).scroll(function () {
   $('.page[data-loaded="false"]').each(function () {
     if ($(this).offset().top - PAGE_HEIGHT < $(window).scrollTop() + window.innerHeight) {
-      console.log('loading ' + 1);
       $(this).attr('data-loaded', 'true');
       loadPage(parseInt($(this).attr('data-page-number')));
     }

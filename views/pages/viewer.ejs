@@ -1,5 +1,5 @@
 <!-- Bootstrap PDF Viewer -->
-<div id="viewer" class="pdf-viewer" data-url="/documents/sample.pdf">
+<div id="viewer" class="pdf-viewer" data-url="<%- documentUrl -%>">
   <div id="search" class="modal" role="dialog">
     <div class="modal-dialog">
       <div class="modal-content">
@@ -8,6 +8,9 @@
         </div>
         <div class="modal-body">
           <input id="search-input" type="text" placeholder="Enter your search text"></input>
+        </div>
+        <div class="modal-footer">
+          <button id="search-next-result" type="button" class="btn">Next</button>
         </div>
       </div>
     </div>
