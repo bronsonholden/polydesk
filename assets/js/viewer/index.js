@@ -1,6 +1,6 @@
 let pdfDocument;
 let PAGE_HEIGHT;
-const DEFAULT_SCALE = 3;
+const DEFAULT_SCALE = 2;
 
 pdfjsLib.workerSrc = './pdf.worker.js';
 pdfjsLib.getDocument('/documents/sample.pdf').then(pdf => {
@@ -15,7 +15,7 @@ pdfjsLib.getDocument('/documents/sample.pdf').then(pdf => {
   loadPage(1).then(pdfPage => {
     let viewport = pdfPage.getViewport(DEFAULT_SCALE);
     PAGE_HEIGHT = viewport.height;
-    document.body.style.width = `${viewport.width}px`;
+    viewer.width = `${viewport.width}px`;
     $('.page').height(`${PAGE_HEIGHT}px`);
   });
 });
@@ -81,9 +81,10 @@ function loadPage(pageNum) {
   });
 }
 
-$(window).scroll(function () {
+$('#viewer').scroll(function () {
+  console.log('scroll');
   $('.page[data-loaded="false"]').each(function () {
-    if ($(this).offset().top - PAGE_HEIGHT < $(window).scrollTop() + window.innerHeight) {
+    if ($(this).offset().top - PAGE_HEIGHT < $('#viewer').scrollTop() + window.innerHeight) {
       $(this).attr('data-loaded', 'true');
       loadPage(parseInt($(this).attr('data-page-number')));
     }

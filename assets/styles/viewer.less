@@ -1,18 +1,30 @@
-body {
+html, body {
+  max-height: 100%;
+}
+
+#viewer {
   background: #afafaf;
-  right: 0px;
-  top: 0px;
-  bottom: 0px;
-  left: 0px;
-  min-width: 100%;
-  min-height: 100%;
+  position: fixed;
+  overflow-y: scroll;
+  max-height: 100%;
+  display: block;
+  padding: 0px;
 }
 
 .page {
   position: relative;
-  margin-top: 50px;
-  margin-left: auto;
-  margin-right: auto;
+  display: block;
+  margin: 25px auto;
+}
+
+.canvasWrapper > canvas {
+}
+
+#properties {
+  display: block;
+  position: fixed;
+  overflow-y: scroll;
+  height: 100%;
 }
 
 @import 'viewer/search.less';
