@@ -81,12 +81,13 @@ function loadPage(pageNum) {
   });
 }
 
-$('#viewer').scroll(function () {
-  console.log('scroll');
-  $('.page[data-loaded="false"]').each(function () {
-    if ($(this).offset().top - PAGE_HEIGHT < $('#viewer').scrollTop() + window.innerHeight) {
-      $(this).attr('data-loaded', 'true');
-      loadPage(parseInt($(this).attr('data-page-number')));
-    }
+$(document).ready(function () {
+  $('#viewer').scroll(function () {
+    $('.page[data-loaded="false"]').each(function () {
+      if ($(this).offset().top - PAGE_HEIGHT < $('#viewer').scrollTop() + window.innerHeight) {
+        $(this).attr('data-loaded', 'true');
+        loadPage(parseInt($(this).attr('data-page-number')));
+      }
+    });
   });
 });

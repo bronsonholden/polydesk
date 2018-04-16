@@ -16,8 +16,8 @@
         orderedMetadataSets.forEach(function (setName, setOrder) {
           var set = metadataSets[setName].fields;
         %>
-          <div class="metadataSet" name="<%- setName -%>" order="<%- setOrder -%>">
-            <h4><%- setName -%></h4>
+          <div setname="<%- setName -%>" setorder="<%- setOrder -%>">
+            <h3><%- setName -%></h3>
             <%
             var orderedFields = Object.keys(set).sort(function (a, b) {
               if (typeof(set[a].order) === 'number' && typeof(set[b].order) !== 'number') {
@@ -31,36 +31,72 @@
             });
             orderedFields.forEach(function (key) {
             %>
-              <div class="form-group metadataFieldSection">
-                <label class="metadataFieldLabel"><%- key -%></label>
+              <div class="form-group">
+                <label><h5><%- key -%></h5></label>
                 <%
+                var value = set[key].value;
+                var typeString;
+
                 switch (set[key].type) {
                 case 'N':
+                  typeString = 'Number';
+                  break;
                 case 'P':
+                  typeString = 'Precision';
+                  break;
                 case 'S':
+                  typeString = 'String';
+                  break;
                 case 'B':
-                %>
-                  <input class="form-control metadataField metadataStringField" fieldType="<%- set[key].type -%>" fieldOrder="<%- set[key].order -%>" setName="<%- setName -%>" fieldName="<%- key -%>" type="string" value="<%- set[key].err || set[key].value -%>"></input>
-                <%
+                  typeString = 'Boolean';
                   break;
                 case 'F':
-                %>
-                  <input class="form-control metadataField metadataStringField" fieldType="<%- set[key].type -%>" fieldOrder="<%- set[key].order -%>" setName="<%- setName -%>" fieldName="<%- key -%>" type="string" value="<%- set[key].err || set[key].calculated -%>" formula="<%- encodeURI(set[key].value) -%>"></input>
-                <%
-                  break;
-                case 'NL':
-                  set[key].value.forEach(function (val, idx, arr) {
-                %>
-                  <input class="form-control metadataField metadataRepeatingField metadataStringField" fieldType="<%- set[key].type -%>" fieldOrder="<%- set[key].order -%>" setName="<%- setName -%>" valueIndex="<%- idx -%>" fieldName="<%- key -%>" type="string" value="<%- val -%>"></input>
-                <%
-                  });
-                %>
-                  <!-- remove item -->
-                <%
+                  typeString = 'Formula';
+                  value = set[key].err || set[key].calculated;
                   break;
                 default:
                   break;
                 }
+
+                if (set[key].type.length === 2 && set[key].type[1] === 'L') {
+                  value.forEach(function (val, idx, arr) {
+                %>
+                  <div class="input-group mb-3">
+                    <div class="input-group-prepend">
+                      <button class="btn btn-outline-secondary" type="button"><i class="icon ion-chevron-up"></i></button>
+                      <button class="btn btn-outline-secondary" type="button"><i class="icon ion-chevron-down"></i></button>
+                      <button class="btn btn-outline-secondary" type="button"><i class="icon ion-close"></i></button>
+                    </div>
+                    <input class="form-control" fieldtype="<%- set[key].type -%>" fieldorder="<%- set[key].order -%>" setname="<%- setName -%>" fieldname="<%- key -%>" type="string" value="<%- val -%>"></input>
+                  </div>
+                <%
+                  });
+                } else {
+                %>
+                  <div class="input-group mb-3">
+                    <div class="input-group-prepend">
+                      <button class="btn btn-outline-secondary" type="button"><i class="icon ion-chevron-up"></i></button>
+                      <button class="btn btn-outline-secondary" type="button"><i class="icon ion-chevron-down"></i></button>
+                      <button class="btn btn-outline-secondary" type="button"><i class="icon ion-close"></i></button>
+                    </div>
+                    <% if (set[key].type === 'F') { %>
+                      <input class="form-control" fieldtype="<%- set[key].type -%>" fieldorder="<%- set[key].order -%>" setname="<%- setName -%>" fieldname="<%- key -%>" type="string" value="<%- value -%>" formula="<%- encodeURI(set[key].value) -%>"></input>
+                    <% } else { %>
+                      <input class="form-control" fieldtype="<%- set[key].type -%>" fieldorder="<%- set[key].order -%>" setname="<%- setName -%>" fieldname="<%- key -%>" type="string" value="<%- value -%>"></input>
+                    <% } %>
+                    <div class="input-group-append">
+                      <button class="btn btn-outline-secondary dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><%- typeString -%></button>
+                      <div class="dropdown-menu">
+                        <a class="dropdown-item" href="#">String</a>
+                        <a class="dropdown-item" href="#">Number</a>
+                        <a class="dropdown-item" href="#">Boolean</a>
+                        <a class="dropdown-item" href="#">Precision</a>
+                        <a class="dropdown-item" href="#">Formula</a>
+                      </div>
+                    </div>
+                  </div>
+              <%
+              }
               %>
               </div>
             <%
@@ -73,7 +109,7 @@
         <div style="height:300px;">&nbsp;</div>
       </form>
     </div>
-    <div id="viewer" class="pdf-viewer offset-md-3 offset-lg-3 col-md-9 col-lg-9"data-url="<%- documentUrl -%>">
+    <div id="viewer" class="pdf-viewer offset-md-3 offset-lg-3 col-md-9 col-lg-9" data-url="<%- documentUrl -%>">
       <div id="search" class="modal" role="dialog">
         <div class="modal-dialog">
           <div class="modal-content">
