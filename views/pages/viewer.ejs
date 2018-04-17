@@ -73,16 +73,13 @@
                 if (set[key].type.length === 2 && set[key].type[1] === 'L') {
                   value.forEach(function (val, idx, arr) {
                 %>
-                  <div class="input-group mb-3 locked">
-                    <input class="form-control" fieldtype="<%- set[key].type -%>" fieldorder="<%- set[key].order -%>" setname="<%- setName -%>" fieldname="<%- key -%>" type="string" value="<%- val -%>"></input>
-                  </div>
-                  <div class="input-group mb-3 unlocked hidden">
-                    <div class="input-group-prepend">
+                  <div class="input-group mb-3 metadata-field">
+                    <div class="input-group-prepend-locked hidden">
                       <button class="btn btn-outline-secondary" type="button"><i class="icon ion-chevron-up"></i></button>
                       <button class="btn btn-outline-secondary" type="button"><i class="icon ion-chevron-down"></i></button>
                     </div>
                     <input class="form-control" fieldtype="<%- set[key].type -%>" fieldorder="<%- set[key].order -%>" setname="<%- setName -%>" fieldname="<%- key -%>" type="string" value="<%- val -%>"></input>
-                    <div class="input-group-append">
+                    <div class="input-group-append-locked hidden">
                       <button class="btn btn-outline-secondary" type="button"><i class="icon ion-close"></i></button>
                     </div>
                   </div>
@@ -90,24 +87,17 @@
                   });
                 } else {
                 %>
-                  <div class="input-group mb-3 locked">
-                    <% if (set[key].type === 'F') { %>
-                      <input disabled="disabled" class="form-control" fieldtype="<%- set[key].type -%>" fieldorder="<%- set[key].order -%>" setname="<%- setName -%>" fieldname="<%- key -%>" type="string" value="<%- value -%>" formula="<%- encodeURI(set[key].value) -%>"></input>
-                    <% } else { %>
-                      <input class="form-control" fieldtype="<%- set[key].type -%>" fieldorder="<%- set[key].order -%>" setname="<%- setName -%>" fieldname="<%- key -%>" type="string" value="<%- value -%>"></input>
-                    <% } %>
-                  </div>
-                  <div class="input-group mb-3 unlocked hidden">
-                    <div class="input-group-prepend">
+                  <div class="input-group mb-3 metadata-field">
+                    <div class="input-group-prepend-locked hidden">
                       <button class="btn btn-outline-secondary" type="button"><i class="icon ion-chevron-up"></i></button>
                       <button class="btn btn-outline-secondary" type="button"><i class="icon ion-chevron-down"></i></button>
                     </div>
                     <% if (set[key].type === 'F') { %>
-                      <input class="form-control" fieldtype="<%- set[key].type -%>" fieldorder="<%- set[key].order -%>" setname="<%- setName -%>" fieldname="<%- key -%>" type="string" value="<%- set[key].value.replace(/"/g, '&quot;') -%>" formula="<%- encodeURI(set[key].value) -%>"></input>
+                      <input disabled="disabled" class="form-control" fieldtype="<%- set[key].type -%>" fieldorder="<%- set[key].order -%>" setname="<%- setName -%>" fieldname="<%- key -%>" type="string" value="<%- value -%>" calculated="<%- value -%>" formula="<%- encodeURI(set[key].value) -%>"></input>
                     <% } else { %>
-                      <input disabled="disabled" class="form-control" fieldtype="<%- set[key].type -%>" fieldorder="<%- set[key].order -%>" setname="<%- setName -%>" fieldname="<%- key -%>" type="string" value="<%- value -%>"></input>
+                      <input class="form-control" fieldtype="<%- set[key].type -%>" fieldorder="<%- set[key].order -%>" setname="<%- setName -%>" fieldname="<%- key -%>" type="string" value="<%- value -%>"></input>
                     <% } %>
-                    <div class="input-group-append">
+                    <div class="input-group-append-locked hidden">
                       <button class="btn btn-outline-secondary" type="button"><i class="icon ion-close"></i></button>
                       <button class="btn btn-outline-secondary dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><%- typeString -%></button>
                       <div class="dropdown-menu">
@@ -158,15 +148,37 @@
     $(document).on('click', '.metadata-set-unlock', function () {
       $(this).siblings('.metadata-set-lock').removeClass('hidden');
       $(this).addClass('hidden');
-      $(this).closest('.metadata-set').find('.unlocked').removeClass('hidden');
-      $(this).closest('.metadata-set').find('.locked').addClass('hidden');
+      $(this).closest('.metadata-set').find('.metadata-field .input-group-prepend-locked').removeClass('input-group-prepend-locked hidden').addClass('input-group-prepend metadata-field-editable');
+      $(this).closest('.metadata-set').find('.metadata-field .input-group-append-locked').removeClass('input-group-append-locked hidden').addClass('input-group-append metadata-field-editable');
+
+      // Make formula fields editable, show the formula string
+      $(this).closest('.metadata-set').find('.metadata-field input[fieldtype="F"]').each(function () {
+        $(this).val(decodeURI($(this).attr('formula')));
+        $(this).removeAttr('disabled');
+      });
+
+      // Lock down data fields while editing the set
+      $(this).closest('.metadata-set').find('.metadata-field input[fieldtype!="F"]').each(function () {
+        $(this).attr('disabled', 'disabled');
+      });
     });
 
     $(document).on('click', '.metadata-set-lock', function () {
       $(this).siblings('.metadata-set-unlock').removeClass('hidden');
       $(this).addClass('hidden');
-      $(this).closest('.metadata-set').find('.locked').removeClass('hidden');
-      $(this).closest('.metadata-set').find('.unlocked').addClass('hidden');
+      $(this).closest('.metadata-set').find('.metadata-field .input-group-prepend').removeClass('input-group-prepend metadata-field-editable').addClass('input-group-prepend-locked hidden');
+      $(this).closest('.metadata-set').find('.metadata-field .input-group-append').removeClass('input-group-append metadata-field-editable').addClass('input-group-append-locked hidden');
+
+      // Lock formula fields down, show calculated value
+      $(this).closest('.metadata-set').find('.metadata-field input[fieldtype="F"]').each(function () {
+        $(this).val($(this).attr('calculated'));
+        $(this).attr('disabled', 'disabled');
+      });
+
+      // Make data fields editable
+      $(this).closest('.metadata-set').find('.metadata-field input[fieldtype!="F"]').each(function () {
+        $(this).removeAttr('disabled');
+      });
     });
   });
 </script>
