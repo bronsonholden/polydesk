@@ -16,8 +16,20 @@
         orderedMetadataSets.forEach(function (setName, setOrder) {
           var set = metadataSets[setName].fields;
         %>
+          <div class="mt-3"></div>
           <div setname="<%- setName -%>" setorder="<%- setOrder -%>">
-            <h3><%- setName -%></h3>
+            <div class="btn-group">
+              <button class="btn btn-light btn-lg" type="button">
+                <%- setName -%>
+              </button>
+              <button class="btn btn-light btn-lg dropdown-toggle dropdown-toggle-split" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                <span class="sr-only">Toggle Dropdown</span>
+              </button>
+              <div class="dropdown-menu">
+                <a class="dropdown-item" href="#">Unlock</a>
+              </div>
+            </div>
+            <hr>
             <%
             var orderedFields = Object.keys(set).sort(function (a, b) {
               if (typeof(set[a].order) === 'number' && typeof(set[b].order) !== 'number') {
@@ -32,7 +44,7 @@
             orderedFields.forEach(function (key) {
             %>
               <div class="form-group">
-                <label><h5><%- key -%></h5></label>
+                <label><h6><%- key -%></h6></label>
                 <%
                 var value = set[key].value;
                 var typeString;
@@ -65,9 +77,11 @@
                     <div class="input-group-prepend">
                       <button class="btn btn-outline-secondary" type="button"><i class="icon ion-chevron-up"></i></button>
                       <button class="btn btn-outline-secondary" type="button"><i class="icon ion-chevron-down"></i></button>
-                      <button class="btn btn-outline-secondary" type="button"><i class="icon ion-close"></i></button>
                     </div>
                     <input class="form-control" fieldtype="<%- set[key].type -%>" fieldorder="<%- set[key].order -%>" setname="<%- setName -%>" fieldname="<%- key -%>" type="string" value="<%- val -%>"></input>
+                    <div class="input-group-append">
+                      <button class="btn btn-outline-secondary" type="button"><i class="icon ion-close"></i></button>
+                    </div>
                   </div>
                 <%
                   });
@@ -77,7 +91,6 @@
                     <div class="input-group-prepend">
                       <button class="btn btn-outline-secondary" type="button"><i class="icon ion-chevron-up"></i></button>
                       <button class="btn btn-outline-secondary" type="button"><i class="icon ion-chevron-down"></i></button>
-                      <button class="btn btn-outline-secondary" type="button"><i class="icon ion-close"></i></button>
                     </div>
                     <% if (set[key].type === 'F') { %>
                       <input class="form-control" fieldtype="<%- set[key].type -%>" fieldorder="<%- set[key].order -%>" setname="<%- setName -%>" fieldname="<%- key -%>" type="string" value="<%- value -%>" formula="<%- encodeURI(set[key].value) -%>"></input>
@@ -85,6 +98,7 @@
                       <input class="form-control" fieldtype="<%- set[key].type -%>" fieldorder="<%- set[key].order -%>" setname="<%- setName -%>" fieldname="<%- key -%>" type="string" value="<%- value -%>"></input>
                     <% } %>
                     <div class="input-group-append">
+                      <button class="btn btn-outline-secondary" type="button"><i class="icon ion-close"></i></button>
                       <button class="btn btn-outline-secondary dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><%- typeString -%></button>
                       <div class="dropdown-menu">
                         <a class="dropdown-item" href="#">String</a>
@@ -99,6 +113,7 @@
               }
               %>
               </div>
+              <div class="mt-4"></div>
             <%
             });
             %>
@@ -128,3 +143,10 @@
     </div>
   </div>
 </div>
+<script>
+  $(document).ready(function () {
+    // Hide editing buttons by default
+    $('.form-group .input-group-append').hide();
+    $('.form-group .input-group-prepend').hide();
+  });
+</script>
