@@ -73,10 +73,10 @@
                 if (set[key].type.length === 2 && set[key].type[1] === 'L') {
                   value.forEach(function (val, idx, arr) {
                 %>
-                  <div class="mb-3 metadata-field">
+                  <div class="mb-2 metadata-field">
                     <div class="input-group-prepend-locked hidden">
-                      <button class="btn btn-outline-secondary" type="button"><i class="icon ion-chevron-up"></i></button>
-                      <button class="btn btn-outline-secondary" type="button"><i class="icon ion-chevron-down"></i></button>
+                      <button class="btn btn-outline-secondary metadata-field-move-item-up" type="button"><i class="icon ion-chevron-up"></i></button>
+                      <button class="btn btn-outline-secondary metadata-field-move-item-down" type="button"><i class="icon ion-chevron-down"></i></button>
                     </div>
                     <input class="form-control" fieldtype="<%- set[key].type -%>" fieldorder="<%- set[key].order -%>" setname="<%- setName -%>" fieldname="<%- key -%>" type="string" value="<%- val -%>"></input>
                     <div class="input-group-append-locked hidden">
@@ -89,8 +89,8 @@
                 %>
                   <div class="mb-3 metadata-field">
                     <div class="input-group-prepend-locked hidden">
-                      <button class="btn btn-outline-secondary" type="button"><i class="icon ion-chevron-up"></i></button>
-                      <button class="btn btn-outline-secondary" type="button"><i class="icon ion-chevron-down"></i></button>
+                      <button class="btn btn-outline-secondary metadata-field-move-up" type="button"><i class="icon ion-chevron-up"></i></button>
+                      <button class="btn btn-outline-secondary metadata-field-move-down" type="button"><i class="icon ion-chevron-down"></i></button>
                     </div>
                     <% if (set[key].type === 'F') { %>
                       <input disabled="disabled" class="form-control" fieldtype="<%- set[key].type -%>" fieldorder="<%- set[key].order -%>" setname="<%- setName -%>" fieldname="<%- key -%>" type="string" value="<%- value -%>" calculated="<%- value -%>" formula="<%- encodeURI(set[key].value) -%>"></input>
@@ -113,7 +113,6 @@
               }
               %>
               </div>
-              <div class="mt-4"></div>
             <%
             });
             %>
@@ -181,6 +180,70 @@
       $(this).closest('.metadata-set').find('.metadata-field input[fieldtype!="F"]').each(function () {
         $(this).removeAttr('disabled');
       });
+    });
+
+    // Move a field up
+    $(document).on('click', '.metadata-field-move-up', function () {
+      var current = $(this).closest('.form-group');
+      var prev = current.prevAll('.form-group:first');
+
+      if (prev.length !== 1) {
+        return;
+      }
+
+      var currentOrder = current.find('.form-control').attr('fieldorder');
+      var prevOrder = prev.find('.form-control').attr('fieldorder');
+
+      current.insertBefore(prev);
+      current.find('.form-control').attr('fieldorder', prevOrder);
+      prev.find('.form-control').attr('fieldorder', currentOrder);
+    });
+
+    // Move a field down
+    $(document).on('click', '.metadata-field-move-down', function () {
+      var current = $(this).closest('.form-group');
+      var next = current.nextAll('.form-group:first');
+
+      if (next.length !== 1) {
+        return;
+      }
+
+      var currentOrder = current.find('.form-control').attr('fieldorder');
+      var nextOrder = next.find('.form-control').attr('fieldorder');
+
+      current.insertAfter(next);
+      current.find('.form-control').attr('fieldorder', nextOrder);
+      next.find('.form-control').attr('fieldorder', currentOrder);
+    });
+
+    // Move an item up
+    $(document).on('click', '.metadata-field-move-item-up', function () {
+      var current = $(this).closest('.metadata-field');
+      var prev = current.prevAll('.metadata-field:first');
+
+      if (prev.length !== 1) {
+        return;
+      }
+
+      var currentOrder = current.find('.form-control').attr('fieldorder');
+      var prevOrder = prev.find('.form-control').attr('fieldorder');
+
+      current.insertBefore(prev);
+    });
+
+    // Move an item down
+    $(document).on('click', '.metadata-field-move-item-down', function () {
+      var current = $(this).closest('.metadata-field');
+      var next = current.nextAll('.metadata-field:first');
+
+      if (next.length !== 1) {
+        return;
+      }
+
+      var currentOrder = current.find('.form-control').attr('fieldorder');
+      var nextOrder = next.find('.form-control').attr('fieldorder');
+
+      current.insertAfter(next);
     });
   });
 </script>
