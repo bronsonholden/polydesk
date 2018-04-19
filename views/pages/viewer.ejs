@@ -19,7 +19,7 @@
           <div class="mt-3"></div>
           <div class="metadata-set" setname="<%- setName -%>" setorder="<%- setOrder -%>">
             <div class="btn-group">
-              <button class="btn btn-light btn-lg" type="button">
+              <button class="btn btn-light btn-lg metadata-field-label" type="button">
                 <%- setName -%>
               </button>
               <button class="btn btn-light btn-lg metadata-set-unlock" type="button">
@@ -80,7 +80,7 @@
                     </div>
                     <input class="form-control" fieldtype="<%- set[key].type -%>" fieldorder="<%- set[key].order -%>" setname="<%- setName -%>" fieldname="<%- key -%>" type="string" value="<%- val -%>"></input>
                     <div class="input-group-append-locked hidden">
-                      <button class="btn btn-outline-secondary" type="button"><i class="icon ion-close"></i></button>
+                      <button class="btn btn-outline-secondary metadata-field-delete" type="button"><i class="icon ion-close"></i></button>
                     </div>
                   </div>
                 <%
@@ -98,7 +98,7 @@
                       <input class="form-control" fieldtype="<%- set[key].type -%>" fieldorder="<%- set[key].order -%>" setname="<%- setName -%>" fieldname="<%- key -%>" type="string" value="<%- value -%>"></input>
                     <% } %>
                     <div class="input-group-append-locked hidden">
-                      <button class="btn btn-outline-secondary" type="button"><i class="icon ion-close"></i></button>
+                      <button class="btn btn-outline-secondary metadata-field-delete" type="button"><i class="icon ion-close"></i></button>
                       <button class="btn btn-outline-secondary dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><%- typeString -%></button>
                       <div class="dropdown-menu">
                         <a class="dropdown-item" href="#">String</a>
@@ -244,6 +244,10 @@
       var nextOrder = next.find('.form-control').attr('fieldorder');
 
       current.insertAfter(next);
+    });
+
+    $(document).on('click', '.metadata-field-delete', function () {
+      $(this).closest('.form-group').remove();
     });
   });
 </script>
