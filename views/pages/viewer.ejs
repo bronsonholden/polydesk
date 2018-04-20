@@ -30,17 +30,12 @@
         orderedMetadataSets.forEach(function (setName, setOrder) {
           var set = metadataSets[setName].fields;
         %>
-          <div class="metadata-set" setname="<%- setName -%>" setorder="<%- setOrder -%>">
+          <div class="metadata-set" setname="<%- setName -%>" setorder="<%- setOrder -%>" locked="locked">
             <div class="px-3 pt-3">
               <div class="btn-group">
-                <button class="btn btn-light btn-lg metadata-field-label" type="button">
-                  <%- setName -%>
-                </button>
-                <button class="btn btn-light btn-lg metadata-set-unlock" type="button">
+                <input class="mr-2 form-control-plaintext btn-lg metadata-set-label" value="<%- setName -%>" readonly></input>
+                <button class="btn rounded-circle btn-light btn-lg metadata-set-lock" type="button">
                   <i class="ion-locked"></i>
-                </button>
-                <button class="btn btn-light btn-lg metadata-set-lock hidden" type="button">
-                  <i class="ion-unlocked"></i>
                 </button>
               </div>
             </div>
@@ -58,8 +53,8 @@
             });
             orderedFields.forEach(function (key) {
             %>
-              <div class="form-group py-2 px-3 m-0">
-                <label><h6><%- key -%></h6></label>
+              <div class="form-group pb-2 pt-3 px-3 m-0">
+                <input class="mb-2 form-control-plaintext metadata-field-label" value="<%- key -%>" readonly></input>
                 <%
                 var value = set[key].value;
                 var typeString;
@@ -159,42 +154,48 @@
 </div>
 <script>
   $(document).ready(function () {
-    $(document).on('click', '.metadata-set-unlock', function () {
-      $(this).siblings('.metadata-set-lock').removeClass('hidden');
-      $(this).addClass('hidden');
-      $(this).closest('.metadata-set').find('.metadata-field').addClass('input-group');
-      $(this).closest('.metadata-set').find('.metadata-field .input-group-prepend-locked').removeClass('input-group-prepend-locked hidden').addClass('input-group-prepend metadata-field-editable');
-      $(this).closest('.metadata-set').find('.metadata-field .input-group-append-locked').removeClass('input-group-append-locked hidden').addClass('input-group-append metadata-field-editable');
-
-      // Make formula fields editable, show the formula string
-      $(this).closest('.metadata-set').find('.metadata-field input[fieldtype="F"]').each(function () {
-        $(this).val(decodeURI($(this).attr('formula')));
-        $(this).removeAttr('disabled');
-      });
-
-      // Lock down data fields while editing the set
-      $(this).closest('.metadata-set').find('.metadata-field input[fieldtype!="F"]').each(function () {
-        $(this).attr('disabled', 'disabled');
-      });
-    });
-
     $(document).on('click', '.metadata-set-lock', function () {
-      $(this).siblings('.metadata-set-unlock').removeClass('hidden');
-      $(this).addClass('hidden');
-      $(this).closest('.metadata-set').find('.metadata-field').removeClass('input-group');
-      $(this).closest('.metadata-set').find('.metadata-field .input-group-prepend').removeClass('input-group-prepend metadata-field-editable').addClass('input-group-prepend-locked hidden');
-      $(this).closest('.metadata-set').find('.metadata-field .input-group-append').removeClass('input-group-append metadata-field-editable').addClass('input-group-append-locked hidden');
+      var set = $(this).closest('.metadata-set');
 
-      // Lock formula fields down, show calculated value
-      $(this).closest('.metadata-set').find('.metadata-field input[fieldtype="F"]').each(function () {
-        $(this).val($(this).attr('calculated'));
-        $(this).attr('disabled', 'disabled');
-      });
+      if (!set.attr('locked')) {
+        set.attr('locked', 'locked');
 
-      // Make data fields editable
-      $(this).closest('.metadata-set').find('.metadata-field input[fieldtype!="F"]').each(function () {
-        $(this).removeAttr('disabled');
-      });
+        set.find('.metadata-field').removeClass('input-group');
+        set.find('.metadata-field .input-group-prepend').removeClass('input-group-prepend metadata-field-editable').addClass('input-group-prepend-locked hidden');
+        set.find('.metadata-field .input-group-append').removeClass('input-group-append metadata-field-editable').addClass('input-group-append-locked hidden');
+
+        // Lock formula fields down, show calculated value
+        set.find('.metadata-field input[fieldtype="F"]').each(function () {
+          $(this).val($(this).attr('calculated'));
+          $(this).attr('disabled', 'disabled');
+        });
+
+        // Make data fields editable
+        set.find('.metadata-field input[fieldtype!="F"]').each(function () {
+          $(this).removeAttr('disabled');
+        });
+
+        $(this).find('i').removeClass('ion-unlocked').addClass('ion-locked');
+      } else {
+        set.removeAttr('locked');
+
+        set.find('.metadata-field').addClass('input-group');
+        set.find('.metadata-field .input-group-prepend-locked').addClass('input-group-prepend metadata-field-editable').removeClass('input-group-prepend-locked hidden');
+        set.find('.metadata-field .input-group-append-locked').addClass('input-group-append metadata-field-editable').removeClass('input-group-append-locked hidden');
+
+        // Show formula string, allow editing
+        set.find('.metadata-field input[fieldtype="F"]').each(function () {
+          $(this).val(decodeURI($(this).attr('formula')));
+          $(this).removeAttr('disabled');
+        });
+
+        // Disallow data field edits
+        set.find('.metadata-field input[fieldtype!="F"]').each(function () {
+          $(this).attr('disabled', 'disabled');
+        });
+
+        $(this).find('i').removeClass('ion-locked').addClass('ion-unlocked');
+      }
     });
 
     // Move a field up
@@ -272,6 +273,19 @@
     $(document).on('click', '.document-viewer-close', function () {
       // TODO: Alert if modifications that aren't saved
       window.location.pathname = '/documents';
+    })
+
+    $(document).on('click', '.metadata-set-label, .metadata-field-label', function () {
+      console.log('asdf');
+      if ($(this).hasClass('form-control-plaintext')) {
+        $(this).addClass('form-control').removeClass('form-control-plaintext').removeAttr('readonly').focus();
+      }
+    });
+
+    $(document).on('focusout', '.metadata-set-label, .metadata-field-label', function () {
+      if ($(this).hasClass('form-control')) {
+        $(this).removeClass('form-control').addClass('form-control-plaintext').attr('readonly', true);
+      }
     })
   });
 </script>
