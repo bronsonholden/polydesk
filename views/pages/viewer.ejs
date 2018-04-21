@@ -1,8 +1,8 @@
 <div class="border border-bottom-1 border-top-0 border-left-0 border-right-0 border-secondary">
 <nav class="navbar navbar-justify-content-left navbar-fixed-top justify-content-between">
   <div>
-    <button type="button" class="btn btn-light btn-outline-primary">Apply</button>
-    <button type="button" class="btn btn-light btn-outline-primary">Save</button>
+    <button type="button" class="btn btn-light btn-outline-primary document-viewer-apply">Apply</button>
+    <button type="button" class="btn btn-light btn-outline-primary document-viewer-save">Save</button>
     <button type="button" class="btn btn-light btn-outline-secondary document-viewer-close">Close</button>
   </div>
   <div>
@@ -33,8 +33,8 @@
           <div class="metadata-set" setname="<%- setName -%>" setorder="<%- setOrder -%>" locked="locked">
             <div class="px-3 pt-3">
               <div class="btn-group">
-                <input class="mr-2 form-control-plaintext btn-lg metadata-set-label" value="<%- setName -%>" readonly></input>
-                <button class="btn rounded-circle btn-light btn-lg metadata-set-lock" type="button">
+                <input class="mr-2 form-control-plaintext text-truncate metadata-set-label font-weight-bold" value="<%- setName -%>" readonly></input>
+                <button class="btn rounded-circle btn-light metadata-set-lock" type="button">
                   <i class="ion-locked"></i>
                 </button>
               </div>
@@ -53,8 +53,8 @@
             });
             orderedFields.forEach(function (key) {
             %>
-              <div class="form-group pb-2 pt-3 px-3 m-0">
-                <input class="mb-2 form-control-plaintext metadata-field-label" value="<%- key -%>" readonly></input>
+              <div class="form-group pb-2 pt-3 px-3 m-0 metadata-field-wrapper">
+                <input class="mb-2 form-control-plaintext metadata-field-label text-truncate" value="<%- key -%>" readonly></input>
                 <%
                 var value = set[key].value;
                 var typeString;
@@ -88,7 +88,7 @@
                       <button class="bg-light btn btn-outline-secondary metadata-field-move-item-up" type="button"><i class="icon ion-chevron-up"></i></button>
                       <button class="bg-light btn btn-outline-secondary metadata-field-move-item-down" type="button"><i class="icon ion-chevron-down"></i></button>
                     </div>
-                    <input class="form-control" fieldtype="<%- set[key].type -%>" fieldorder="<%- set[key].order -%>" setname="<%- setName -%>" fieldname="<%- key -%>" type="string" value="<%- val -%>"></input>
+                    <input class="form-control" fieldtype="<%- set[key].type -%>" fieldorder="<%- set[key].order -%>" type="string" value="<%- val -%>"></input>
                     <div class="input-group-append-locked hidden">
                       <button class="bg-light btn btn-outline-secondary metadata-field-delete-item" type="button"><i class="icon ion-close"></i></button>
                     </div>
@@ -103,9 +103,9 @@
                       <button class="bg-light btn btn-outline-secondary metadata-field-move-down" type="button"><i class="icon ion-chevron-down"></i></button>
                     </div>
                     <% if (set[key].type === 'F') { %>
-                      <input disabled="disabled" class="form-control" fieldtype="<%- set[key].type -%>" fieldorder="<%- set[key].order -%>" setname="<%- setName -%>" fieldname="<%- key -%>" type="string" value="<%- value -%>" calculated="<%- value -%>" formula="<%- encodeURI(set[key].value) -%>"></input>
+                      <input disabled="disabled" class="form-control" fieldtype="<%- set[key].type -%>" fieldorder="<%- set[key].order -%>" type="string" value="<%- value -%>" calculated="<%- value -%>" formula="<%- encodeURI(set[key].value) -%>"></input>
                     <% } else { %>
-                      <input class="form-control" fieldtype="<%- set[key].type -%>" fieldorder="<%- set[key].order -%>" setname="<%- setName -%>" fieldname="<%- key -%>" type="string" value="<%- value -%>"></input>
+                      <input class="form-control" fieldtype="<%- set[key].type -%>" fieldorder="<%- set[key].order -%>" type="string" value="<%- value -%>"></input>
                     <% } %>
                     <div class="input-group-append-locked hidden">
                       <button class="bg-light btn btn-outline-secondary metadata-field-delete" type="button"><i class="icon ion-close"></i></button>
@@ -149,6 +149,7 @@
           </div>
         </div>
       </div>
+      <div id="growls-viewer"></div>
     </div>
   </div>
 </div>
@@ -273,19 +274,22 @@
     $(document).on('click', '.document-viewer-close', function () {
       // TODO: Alert if modifications that aren't saved
       window.location.pathname = '/documents';
-    })
+    });
 
     $(document).on('click', '.metadata-set-label, .metadata-field-label', function () {
-      console.log('asdf');
       if ($(this).hasClass('form-control-plaintext')) {
         $(this).addClass('form-control').removeClass('form-control-plaintext').removeAttr('readonly').focus();
+        $(this).on('keydown', null, 'return', function () {
+          $(this).focusout();
+        });
       }
     });
 
     $(document).on('focusout', '.metadata-set-label, .metadata-field-label', function () {
       if ($(this).hasClass('form-control')) {
         $(this).removeClass('form-control').addClass('form-control-plaintext').attr('readonly', true);
+        $(this).off('keydown');
       }
-    })
+    });
   });
 </script>
