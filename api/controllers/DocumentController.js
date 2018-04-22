@@ -105,14 +105,6 @@ module.exports = {
     var metadataSets = req.body.metadataSets;
     var metadataOrdering = req.body.metadataOrdering;
 
-    _.each(metadataSets, (set, setName) => {
-      _.each(set, (field, fieldName) => {
-        if (field.type === 'F') {
-          field.value = decodeURI(field.value);
-        }
-      });
-    });
-
     // TODO: Transaction? Or add sets, then remove sets not updated?
     async.waterfall([
       (callback) => {
@@ -175,7 +167,14 @@ module.exports = {
         });
       }
 
-      res.redirect('/documents');
+      if (req.body.save) {
+        res.redirect('/documents');
+      } else {
+        res.send({
+          success: true,
+          message: 'Metadata applied'
+        });
+      }
     });
   },
   upload: (req, res) => {

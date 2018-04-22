@@ -1,0 +1,80 @@
+html, body {
+  max-height: 100%;
+}
+
+.hidden {
+  display: none;
+}
+
+#viewer {
+  background: #afafaf;
+  position: fixed;
+  overflow-y: scroll;
+  max-height: 100%;
+  display: block;
+  padding: 0px;
+}
+
+.page {
+  position: relative;
+  display: block;
+  margin: 25px auto;
+}
+
+input.form-control {
+  min-width: 60px;
+}
+
+.metadata-set .btn-group {
+  max-width: 100%;
+}
+
+#properties {
+  display: block;
+  position: fixed;
+  overflow-y: scroll;
+  height: 100%;
+}
+
+#actionbar {
+  display: block;
+  position: fixed;
+  overflow: hidden;
+}
+
+.metadata-set-lock i {
+  opacity: 1;
+}
+
+.metadata-set-unlock i {
+  opacity: 0.4;
+}
+
+.bg-primary-op {
+  background-color: rgba(0, 123, 255, 0.3) !important;
+}
+
+.bg-secondary-op {
+  background-color: rgba(108, 117, 125, 0.3) !important;
+}
+
+.bg-success-op {
+  background-color: rgba(40, 167, 69, 0.3) !important;
+}
+
+.bg-danger-op {
+  background-color: rgba(220, 53, 69, 0.3) !important;
+}
+
+.bg-warning-op {
+  background-color: rgba(255, 193, 7, 0.3) !important;
+}
+
+.bg-info-op {
+  /* Make this one more opaque to help distinguish it from bg-primary-op */
+  background-color: rgba(23, 162, 184, 0.2) !important;
+}
+
+@import 'viewer/growls.less';
+@import 'viewer/search.less';
+@import 'viewer/text-layer.less';
