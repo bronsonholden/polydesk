@@ -1,7 +1,6 @@
 const sails = require('sails');
 const async = require('async');
-const { describe, it, before, after } = require('mocha');
-const { expect } = require('chai');
+const { describe, it, before } = require('mocha');
 
 describe('User-UserGroup', function () {
   var inputs = {};
@@ -57,4 +56,4 @@ describe('User-UserGroup', function () {
   // it('removes User from UserGroup', function (done) {
   //   done();
   // })
-})
+});

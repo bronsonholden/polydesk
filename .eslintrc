@@ -1,5 +1,8 @@
 {
   "extends": "standard",
+  "plugins": [
+    "chai-friendly"
+  ],
   "globals": {
     "_": "true",
     "sails": "true",
@@ -35,6 +38,8 @@
       "anonymous": "always",
       "named": "never",
       "asyncArrow": "always"
-    }]
+    }],
+    "no-unused-expressions": 0,
+    "chai-friendly/no-unused-expressions": 2
   }
 }

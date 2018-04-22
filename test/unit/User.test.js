@@ -1,8 +1,6 @@
 const sails = require('sails');
-const async = require('async');
-const { describe, it, before, after } = require('mocha');
+const { describe, it } = require('mocha');
 const { expect } = require('chai');
-const bcrypt = require('bcryptjs');
 
 describe('User (model)', function () {
   this.timeout(60000);
