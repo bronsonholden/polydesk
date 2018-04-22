@@ -28,7 +28,7 @@ module.exports = {
          */
         (callback) => {
           Account.findOne({
-            name: inputs.email
+            name: inputs.name
           }).usingConnection(db).exec((err, account) => {
             if (err) {
               return callback(err);
@@ -48,7 +48,7 @@ module.exports = {
          */
         (callback) => {
           Account.create({
-            name: inputs.email
+            name: inputs.name
           }).usingConnection(db).fetch().exec((err, account) => {
             if (err) {
               return callback(err);
