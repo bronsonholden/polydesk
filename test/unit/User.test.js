@@ -30,7 +30,7 @@ describe('User (model)', function () {
     });
   });
 
-  it('password hash returned from get', function (done) {
+  it('password hash returned from find', function (done) {
     sails.helpers.createNewUserAndAccount.with({
       email: 'user+3@polydesk.com',
       password: 'password'

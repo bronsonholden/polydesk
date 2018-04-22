@@ -1,6 +1,7 @@
 const sails = require('sails');
 const async = require('async');
 const { describe, it, before } = require('mocha');
+const { expect } = require('chai');
 
 describe('User-UserGroup', function () {
   var inputs = {};
@@ -46,7 +47,8 @@ describe('User-UserGroup', function () {
       user: inputs.user.id,
       userGroup: inputs.userGroup.id
     }).switch({
-      success: () => {
+      success: (user) => {
+        expect(user).to.exist;
         done();
       },
       error: done

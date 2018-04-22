@@ -18,13 +18,7 @@ module.exports = {
     fileType: {
       type: 'string',
       required: true,
-      isIn: [
-        'pdf',
-        'txt',
-        'csv',
-        'json',
-        'xml'
-      ]
+      isIn: sails.config.polydesk.supportedFileTypes
     }
   }
 };

@@ -24,7 +24,7 @@ module.exports = {
     sails.getDatastore().transaction((db, callback) => {
       async.waterfall([
         /**
-         * Check if an account already exists for that user
+         * Check if an account already exists
          */
         (callback) => {
           Account.findOne({
@@ -44,7 +44,7 @@ module.exports = {
           });
         },
         /**
-         * Create the user's default account
+         * Create the account
          */
         (callback) => {
           Account.create({
@@ -57,20 +57,20 @@ module.exports = {
             callback(null, account);
           });
         }
-      ], (err, user) => {
+      ], (err, account) => {
         if (err) {
           return callback(err);
         }
 
-        callback(null, user);
+        callback(null, account);
       });
     }).intercept('E_ACCOUNT_ALREADYEXISTS', (err) => {
       exits.accountAlreadyExists(err);
     }).intercept((err) => {
       exits.error(err);
-    }).exec((err, user) => {
+    }).exec((err, account) => {
       if (!err) {
-        exits.success(user);
+        exits.success(account);
       }
     });
   }
