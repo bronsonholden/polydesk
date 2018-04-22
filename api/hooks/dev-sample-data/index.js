@@ -16,7 +16,7 @@ module.exports = (sails) => {
       sails.on('hook:orm:loaded', () => {
         async.waterfall([
           (callback) => {
-            sails.helpers.createNewUser.with({
+            sails.helpers.createNewUserAndAccount.with({
               email: 'rest@polydesk.com',
               password: 'password'
             }).switch({

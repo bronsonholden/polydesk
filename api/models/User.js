@@ -21,8 +21,7 @@ module.exports = {
       required: true
     },
     defaultAccount: {
-      model: 'Account',
-      required: true
+      model: 'Account'
     },
     accounts: {
       collection: 'Account',

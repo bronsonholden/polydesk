@@ -70,7 +70,7 @@ module.exports = {
           UserGroup.create({
             account: inputs.account,
             name: inputs.name
-          }).usingConnection(db).exec((err, userGroup) => {
+          }).usingConnection(db).fetch().exec((err, userGroup) => {
             if (err) {
               return callback(err);
             }

@@ -46,7 +46,7 @@ module.exports = {
   create: (req, res) => {
     assert(req.session.account);
 
-    sails.helpers.createUserGroup.with({
+    sails.helpers.createNewUserGroup.with({
       account: req.session.account,
       name: req.param('name')
     }).intercept('E_INVALID_ARGINS', (err) => { // eslint-disable-line handle-callback-err

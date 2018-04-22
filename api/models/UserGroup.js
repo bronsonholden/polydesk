@@ -8,8 +8,7 @@
 module.exports = {
   attributes: {
     account: {
-      model: 'Account',
-      required: true
+      model: 'Account'
     },
     name: {
       type: 'string',

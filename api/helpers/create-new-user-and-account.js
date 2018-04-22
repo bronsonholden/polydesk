@@ -1,5 +1,5 @@
 module.exports = {
-  friendlyName: 'Create New User',
+  friendlyName: 'Create New User and Account',
   description: 'Create a new user and default account',
   inputs: {
     email: {
@@ -9,7 +9,7 @@ module.exports = {
     },
     password: {
       type: 'string',
-      description: 'The hash of the password provided by the user',
+      description: 'The plaintext password',
       required: true
     }
   },

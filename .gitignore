@@ -104,7 +104,6 @@ node_modules
 
 .tmp
 
-
 ################################################
 # Miscellaneous
 #
@@ -119,6 +118,7 @@ node_modules
 nbproject
 .idea
 .node_history
+.nyc_output
 dump.rdb
 
 npm-debug.log

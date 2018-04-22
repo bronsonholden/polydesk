@@ -11,7 +11,7 @@ module.exports = {
     shortcuts: false
   },
   create: (req, res) => {
-    sails.helpers.createNewUser.with({
+    sails.helpers.createNewUserAndAccount.with({
       email: req.param('email'),
       password: req.param('password')
     }).intercept('E_INVALID_ARGINS', (err) => { // eslint-disable-line handle-callback-err
