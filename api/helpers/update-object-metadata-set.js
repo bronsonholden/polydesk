@@ -1,4 +1,5 @@
 const arangoDb = require('arangojs');
+const BigNumber = require('bignumber.js');
 
 module.exports = {
   friendlyName: 'Update Object Metadata Set',
@@ -82,6 +83,7 @@ module.exports = {
 
     Object.keys(inputs.metadata).forEach((key, index) => {
       var val = inputs.metadata[key];
+      var big;
 
       // TODO: D.R.Y.
       switch (val.type) {
@@ -95,13 +97,13 @@ module.exports = {
       case 'B':
         document['$' + key] = {
           type: 'B',
-          value: val.value === 'true' ? true : false,
+          value: val.value === 'true',
           order: val.order
         };
         break;
       case 'N':
         try {
-          var big = new BigNumber(val.value);
+          big = new BigNumber(val.value);
           var n = big.toNumber();
 
           document['$' + key] = {
@@ -119,7 +121,7 @@ module.exports = {
         break;
       case 'P':
         try {
-          var big = new BigNumber(val.value);
+          big = new BigNumber(val.value);
 
           document['$' + key] = {
             type: 'P',
@@ -160,7 +162,7 @@ module.exports = {
         }
         break;
       default:
-        return;
+        break;
       }
     });
 

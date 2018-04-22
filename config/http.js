@@ -10,7 +10,6 @@
  */
 
 module.exports.http = {
-
   /****************************************************************************
   *                                                                           *
   * Sails/Express middleware to run for every HTTP request.                   *
@@ -21,7 +20,6 @@ module.exports.http = {
   ****************************************************************************/
 
   middleware: {
-
     /***************************************************************************
     *                                                                          *
     * The order in which middleware should be run for HTTP requests.           *
@@ -39,9 +37,8 @@ module.exports.http = {
       'poweredBy',
       'router',
       'www',
-      'favicon',
+      'favicon'
     ],
-
 
     /***************************************************************************
     *                                                                          *
@@ -59,7 +56,5 @@ module.exports.http = {
 
     passportInit: require('passport').initialize(),
     passportSession: require('passport').session()
-
-  },
-
+  }
 };

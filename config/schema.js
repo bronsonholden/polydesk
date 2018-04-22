@@ -1,5 +1,4 @@
 module.exports.schema = {
-
   workflow: {
     type: 'object',
     properties: {
@@ -55,7 +54,7 @@ module.exports.schema = {
           'S', // string
           'B', // boolean
           'N', // number,
-          'P', // arbitrary precision number
+          'P' // arbitrary precision number
         ]
       },
       value: {
@@ -97,5 +96,4 @@ module.exports.schema = {
       }
     ]
   }
-
 };

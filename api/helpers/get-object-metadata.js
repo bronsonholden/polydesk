@@ -1,7 +1,6 @@
 const _ = require('lodash');
 const jsep = require('jsep');
 const arangoDb = require('arangojs');
-const BigNumber = require('bignumber.js');
 
 module.exports = {
   friendlyName: 'Get Object Metadata Sets',
@@ -61,11 +60,6 @@ module.exports = {
 
     var collectionName = sails.config.metadata.arangoDb.collection.replace('%account', inputs.account);
 
-    const collection = db.collection(collectionName);
-    var document = {
-      _object: `${prefix}${inputs.object}`
-    };
-
     async.waterfall([
       (callback) => {
         db.query(`FOR d IN \`${collectionName}\` FILTER d._object == '${prefix}${inputs.object}' RETURN d`).catch((err) => {
@@ -80,7 +74,7 @@ module.exports = {
         var results = [];
 
         cursor.each(val => results.push(val));
-        callback(null, results)
+        callback(null, results);
       },
       (results, callback) => {
         var metadataSets = {};
@@ -89,7 +83,9 @@ module.exports = {
         var metadataOrdering = results.map((res) => {
           var set = {};
 
-          Object.keys(res).filter(key => key.indexOf('$') === 0).forEach(key => set[key.slice(1)] = res[key]);
+          Object.keys(res).filter(key => key.indexOf('$') === 0).forEach(key => {
+            set[key.slice(1)] = res[key];
+          });
 
           metadataSets[res._set] = set;
 
@@ -108,13 +104,12 @@ module.exports = {
       },
       (metadataSets, metadataOrdering, callback) => {
         try {
-          var formulas = {};
           var context = {
             metadataSets: metadataSets,
             formulaResults: {},
             formulaStack: [],
             setStack: []
-          }
+          };
 
           _.each(metadataSets, (set, setName) => {
             context.setStack.push(setName);
@@ -162,7 +157,7 @@ module.exports = {
             return {
               fields: set,
               order: metadataOrdering.indexOf(setName)
-            }
+            };
           });
 
           callback(null, result);

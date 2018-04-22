@@ -1,0 +1,40 @@
+{
+  "extends": "standard",
+  "globals": {
+    "_": "true",
+    "sails": "true",
+    "async": "true",
+    "server": "true",
+    "AccountController": "true",
+    "ActivationController": "true",
+    "AuthController": "true",
+    "CapabilityController": "true",
+    "DashboardController": "true",
+    "DocumentController": "true",
+    "HomepageController": "true",
+    "RESTAuthController": "true",
+    "UserController": "true",
+    "UserGroupController": "true",
+    "WorkflowController": "true",
+    "Account": "true",
+    "Activation": "true",
+    "Capability": "true",
+    "Document": "true",
+    "User": "true",
+    "UserGroup": "true",
+    "Workflow": "true"
+  },
+  "rules": {
+    "array-bracket-spacing": [ "error", "always" ],
+    "linebreak-style": [ 2, "windows" ],
+    "semi": [ 2, "always" ],
+    "indent": [ 2, 2, {
+      "SwitchCase": 0
+    }],
+    "space-before-function-paren": [ 2, {
+      "anonymous": "always",
+      "named": "never",
+      "asyncArrow": "always"
+    }]
+  }
+}

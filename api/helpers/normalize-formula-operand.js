@@ -15,12 +15,7 @@ module.exports = {
     }
   },
   fn: (inputs, exits) => {
-    // List of metadata value types that don't have a corresponding native type
-    const types = [
-      'P', // precision
-    ];
-
-    switch (typeof(inputs.operand)) {
+    switch (typeof inputs.operand) {
     case 'string':
       return exits.success({
         type: 'S',

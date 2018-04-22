@@ -54,7 +54,6 @@ $(document).ready(function () {
       metadataOrdering: metadataOrdering,
       save: false
     }, function (data, res) {
-
       if (res.headers.location) {
         window.location.pathname = res.headers.location;
       } else {

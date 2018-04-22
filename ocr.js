@@ -3,15 +3,14 @@ const async = require('async');
 const readline = require('readline');
 const path = require('path');
 const exec = require('child_process').exec;
-const uuidv4 = require('uuid/v4');
 const skipperDisk = require('skipper-disk');
 const skipperS3 = require('skipper-better-s3');
 
-const sails = require('sails')
+const sails = require('sails');
 
-if (typeof(process.env.NODE_ENV) !== 'string' || process.env.NODE_ENV.indexOf('ocr-') !== 0) {
+if (typeof process.env.NODE_ENV !== 'string' || process.env.NODE_ENV.indexOf('ocr-') !== 0) {
   sails.log.error(`It looks like the OCR worker wasn't executed in an appropriate environment. They are prefixed with 'ocr-<name>', e.g. 'ocr-development'. Retry the command prefixed with NODE_ENV=<your-ocr-env-here>`);
-  return process.exit(1);
+  process.exit(1);
 }
 
 sails.load({
@@ -35,6 +34,11 @@ sails.load({
     views: false
   }
 }, function (err, app) {
+  if (err) {
+    sails.log.error(err.message);
+    process.exit(1);
+  }
+
   var disk = skipperDisk();
   var s3 = skipperS3(sails.config.documents.s3);
   var shutdown = false;
@@ -125,6 +129,10 @@ sails.load({
               });
 
               disk.ls(tmp, (err, pages) => {
+                if (err) {
+                  return callback(err);
+                }
+
                 async.eachSeries(pages.filter(page => path.extname(page) === '.jpg'), (page, callback) => {
                   receiver.write(fs.createReadStream(page), (err) => {
                     if (err) {
@@ -151,7 +159,7 @@ sails.load({
 
               receiver.write(fs.createReadStream(local), (err) => {
                 if (err) {
-                  return callback(err)
+                  return callback(err);
                 }
 
                 callback(null, tmp);

@@ -9,11 +9,9 @@
  *   https://sailsjs.com/anatomy/tasks/config/watch.js
  *
  */
-module.exports = function(grunt) {
-
+module.exports = function (grunt) {
   grunt.config.set('watch', {
     assets: {
-
       // Assets to watch:
       files: [
         'assets/**/*',
@@ -52,5 +50,4 @@ module.exports = function(grunt) {
   // grunt.loadNpmTasks('grunt-contrib-watch');
   // ```
   // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-
 };

@@ -5,8 +5,6 @@
  * @help        :: See http://sailsjs.org/#!/documentation/concepts/Controllers
  */
 
-const async = require('async');
-
 module.exports = {
   _config: {
     actions: false,
@@ -16,7 +14,7 @@ module.exports = {
     sails.helpers.createNewUser.with({
       email: req.param('email'),
       password: req.param('password')
-    }).intercept('E_INVALID_ARGINS', (err) => {
+    }).intercept('E_INVALID_ARGINS', (err) => { // eslint-disable-line handle-callback-err
       return 'One or more validation errors occurred';
     }).switch({
       success: (user) => {

@@ -37,8 +37,8 @@ module.exports = {
 
       if (!operand) {
         return exits.success({
-          err: 'Invalid operand type: ' + typeof(operand)
-        })
+          err: 'Invalid operand type: ' + typeof operand
+        });
       }
 
       switch (operand.type) {

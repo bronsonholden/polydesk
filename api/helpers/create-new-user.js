@@ -117,30 +117,30 @@ module.exports = {
          * Add all capabilities for that user in their account
          */
         (user, account, callback) => {
-            var arr = [
-              'can_login',
-              'view_documents',
-              'upload_documents',
-              'add_document_metadata_sets',
-              'update_document_metadata_sets',
-              'remove_document_metadata_sets',
-              'edit_metadata_groups',
-              'edit_workflows'
-            ].map((cap) => {
-              return {
-                name: cap,
-                user: user.id,
-                account: account.id
-              }
-            });
+          var arr = [
+            'can_login',
+            'view_documents',
+            'upload_documents',
+            'add_document_metadata_sets',
+            'update_document_metadata_sets',
+            'remove_document_metadata_sets',
+            'edit_metadata_groups',
+            'edit_workflows'
+          ].map((cap) => {
+            return {
+              name: cap,
+              user: user.id,
+              account: account.id
+            };
+          });
 
-            Capability.createEach(arr).usingConnection(db).exec((err) => {
-              if (err) {
-                return callback(err);
-              }
+          Capability.createEach(arr).usingConnection(db).exec((err) => {
+            if (err) {
+              return callback(err);
+            }
 
-              callback(null, user);
-            });
+            callback(null, user);
+          });
         }
       ], (err, user) => {
         if (err) {

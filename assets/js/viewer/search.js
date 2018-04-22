@@ -100,4 +100,4 @@
       el.scrollIntoView();
     });
   });
-})(jQuery);
+})($);

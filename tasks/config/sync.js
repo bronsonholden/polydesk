@@ -10,15 +10,16 @@
  *   https://sailsjs.com/anatomy/tasks/config/sync.js
  *
  */
-module.exports = function(grunt) {
-
+module.exports = function (grunt) {
   grunt.config.set('sync', {
     dev: {
-      files: [{
-        cwd: './assets',
-        src: ['**/*.!(coffee|less)'],
-        dest: '.tmp/public'
-      }]
+      files: [
+        {
+          cwd: './assets',
+          src: [ '**/*.!(coffee|less)' ],
+          dest: '.tmp/public'
+        }
+      ]
     }
   });
 
@@ -45,5 +46,4 @@ module.exports = function(grunt) {
   // grunt.loadNpmTasks('grunt-sync');
   // ```
   // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-
 };

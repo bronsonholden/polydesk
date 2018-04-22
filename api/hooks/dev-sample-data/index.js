@@ -4,7 +4,6 @@
  * Project hook to create some sample data after lifting.
  */
 
-const AWS = require('aws-sdk');
 const _ = require('lodash');
 
 module.exports = (sails) => {
@@ -27,19 +26,13 @@ module.exports = (sails) => {
                 callback(null, user);
               },
               error: (err) => {
-                callback({
-                  message: err.message
-                });
+                callback(err);
               },
               accountAlreadyExists: (err) => {
-                callback({
-                  message: err.message
-                });
+                callback(err);
               },
               userAlreadyExists: (err) => {
-                callback({
-                  message: err.message
-                });
+                callback(err);
               }
             });
           },
@@ -148,16 +141,12 @@ module.exports = (sails) => {
                 callback(null, user, doc);
               },
               error: (err) => {
-                callback({
-                  message: err.message
-                });
+                callback(err);
               },
               invalidObjectType: (err) => {
-                callback({
-                  message: err.message
-                });
+                callback(err);
               }
-            })
+            });
           },
           (user, doc, callback) => {
             sails.helpers.addObjectMetadataSet.with({
@@ -185,19 +174,15 @@ module.exports = (sails) => {
                 callback();
               },
               error: (err) => {
-                callback({
-                  message: err.message
-                });
+                callback(err);
               },
               invalidObjectType: (err) => {
-                callback({
-                  message: err.message
-                });
+                callback(err);
               }
-            })
+            });
           }
         ], callback);
       });
     }
   };
-}
+};

@@ -51,7 +51,7 @@ module.exports = {
         (callback) => {
           UserGroup.findOne({
             account: inputs.account,
-            name: inputs.name,
+            name: inputs.name
           }).usingConnection(db).exec((err, userGroup) => {
             if (err) {
               return callback(err);
@@ -95,4 +95,4 @@ module.exports = {
       }
     });
   }
-}
+};

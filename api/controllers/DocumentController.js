@@ -7,7 +7,6 @@
 
 const skipperS3 = require('skipper-better-s3');
 const path = require('path');
-const uuid = require('uuid/v4');
 
 module.exports = {
   browse: (req, res) => {
@@ -46,7 +45,7 @@ module.exports = {
       (callback) => {
         Document.findOne({
           account: req.session.account,
-          id: req.param('document'),
+          id: req.param('document')
         }).exec((err, doc) => {
           if (err) {
             return callback(err);
@@ -69,14 +68,10 @@ module.exports = {
             callback(null, metadataSets);
           },
           error: (err) => {
-            callback({
-              message: err.message
-            });
+            callback(err);
           },
           invalidObjectType: (err) => {
-            callback({
-              message: err.message
-            });
+            callback(err);
           }
         });
       }
@@ -117,14 +112,10 @@ module.exports = {
             callback();
           },
           error: (err) => {
-            callback({
-              message: err.message
-            });
+            callback(err);
           },
           invalidObjectType: (err) => {
-            callback({
-              message: err.message
-            });
+            callback(err);
           }
         });
       },
@@ -148,14 +139,10 @@ module.exports = {
               callback();
             },
             error: (err) => {
-              callback({
-                message: err.message
-              });
+              callback(err);
             },
             invalidObjectType: (err) => {
-              callback({
-                message: err.message
-              });
+              callback(err);
             }
           });
         }, callback);

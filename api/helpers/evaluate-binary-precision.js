@@ -32,10 +32,9 @@ module.exports = {
     }
   },
   fn: (inputs, exits) => {
+    var lval = new BigNumber(inputs.lval.value);
+    var rval = new BigNumber(inputs.rval.value);
     var res;
-
-    lval = new BigNumber(inputs.lval.value);
-    rval = new BigNumber(inputs.rval.value);
 
     switch (inputs.operator) {
     case '*':

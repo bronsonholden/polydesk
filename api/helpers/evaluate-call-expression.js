@@ -44,7 +44,7 @@ module.exports = {
         });
       }
 
-      if (typeof(field) !== 'string' || typeof(set) !== 'string') {
+      if (typeof field !== 'string' || typeof set !== 'string') {
         return exits.success({
           err: 'Invalid field specification'
         });

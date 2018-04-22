@@ -7,8 +7,8 @@ pdfjsLib.getDocument('/documents/sample.pdf').then(pdf => {
   pdfDocument = pdf;
 
   let viewer = document.getElementById('viewer');
-  for (let i=0; i<pdf.pdfInfo.numPages; i++) {
-    let page = createEmptyPage(i+1);
+  for (let i = 0; i < pdf.pdfInfo.numPages; i++) {
+    let page = createEmptyPage(i + 1);
     viewer.appendChild(page);
   }
 

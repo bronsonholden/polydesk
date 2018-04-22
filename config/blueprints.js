@@ -10,7 +10,6 @@
  */
 
 module.exports.blueprints = {
-
   /***************************************************************************
   *                                                                          *
   * Automatically expose implicit routes for every action in your app?       *
@@ -19,7 +18,6 @@ module.exports.blueprints = {
 
   // actions: false,
 
-
   /***************************************************************************
   *                                                                          *
   * Automatically expose RESTful routes for your models?                     *
@@ -27,7 +25,6 @@ module.exports.blueprints = {
   ***************************************************************************/
 
   // rest: true,
-
 
   /***************************************************************************
   *                                                                          *
@@ -39,5 +36,4 @@ module.exports.blueprints = {
   // shortcuts: true,
 
   prefix: '/api'
-
 };
