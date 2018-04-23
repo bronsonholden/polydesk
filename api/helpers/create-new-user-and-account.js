@@ -52,37 +52,21 @@ module.exports = {
           });
         },
         /**
-         * Check if an account already exists for that user
-         */
-        (callback) => {
-          Account.findOne({
-            name: inputs.email
-          }).usingConnection(db).exec((err, account) => {
-            if (err) {
-              return callback(err);
-            }
-
-            if (account) {
-              var e = new Error('An account for that email already exists');
-              e.code = 'E_ACCOUNT_ALREADYEXISTS';
-              return callback(e);
-            }
-
-            callback();
-          });
-        },
-        /**
          * Create the user's default account
          */
         (callback) => {
-          Account.create({
+          sails.helpers.createNewAccount.with({
             name: inputs.email
-          }).usingConnection(db).fetch().exec((err, account) => {
-            if (err) {
-              return callback(err);
+          }).switch({
+            success: (account) => {
+              callback(null, account);
+            },
+            error: (err) => {
+              callback(err);
+            },
+            accountAlreadyExists: (err) => {
+              callback(err);
             }
-
-            callback(null, account);
           });
         },
         /**

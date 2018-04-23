@@ -1,3 +1,5 @@
+const arangoDb = require('arangojs');
+
 module.exports = {
   friendlyName: 'Create New Account',
   description: 'Create a new account',
@@ -56,6 +58,18 @@ module.exports = {
 
             callback(null, account);
           });
+        },
+        (account, callback) => {
+          const collectionName = sails.config.metadata.arangoDb.collection.replace('%account', account.id);
+          var db = new arangoDb.Database({
+            url: sails.config.metadata.arangoDb.url
+          });
+
+          db.useDatabase(sails.config.metadata.arangoDb.database);
+          db.useBasicAuth(sails.config.metadata.arangoDb.username, sails.config.metadata.arangoDb.password);
+          db.collection(collectionName).create();
+
+          callback(null, account);
         }
       ], (err, account) => {
         if (err) {
