@@ -5,7 +5,7 @@ const { before, after } = require('mocha');
 const { exec } = require('child_process');
 
 before(function (done) {
-  this.timeout(5000);
+  this.timeout(300000);
 
   process.env.NODE_ENV = 'test';
 
@@ -55,7 +55,7 @@ before(function (done) {
 });
 
 after(function (done) {
-  this.timeout(5000);
+  this.timeout(300000);
 
   async.waterfall([
     (callback) => {

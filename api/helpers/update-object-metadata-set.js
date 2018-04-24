@@ -97,7 +97,7 @@ module.exports = {
       case 'B':
         document['$' + key] = {
           type: 'B',
-          value: val.value === 'true',
+          value: val.value,
           order: val.order
         };
         break;
@@ -191,10 +191,16 @@ module.exports = {
               callback(err);
             }).then((document) => {
               if (document) {
-                callback(null, document);
+                callback();
               }
             });
-          }, callback);
+          }, (err) => {
+            if (err) {
+              return callback(err);
+            }
+
+            callback(null, document);
+          });
         } else {
           collection.save(document, {
             waitForSync: true,
@@ -208,7 +214,7 @@ module.exports = {
           });
         }
       }
-    ], (err) => {
+    ], (err, document) => {
       if (err) {
         return exits.error(new Error(err.message));
       }

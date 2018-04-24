@@ -97,7 +97,7 @@ module.exports = {
       case 'B':
         document['$' + key] = {
           type: 'B',
-          value: val.value === 'true',
+          value: val.value,
           order: val.order
         };
         break;
@@ -191,7 +191,7 @@ module.exports = {
               callback(err);
             }).then((document) => {
               if (document) {
-                callback(null, document);
+                callback();
               }
             });
           }, (err) => {
