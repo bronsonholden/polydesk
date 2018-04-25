@@ -67,6 +67,10 @@ after(function (done) {
       db.dropDatabase(sails.config.metadata.arangoDb.database).then((info) => {
         callback();
       }, (err) => {
+        if (err) {
+          console.log(err.message);
+        }
+
         callback();
       });
     },

@@ -13,6 +13,8 @@ describe('Document (model)', function () {
       name: 'document@polydesk.com'
     }).switch({
       success: (account) => {
+        expect(account).to.exist;
+        expect(account.name).to.equal('document@polydesk.com');
         inputs.account = account;
         done();
       },
@@ -29,6 +31,9 @@ describe('Document (model)', function () {
     }).switch({
       success: (document) => {
         expect(document).to.exist;
+        expect(document.name).to.equal('document');
+        expect(document.fileType).to.equal('pdf');
+        expect(document.account).to.equal(inputs.account.id);
         done();
       },
       error: done
@@ -48,7 +53,7 @@ describe('Document (model)', function () {
             callback(null, document);
           },
           error: callback
-        })
+        });
       },
       (document, callback) => {
         sails.helpers.addObjectMetadataSet.with({
