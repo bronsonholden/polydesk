@@ -23,7 +23,6 @@ module.exports = (sails) => {
 
       sails.log.info(`·• ArangoDB ${sails.config.metadata.arangoDb.url} Auto-migration...  (drop)`);
 
-
       var db = new arangoDb.Database({
         url: sails.config.metadata.arangoDb.url
       });
