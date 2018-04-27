@@ -1,6 +1,5 @@
 const sails = require('sails');
 const async = require('async');
-const arangoDb = require('arangojs');
 const { before, after } = require('mocha');
 const { exec } = require('child_process');
 
@@ -34,22 +33,6 @@ before(function (done) {
       }, (err) => {
         callback(err);
       });
-    },
-    (callback) => {
-      var db = new arangoDb.Database({
-        url: sails.config.metadata.arangoDb.url
-      });
-
-      db.useBasicAuth(sails.config.metadata.arangoDb.username, sails.config.metadata.arangoDb.password);
-      db.createDatabase(sails.config.metadata.arangoDb.database, [
-        {
-          username: 'root'
-        }
-      ]).then((info) => {
-        callback();
-      }, (err) => {
-        callback(err);
-      });
     }
   ], done);
 });
@@ -58,22 +41,6 @@ after(function (done) {
   this.timeout(300000);
 
   async.waterfall([
-    (callback) => {
-      var db = new arangoDb.Database({
-        url: sails.config.metadata.arangoDb.url
-      });
-
-      db.useBasicAuth(sails.config.metadata.arangoDb.username, sails.config.metadata.arangoDb.password);
-      db.dropDatabase(sails.config.metadata.arangoDb.database).then((info) => {
-        callback();
-      }, (err) => {
-        if (err) {
-          console.log(err.message);
-        }
-
-        callback();
-      });
-    },
     (callback) => {
       sails.lower(callback);
     },
