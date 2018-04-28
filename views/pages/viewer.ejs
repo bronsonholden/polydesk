@@ -103,19 +103,19 @@
                       <button class="bg-light btn btn-outline-secondary metadata-field-move-down" type="button"><i class="icon ion-chevron-down"></i></button>
                     </div>
                     <% if (set[key].type === 'F') { %>
-                      <input disabled="disabled" class="form-control" fieldtype="<%- set[key].type -%>" fieldorder="<%- set[key].order -%>" type="string" value="<%- value -%>" calculated="<%- value -%>" formula="<%- encodeURI(set[key].value) -%>"></input>
+                      <input readonly class="form-control" fieldtype="<%- set[key].type -%>" fieldorder="<%- set[key].order -%>" type="string" value="<%- value -%>" calculated="<%- value -%>" formula="<%- encodeURI(set[key].value) -%>"></input>
                     <% } else { %>
                       <input class="form-control" fieldtype="<%- set[key].type -%>" fieldorder="<%- set[key].order -%>" type="string" value="<%- value -%>"></input>
                     <% } %>
                     <div class="input-group-append-locked hidden">
                       <button class="bg-light btn btn-outline-secondary metadata-field-delete" type="button"><i class="icon ion-close"></i></button>
                       <button class="bg-light btn btn-outline-secondary dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><%- typeString -%></button>
-                      <div class="dropdown-menu">
-                        <a class="dropdown-item" href="#">String</a>
-                        <a class="dropdown-item" href="#">Number</a>
-                        <a class="dropdown-item" href="#">Boolean</a>
-                        <a class="dropdown-item" href="#">Precision</a>
-                        <a class="dropdown-item" href="#">Formula</a>
+                      <div class="dropdown-menu metadata-field-type-dropdown">
+                        <a class="dropdown-item" fieldtype="S" href="#">String</a>
+                        <a class="dropdown-item" fieldtype="N" href="#">Number</a>
+                        <a class="dropdown-item" fieldtype="B" href="#">Boolean</a>
+                        <a class="dropdown-item" fieldtype="P" href="#">Precision</a>
+                        <a class="dropdown-item" fieldtype="F" href="#">Formula</a>
                       </div>
                     </div>
                   </div>
@@ -168,12 +168,12 @@
         // Lock formula fields down, show calculated value
         set.find('.metadata-field input[fieldtype="F"]').each(function () {
           $(this).val($(this).attr('calculated'));
-          $(this).attr('disabled', 'disabled');
+          $(this).prop('readonly', true);
         });
 
         // Make data fields editable
         set.find('.metadata-field input[fieldtype!="F"]').each(function () {
-          $(this).removeAttr('disabled');
+          $(this).removeAttr('readonly');
         });
 
         $(this).find('i').removeClass('ion-unlocked').addClass('ion-locked');
@@ -187,12 +187,12 @@
         // Show formula string, allow editing
         set.find('.metadata-field input[fieldtype="F"]').each(function () {
           $(this).val(decodeURI($(this).attr('formula')));
-          $(this).removeAttr('disabled');
+          $(this).removeAttr('readonly');
         });
 
         // Disallow data field edits
         set.find('.metadata-field input[fieldtype!="F"]').each(function () {
-          $(this).attr('disabled', 'disabled');
+          $(this).prop('readonly', true);
         });
 
         $(this).find('i').removeClass('ion-locked').addClass('ion-unlocked');
@@ -287,9 +287,28 @@
 
     $(document).on('focusout', '.metadata-set-label, .metadata-field-label', function () {
       if ($(this).hasClass('form-control')) {
-        $(this).removeClass('form-control').addClass('form-control-plaintext').attr('readonly', true);
+        $(this).removeClass('form-control').addClass('form-control-plaintext').prop('readonly', true);
         $(this).off('keydown');
       }
+    });
+
+    $(document).on('change', '.form-control[fieldtype="F"]', function () {
+      $(this).attr('formula', $(this).val());
+    });
+
+    $(document).on('click', '.metadata-field-type-dropdown .dropdown-item', function () {
+      var fieldType = $(this).attr('fieldtype');
+      var control = $(this).closest('.metadata-field').find('.form-control');
+
+      control.attr('fieldtype', fieldType);
+      if (fieldType === 'F') {
+        control.removeAttr('readonly');
+        control.attr('calculated', 'Please reload');
+      } else {
+        control.prop('readonly', true);
+      }
+
+      $(this).closest('.metadata-field-type-dropdown').siblings('.dropdown-toggle').text($(this).text());
     });
   });
 </script>
