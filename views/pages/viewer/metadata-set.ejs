@@ -1,0 +1,32 @@
+<div class="metadata-set" setname="<%- setName -%>" setorder="<%- setOrder -%>" locked="locked">
+  <div class="px-3 pt-3">
+    <div class="btn-group w-100">
+      <input class="mr-2 form-control-plaintext text-truncate metadata-set-label font-weight-bold" value="<%- setName -%>" readonly></input>
+      <button class="btn rounded-circle btn-light metadata-set-lock" type="button">
+        <i class="ion-locked"></i>
+      </button>
+    </div>
+  </div>
+  <hr>
+  <%
+  var orderedFields = Object.keys(metadataSet).sort(function (a, b) {
+    if (typeof(metadataSet[a].order) === 'number' && typeof(metadataSet[b].order) !== 'number') {
+      return -1;
+    } else if (typeof(metadataSet[a].order) !== 'number' && typeof(metadataSet[b].order) === 'number') {
+      return 1;
+    } else if (typeof(metadataSet[a].order) !== 'number' && typeof(metadataSet[b].order) !== 'number') {
+      return 0;
+    }
+    return metadataSet[a].order - metadataSet[b].order;
+  });
+  orderedFields.forEach(function (key) {
+  %>
+    <%- include('metadata-field.ejs', {
+      metadataField: metadataSet[key],
+      fieldName: key
+    });
+    %>
+  <%
+  });
+  %>
+</div>

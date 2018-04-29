@@ -1,0 +1,64 @@
+<div class="form-group pb-2 pt-3 px-3 m-0 metadata-field-wrapper">
+  <input class="mb-2 form-control-plaintext metadata-field-label text-truncate" value="<%- fieldName -%>" readonly></input>
+  <%
+  var value = metadataField.value;
+  var typeString;
+
+  switch (metadataField.type) {
+  case 'N':
+    typeString = 'Number';
+    break;
+  case 'P':
+    typeString = 'Precision';
+    break;
+  case 'S':
+    typeString = 'String';
+    break;
+  case 'B':
+    typeString = 'Boolean';
+    break;
+  case 'F':
+    typeString = 'Formula';
+    break;
+  default:
+    break;
+  }
+
+  if (metadataField.type.length === 2 && metadataField.type[1] === 'L') {
+    value.forEach(function (val, idx, arr) {
+  %>
+  <%-
+      include('metadata-field-repeating.ejs', {
+        type: metadataField.type,
+        order: metadataField.order,
+        val: val
+      });
+  %>
+  <%
+    });
+  } else {
+    if (metadataField.type === 'F') {
+      var calculated = metadataField.err || metadataField.calculated;
+  %>
+  <%- include('metadata-field-formula.ejs', {
+        type: metadataField.type,
+        typeString: typeString,
+        calculated: calculated,
+        value: calculated,
+        formula: encodeURI(metadataField.value),
+        order: metadataField.order
+      }); %>
+  <%
+    } else {
+  %>
+  <%- include('metadata-field-simple.ejs', {
+        type: metadataField.type,
+        typeString: typeString,
+        value: metadataField.value,
+        order: metadataField.order
+      }); %>
+<%
+    }
+  }
+%>
+</div>
