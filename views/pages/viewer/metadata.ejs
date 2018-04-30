@@ -1,27 +1,28 @@
 <form id="metadata" method="POST" action="/viewer/<%- id -%>/metadata" enctype="multipart/form-data">
   <%
-  var orderedMetadataSets = Object.keys(metadataSets).sort(function (a, b) {
-    if (typeof(metadataSets[a].order) === 'number' && typeof(metadataSets[b].order) !== 'number') {
-      return -1;
-    } else if (typeof(metadataSets[a].order) !== 'number' && typeof(metadataSets[b].order) === 'number') {
-      return 1;
-    } else if (typeof(metadataSets[a].order) !== 'number' && typeof(metadataSets[b].order) !== 'number') {
-      return 0;
-    }
-    return metadataSets[a].order - metadataSets[b].order;
-  });
-  orderedMetadataSets.forEach(function (setName, setOrder) {
-    var metadataSet = metadataSets[setName];
+    var orderedMetadataSets = Object.keys(metadataSets).sort(function (a, b) {
+      if (typeof metadataSets[a].order === 'number' && typeof metadataSets[b].order !== 'number') {
+        return -1;
+      } else if (typeof metadataSets[a].order !== 'number' && typeof metadataSets[b].order === 'number') {
+        return 1;
+      } else if (typeof metadataSets[a].order !== 'number' && typeof metadataSets[b].order !== 'number') {
+        return 0;
+      }
+      return metadataSets[a].order - metadataSets[b].order;
+    });
+
+    orderedMetadataSets.forEach(function (setName, setOrder) {
+      var metadataSet = metadataSets[setName];
   %>
-    <%-
+  <%-
       include('metadata-set', {
         metadataSet: metadataSet.fields,
         setName: setName,
         setOrder: setOrder
       });
-    %>
+  %>
   <%
-  });
+    });
   %>
   <div style="height:300px;">&nbsp;</div>
 </form>
