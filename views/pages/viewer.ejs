@@ -6,9 +6,11 @@
     <button type="button" class="btn btn-light btn-outline-secondary document-viewer-close">Close</button>
   </div>
   <div>
-    <span class="pr-2">Zoom</span>
-    <button type="button" class="btn rounded-circle btn-light btn-outline-secondary"><i class="ion-plus"></i></button>
-    <button type="button" class="btn rounded-circle btn-light btn-outline-secondary"><i class="ion-minus"></i></button>
+    <button type="button" class="btn rounded-circle btn-light btn-outline-secondary viewer-action" data-toggle="tooltip" data-placement="bottom" title="Add Metadata Template"><i class="ion-code"></i></button>
+  </div>
+  <div>
+    <button type="button" class="btn rounded-circle btn-light btn-outline-secondary viewer-action" data-toggle="tooltip" data-placement="bottom" title="Zoom In"><i class="ion-plus"></i></button>
+    <button type="button" class="btn rounded-circle btn-light btn-outline-secondary viewer-action" data-toggle="tooltip" data-placement="bottom" title="Zoom Out"><i class="ion-minus"></i></button>
   </div>
 </nav>
 </div>
@@ -41,6 +43,12 @@
 </div>
 <script>
   $(document).ready(function () {
+    $('[data-toggle="tooltip"]').tooltip();
+
+    $(document).on('click', '.viewer-action', function () {
+      this.blur();
+    });
+
     $(document).on('click', '.metadata-set-lock', function () {
       var set = $(this).closest('.metadata-set');
 
