@@ -46,7 +46,11 @@
     $('[data-toggle="tooltip"]').tooltip();
 
     $(document).on('click', '.viewer-action', function () {
-      this.blur();
+      var self = this;
+
+      setTimeout(function () {
+        self.blur();
+      }, 150);
     });
 
     $(document).on('click', '.metadata-set-lock', function () {
