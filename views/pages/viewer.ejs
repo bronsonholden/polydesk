@@ -1,27 +1,29 @@
-<div class="border border-bottom-1 border-top-0 border-left-0 border-right-0 border-secondary">
-<nav class="navbar navbar-justify-content-left navbar-fixed-top justify-content-between">
-  <div>
-    <button type="button" class="btn btn-light btn-outline-primary document-viewer-apply">Apply</button>
-    <button type="button" class="btn btn-light btn-outline-primary document-viewer-save">Save</button>
-    <button type="button" class="btn btn-light btn-outline-secondary document-viewer-close">Close</button>
+<div class="container-fluid d-flex h-100 flex-column">
+  <div class="row border border-bottom-1 border-top-0 border-left-0 border-right-0 border-secondary">
+    <div class="w-100">
+      <nav class="navbar navbar-justify-content-left navbar-fixed-top justify-content-between">
+        <div>
+          <button type="button" class="btn btn-light btn-outline-primary document-viewer-apply">Apply</button>
+          <button type="button" class="btn btn-light btn-outline-primary document-viewer-save">Save</button>
+          <button type="button" class="btn btn-light btn-outline-secondary document-viewer-close">Close</button>
+        </div>
+        <div>
+          <button type="button" class="btn rounded-circle btn-light btn-outline-secondary viewer-action" data-toggle="tooltip" data-placement="bottom" title="Add Metadata Template"><i class="ion-code"></i></button>
+        </div>
+        <div>
+          <button type="button" class="btn rounded-circle btn-light btn-outline-secondary viewer-action" data-toggle="tooltip" data-placement="bottom" title="Zoom In"><i class="ion-plus"></i></button>
+          <button type="button" class="btn rounded-circle btn-light btn-outline-secondary viewer-action" data-toggle="tooltip" data-placement="bottom" title="Zoom Out"><i class="ion-minus"></i></button>
+        </div>
+      </nav>
+    </div>
   </div>
-  <div>
-    <button type="button" class="btn rounded-circle btn-light btn-outline-secondary viewer-action" data-toggle="tooltip" data-placement="bottom" title="Add Metadata Template"><i class="ion-code"></i></button>
-  </div>
-  <div>
-    <button type="button" class="btn rounded-circle btn-light btn-outline-secondary viewer-action" data-toggle="tooltip" data-placement="bottom" title="Zoom In"><i class="ion-plus"></i></button>
-    <button type="button" class="btn rounded-circle btn-light btn-outline-secondary viewer-action" data-toggle="tooltip" data-placement="bottom" title="Zoom Out"><i class="ion-minus"></i></button>
-  </div>
-</nav>
-</div>
-<div id="wrapper" class="container-fluid">
-  <div class="row">
-    <div id="properties" class="px-0 col-md-3 cold-lg-3">
+  <div class="row d-flex" style="flex: 1;">
+    <div id="properties" class="col-md-3 p-0">
       <%- include('viewer/metadata.ejs', {
         metadataSets: metadataSets
       }); %>
     </div>
-    <div id="viewer" class="pdf-viewer offset-md-3 offset-lg-3 col-md-9 col-lg-9" data-url="<%- documentUrl -%>">
+    <div id="viewer" class="pdf-viewer m-0 col-md-9 border bg-secondary-op" data-url="<%- documentUrl -%>">
       <div id="search" class="modal" role="dialog">
         <div class="modal-dialog">
           <div class="modal-content">
@@ -41,6 +43,7 @@
     </div>
   </div>
 </div>
+
 <script>
   $(document).ready(function () {
     $('[data-toggle="tooltip"]').tooltip();
