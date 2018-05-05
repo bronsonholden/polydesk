@@ -60,7 +60,7 @@ $(document).ready(function () {
         $.growl.notice({
           message: res.body.message,
           title: 'Success!',
-          location: 'viewer'
+          location: 'br'
         });
       }
     });
