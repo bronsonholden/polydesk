@@ -7,7 +7,6 @@ html, body {
 }
 
 #viewer {
-  overflow-y: scroll;
   padding: 0px;
 }
 
@@ -29,8 +28,19 @@ input.form-control {
   left: 10px;
 }
 
-#properties {
-  overflow-y: scroll;
+@media only screen and (min-width: 576px) {
+  #properties {
+    overflow-y: scroll;
+  }
+
+  #viewer {
+    overflow-y: scroll;
+  }
+}
+
+@media only screen and (max-width: 575px) {
+  #properties {
+  }
 }
 
 .metadata-set-lock i {
