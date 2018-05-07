@@ -1,5 +1,5 @@
 <div class="form-group pb-2 pt-3 px-3 m-0 metadata-field-wrapper">
-  <input class="mb-2 form-control-plaintext metadata-field-label text-truncate" value="<%- fieldName -%>" readonly></input>
+  <input class="mb-2 form-control-plaintext metadata-field-label text-truncate" value="<%- fieldName %>" readonly></input>
   <%
     var value = metadataField.value;
     var typeString;
@@ -28,7 +28,7 @@
       value.forEach(function (val, idx, arr) {
   %>
   <%-
-        include('metadata-field-repeating.ejs', {
+        include('shared/metadata-field-repeating.ejs', {
           type: metadataField.type,
           order: metadataField.order,
           val: val
@@ -41,7 +41,7 @@
         var calculated = metadataField.err || metadataField.calculated;
   %>
   <%-
-        include('metadata-field-formula.ejs', {
+        include('shared/metadata-field-formula.ejs', {
           type: metadataField.type,
           typeString: typeString,
           calculated: calculated,
@@ -54,7 +54,7 @@
       } else {
   %>
   <%-
-        include('metadata-field-simple.ejs', {
+        include('shared/metadata-field-simple.ejs', {
           type: metadataField.type,
           typeString: typeString,
           value: metadataField.value,

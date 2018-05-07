@@ -1,6 +1,6 @@
 <div class="container-fluid d-flex h-100 flex-column">
   <div class="row flex-row d-flex border border-bottom-1 border-top-0 border-left-0 border-right-0 border-secondary">
-    <div class="col-md-3 p-0 justify-content-between">
+    <div class="col-lg-3 col-md-4 col-sm-5 p-0 justify-content-between">
       <nav class="navbar navbar-fixed-top">
         <div class="d-inline">
           <button type="button" class="btn btn-light btn-outline-primary document-viewer-apply">Apply</button>
@@ -9,10 +9,10 @@
         </div>
       </nav>
     </div>
-    <div id="viewer-menu" class="col-md-9 p-0 justify-content-between">
+    <div id="viewer-menu" class="col-lg-9 col-md-8 col-sm-7 p-0 justify-content-between">
       <nav class="navbar navbar-fixed-top">
         <div>
-          <button type="button" class="btn rounded-circle btn-light btn-outline-secondary viewer-action" data-toggle="tooltip" data-placement="bottom" data-container="#viewer-menu" title="New Metadata Set"><i class="ion-compose"></i></button>
+          <button type="button" class="btn rounded-circle btn-light btn-outline-secondary viewer-action new-metadata-set" data-toggle="tooltip" data-placement="bottom" data-container="#viewer-menu" title="New Metadata Set"><i class="ion-compose"></i></button>
           <button type="button" class="btn rounded-circle btn-light btn-outline-secondary viewer-action" data-toggle="tooltip" data-placement="bottom" data-container="#viewer-menu" title="Add Metadata Template"><i class="ion-code"></i></button>
         </div>
         <div>
@@ -25,14 +25,14 @@
     </div>
   </div>
   <div class="row d-flex flex-row" style="flex: 1;">
-    <div id="properties" class="col-md-3 p-0">
+    <div id="properties" class="col-lg-3 col-md-4 col-sm-5 p-0">
       <%-
         include('viewer/metadata.ejs', {
           metadataSets: metadataSets
         });
       %>
     </div>
-    <div id="viewer" class="pdf-viewer m-0 col-md-9 border bg-secondary-op" data-url="<%- documentUrl -%>">
+    <div id="viewer" class="pdf-viewer m-0 col-lg-9 col-md-8 col-sm-7 border bg-secondary-op" data-url="<%- documentUrl -%>">
       <div id="search" class="modal" role="dialog">
         <div class="modal-dialog">
           <div class="modal-content">
@@ -218,6 +218,16 @@
       }
 
       $(this).closest('.metadata-field-type-dropdown').siblings('.dropdown-toggle').text($(this).text());
+    });
+
+    $(document).on('click', '.new-metadata-set', function () {
+      var order = $('.metadata-set').length;
+
+      $(window.JST['views/pages/viewer/shared/metadata-set.ejs']({
+        setName: 'New Metadata Set',
+        setOrder: order,
+        metadataSet: {}
+      })).appendTo('#metadata');
     });
   });
 </script>

@@ -1,4 +1,4 @@
-<form id="metadata" method="POST" action="/viewer/<%- id -%>/metadata" enctype="multipart/form-data">
+<form style="padding-bottom: 300px;" id="metadata" method="POST" action="/viewer/<%- id %>/metadata" enctype="multipart/form-data">
   <%
     var orderedMetadataSets = Object.keys(metadataSets).sort(function (a, b) {
       if (typeof metadataSets[a].order === 'number' && typeof metadataSets[b].order !== 'number') {
@@ -24,5 +24,4 @@
   <%
     });
   %>
-  <div style="height:300px;">&nbsp;</div>
 </form>

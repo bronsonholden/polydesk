@@ -58,8 +58,8 @@ var jsFilesToInject = [
 // >   https://sailsjs.com/docs/concepts/assets/task-automation
 //
 var templateFilesToInject = [
-  'templates/**/*.html',
-  'views/pages/viewer/*.ejs'
+  'assets/templates/**/*.html',
+  'views/pages/viewer/shared/*.ejs'
 ];
 
 // The following code exists to parse the arrays of glob expressions above, and
@@ -88,10 +88,4 @@ module.exports.jsFilesToInject = jsFilesToInject.map((jsPath) => {
   return require('path').join(tmpPath, jsPath);
 });
 
-module.exports.templateFilesToInject = templateFilesToInject.map((tplPath) => {
-  // If we're ignoring the file, make sure the ! is at the beginning of the path
-  if (tplPath[0] === '!') {
-    return require('path').join('!assets/', tplPath.substr(1));
-  }
-  return require('path').join('assets/', tplPath);
-});
+module.exports.templateFilesToInject = templateFilesToInject;
