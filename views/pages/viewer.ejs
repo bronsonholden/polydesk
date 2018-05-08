@@ -229,5 +229,64 @@
         metadataSet: {}
       })).appendTo('#metadata');
     });
+
+    $(document).on('click', '.metadata-add-field-dropdown > .dropdown-item', function () {
+      var metadataSet = $(this).closest('.metadata-set');
+      var fieldOrder = metadataSet.find('.metadata-field').length;
+      var fieldType = $(this).attr('fieldtype');
+
+      switch (fieldType) {
+      case 'S':
+        metadataField = $(window.JST['views/pages/viewer/shared/metadata-field-simple.ejs']({
+          type: fieldType,
+          typeString: 'String',
+          order: fieldOrder,
+          value: ''
+        }));
+        break;
+      case 'N':
+        metadataField = $(window.JST['views/pages/viewer/shared/metadata-field-simple.ejs']({
+          type: fieldType,
+          typeString: 'Number',
+          order: fieldOrder,
+          value: ''
+        }));
+        break;
+      case 'B':
+        metadataField = $(window.JST['views/pages/viewer/shared/metadata-field-simple.ejs']({
+          type: fieldType,
+          typeString: 'Boolean',
+          order: fieldOrder,
+          value: ''
+        }));
+        break;
+      case 'P':
+        metadataField = $(window.JST['views/pages/viewer/shared/metadata-field-simple.ejs']({
+          type: fieldType,
+          typeString: 'Precision',
+          order: fieldOrder,
+          value: ''
+        }));
+        break;
+      case 'F':
+        metadataField = $(window.JST['views/pages/viewer/shared/metadata-field-formula.ejs']({
+          type: fieldType,
+          typeString: 'Formula',
+          order: fieldOrder,
+          value: '',
+          calculated: ''
+        }));
+        break;
+      default:
+        return;
+      }
+
+      var metadataFieldWrapper = $(window.JST['views/pages/viewer/shared/metadata-field.ejs']({
+        fieldName: 'New Metadata Field'
+      }));
+
+      metadataFieldWrapper.appendTo(metadataSet);
+      metadataField.appendTo(metadataFieldWrapper);
+    });
   });
 </script>
