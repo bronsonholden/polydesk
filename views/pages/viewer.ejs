@@ -64,50 +64,6 @@
       }, 150);
     });
 
-    $(document).on('click', '.metadata-set-lock', function () {
-      var set = $(this).closest('.metadata-set');
-
-      if (!set.attr('locked')) {
-        set.attr('locked', 'locked');
-
-        set.find('.metadata-field').removeClass('input-group');
-        set.find('.metadata-field .input-group-prepend').removeClass('input-group-prepend metadata-field-editable').addClass('input-group-prepend-locked hidden');
-        set.find('.metadata-field .input-group-append').removeClass('input-group-append metadata-field-editable').addClass('input-group-append-locked hidden');
-
-        // Lock formula fields down, show calculated value
-        set.find('.metadata-field input[fieldtype="F"]').each(function () {
-          $(this).val($(this).attr('calculated'));
-          $(this).prop('readonly', true);
-        });
-
-        // Make data fields editable
-        set.find('.metadata-field input[fieldtype!="F"]').each(function () {
-          $(this).removeAttr('readonly');
-        });
-
-        $(this).find('i').removeClass('ion-unlocked').addClass('ion-locked');
-      } else {
-        set.removeAttr('locked');
-
-        set.find('.metadata-field').addClass('input-group');
-        set.find('.metadata-field .input-group-prepend-locked').addClass('input-group-prepend metadata-field-editable').removeClass('input-group-prepend-locked hidden');
-        set.find('.metadata-field .input-group-append-locked').addClass('input-group-append metadata-field-editable').removeClass('input-group-append-locked hidden');
-
-        // Show formula string, allow editing
-        set.find('.metadata-field input[fieldtype="F"]').each(function () {
-          $(this).val(decodeURI($(this).attr('formula')));
-          $(this).removeAttr('readonly');
-        });
-
-        // Disallow data field edits
-        set.find('.metadata-field input[fieldtype!="F"]').each(function () {
-          $(this).prop('readonly', true);
-        });
-
-        $(this).find('i').removeClass('ion-locked').addClass('ion-unlocked');
-      }
-    });
-
     // Move a field up
     $(document).on('click', '.metadata-field-move-up', function () {
       var current = $(this).closest('.form-group');
@@ -172,6 +128,35 @@
       current.insertAfter(next);
     });
 
+    // Clicking on a formula to edit
+    $(document).on('dblclick', '.metadata-field .form-control[fieldtype="F"]', function () {
+      var metadataField = $(this).closest('.metadata-field');
+
+
+      $(this).removeAttr('readonly');
+      $(this).val(decodeURI($(this).attr('formula')));
+
+      $(this).one('focusout', function () {
+        $(this).val($(this).attr('calculated'));
+        $(this).prop('readonly', true);
+        $(this).off('change').off('keydown');
+      });
+
+      $(this).one('change', function () {
+        $(this).attr('formula', encodeURI($(this).val()));
+        $(this).attr('calculated', 'Please save and reload');
+        $(this).val($(this).attr('calculated'));
+        $(this).prop('readonly', true);
+        $(this).off('focusout').off('keydown');
+      });
+
+      $(this).on('keydown', null, 'return', function () {
+        $(this).attr('formula', encodeURI($(this).val()));
+        $(this).attr('calculated', 'Please save and reload');
+        $(this).focusout().off('change');
+      });
+    });
+
     $(document).on('click', '.metadata-field-delete', function () {
       $(this).closest('.form-group').remove();
     });
@@ -201,23 +186,30 @@
       }
     });
 
-    $(document).on('change', '.form-control[fieldtype="F"]', function () {
-      $(this).attr('formula', $(this).val());
-    });
-
     $(document).on('click', '.metadata-field-type-dropdown .dropdown-item', function () {
       var fieldType = $(this).attr('fieldtype');
-      var control = $(this).closest('.metadata-field').find('.form-control');
+      var metadataField = $(this).closest('.metadata-field-wrapper');
+      var control = metadataField.find('.form-control');
 
       control.attr('fieldtype', fieldType);
-      if (fieldType === 'F') {
-        control.removeAttr('readonly');
-        control.attr('calculated', 'Please reload');
-      } else {
-        control.prop('readonly', true);
-      }
 
-      $(this).closest('.metadata-field-type-dropdown').siblings('.dropdown-toggle').text($(this).text());
+      switch (fieldType) {
+      case 'S':
+        metadataField.find('.metadata-field-type i').removeClass().addClass('ion-quote');
+        break;
+      case 'B':
+        metadataField.find('.metadata-field-type i').removeClass().addClass('ion-checkmark');
+        break;
+      case 'N':
+        metadataField.find('.metadata-field-type i').removeClass().addClass('ion-pound');
+        break;
+      case 'P':
+        metadataField.find('.metadata-field-type i').removeClass().addClass('ion-pinpoint');
+        break;
+      case 'F':
+        metadataField.find('.metadata-field-type i').removeClass().addClass('ion-flash');
+        break;
+      }
     });
 
     $(document).on('click', '.new-metadata-set', function () {
@@ -282,7 +274,8 @@
       }
 
       var metadataFieldWrapper = $(window.JST['views/pages/viewer/shared/metadata-field.ejs']({
-        fieldName: 'New Metadata Field'
+        fieldName: 'New Metadata Field',
+        fieldType: fieldType
       }));
 
       metadataFieldWrapper.appendTo(metadataSet.find('.metadata-set-fields'));

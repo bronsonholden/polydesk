@@ -1,4 +1,55 @@
 <div class="form-group pb-2 pt-3 px-3 m-0 metadata-field-wrapper">
-  <input class="mb-2 form-control-plaintext metadata-field-label text-truncate" value="<%- fieldName %>" readonly></input>
+  <%
+    var ionicon;
+
+    switch (fieldType) {
+    case 'N':
+      ionicon = 'ion-pound';
+      break;
+    case 'P':
+      ionicon = 'ion-pinpoint';
+      break;
+    case 'S':
+      ionicon = 'ion-quote';
+      break;
+    case 'B':
+      ionicon = 'ion-checkmark';
+      break;
+    case 'F':
+      ionicon = 'ion-flash';
+      break;
+    case 'NL':
+      typeString = 'Number List';
+      ionicon = 'ion-grid';
+      break;
+    default:
+      break;
+    }
+  %>
+  <div class="mb-2 btn-group w-100">
+    <input class="form-control-plaintext metadata-field-label text-truncate" value="<%- fieldName %>" readonly></input>
+    <div>
+      <button class="ml-2 mr-1 btn rounded-circle btn-light metadata-field-type" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+        <i class="<%- ionicon %>"></i>
+      </button>
+      <div class="dropdown-menu metadata-field-type-dropdown">
+        <a class="dropdown-item" fieldtype="S" href="#"><i class="ion-quote mr-4"></i>Change to string</a>
+        <a class="dropdown-item" fieldtype="N" href="#"><i class="ion-pound mr-4"></i>Change to number</a>
+        <a class="dropdown-item" fieldtype="B" href="#"><i class="ion-checkmark mr-4"></i>Change to boolean</a>
+        <a class="dropdown-item" fieldtype="P" href="#"><i class="ion-pinpoint mr-4"></i>Change to precision</a>
+        <a class="dropdown-item" fieldtype="F" href="#"><i class="ion-flash mr-4"></i>Change to formula</a>
+      </div>
+    </div>
+    <div>
+      <button class="btn rounded-circle btn-light metadata-field-more" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+        <i class="ion-more"></i>
+      </button>
+      <div class="dropdown-menu metadata-field-actions-dropdown">
+        <a class="dropdown-item metadata-field-move-up" href="#"><i class="ion-chevron-up mr-4"></i>Move up</a>
+        <a class="dropdown-item metadata-field-move-down" href="#"><i class="ion-chevron-down mr-4"></i>Move down</a>
+        <a class="dropdown-item metadata-field-delete" href="#"><i class="ion-close mr-4"></i>Delete</a>
+      </div>
+    </div>
+  </div>
   <!-- append metadata-field-* here -->
 </div>
