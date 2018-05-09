@@ -15,7 +15,7 @@ module.exports = {
     sails.helpers.addUserToAccount.with({
       user: req.param('user'),
       account: req.session.account
-    }).intercept('E_INVALID_ARGINS', (err) => {
+    }).intercept('E_INVALID_ARGINS', (err) => { // eslint-disable-line handle-callback-err
       return 'One or more validation errors occurred';
     }).switch({
       success: (user) => {

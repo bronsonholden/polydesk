@@ -5,7 +5,6 @@
  * @help        :: See http://sailsjs.org/#!/documentation/concepts/Controllers
  */
 
-const sails = require('sails');
 const passport = require('passport');
 
 module.exports = {

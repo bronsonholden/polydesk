@@ -1,0 +1,40 @@
+{
+  "overrides": [
+    {
+      "files": [
+        "workflow.js",
+        "workflowGraph.js",
+        "workflowTerminal.js"
+      ],
+      "globals": {
+        "$": "true",
+        "mxCell": "true",
+        "mxConstants": "true",
+        "mxConstraintHandler": "true",
+        "mxEdgeHandler": "true",
+        "mxEdgeStyle": "true",
+        "mxEvent": "true",
+        "mxGeometry": "true",
+        "mxGraph": "true",
+        "mxPerimeter": "true",
+        "mxPoint": "true",
+        "mxRubberband": "true",
+        "mxUtils": "true",
+        "WorkflowGraph": "true",
+        "WorkflowTerminal": "true",
+        "workflowTypeColor": "true"
+      },
+      "rules": {
+        "new-cap": [ "error", { "newIsCapExceptionPattern": "^mx" } ]
+      }
+    },
+    {
+      "files": [ "viewer/*.js" ],
+      "globals": {
+        "$": "true",
+        "pdfjsLib": "true",
+        "io": "true"
+      }
+    }
+  ]
+}

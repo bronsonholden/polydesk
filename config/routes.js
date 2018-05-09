@@ -9,8 +9,6 @@
  */
 
 module.exports.routes = {
-
-
   // Webpages
 
   /***************************************************************************
@@ -35,8 +33,10 @@ module.exports.routes = {
   *                                                                          *
   ***************************************************************************/
 
-  'get /login': {
-    view: 'pages/login'
+  'get /login': (req, res) => {
+    return res.view('pages/login', {
+      next: req.query.next
+    });
   },
 
   'get /signup': {
@@ -49,7 +49,12 @@ module.exports.routes = {
   'post /signup': 'UserController.create',
 
   'get /dashboard': 'DashboardController.dashboard',
+
+  'post /documents': 'DocumentController.upload',
   'get /documents': 'DocumentController.browse',
+  'get /upload': {
+    view: 'pages/upload'
+  },
 
   'get /workflow': {
     view: 'pages/rpd',
@@ -59,6 +64,7 @@ module.exports.routes = {
   },
 
   'get /viewer/:document': 'DocumentController.view',
+  'post /viewer/:document/metadata': 'DocumentController.applyMetadata',
 
   'post /api/login': 'RESTAuthController.login',
   'post /api/logout': 'RESTAuthController.logout',

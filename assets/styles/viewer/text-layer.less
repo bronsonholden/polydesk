@@ -1,0 +1,38 @@
+.textLayer {
+  position: absolute;
+  left: 0;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  line-height: 1.0;
+  opacity: 1;
+}
+
+.textLayer > div {
+  color: rgba(0, 0, 0, 0);
+  position: absolute;
+  cursor: text;
+  -webkit-transform-origin: 0% 0%;
+          transform-origin: 0% 0%;
+}
+
+span.highlighted {
+  background: rgba(90, 125, 255, 0.7);
+  padding: 3px 3px 3px 3px;
+  border-radius: 2px;
+}
+
+.textLayer ::selection {
+    background: rgba(90, 125, 255, 0.7);
+    color: transparent;
+}
+
+.textLayer ::-webkit-selection {
+    background: rgba(90, 125, 255, 0.7);
+    color: transparent;
+}
+
+.textLayer ::-moz-selection {
+    background: rgba(90, 125, 255, 0.7);
+    color: transparent;
+}

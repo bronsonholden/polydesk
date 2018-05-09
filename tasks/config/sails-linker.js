@@ -11,11 +11,8 @@
  *   https://sailsjs.com/anatomy/tasks/config/sails-linker.js
  *
  */
-module.exports = function(grunt) {
-
+module.exports = function (grunt) {
   grunt.config.set('sails-linker', {
-
-
     // JavaScript
     // CLient-side JavaScript
     devJs: {
@@ -37,7 +34,7 @@ module.exports = function(grunt) {
         startTag: '<!--SCRIPTS-->',
         endTag: '<!--SCRIPTS END-->',
         fileTmpl: '<script src="%s"></script>',
-        appRoot: '.tmp/public',
+        appRoot: '.tmp/public'
         // relative: true
         // ^^ Uncomment this if compiling assets for use in PhoneGap, CDN, etc.
         //    (but be note that this can break custom font URLs)
@@ -57,9 +54,9 @@ module.exports = function(grunt) {
         appRoot: '.tmp/public'
       },
       files: {
-        '.tmp/public/**/*.html': ['.tmp/public/min/production.min.js'],
-        'views/**/*.html': ['.tmp/public/min/production.min.js'],
-        'views/**/*.ejs': ['.tmp/public/min/production.min.js']
+        '.tmp/public/**/*.html': [ '.tmp/public/min/production.min.js' ],
+        'views/**/*.html': [ '.tmp/public/min/production.min.js' ],
+        'views/**/*.ejs': [ '.tmp/public/min/production.min.js' ]
       }
     },
 
@@ -68,18 +65,17 @@ module.exports = function(grunt) {
         startTag: '<!--SCRIPTS-->',
         endTag: '<!--SCRIPTS END-->',
         fileTmpl: '<script src="%s"></script>',
-        appRoot: '.tmp/public',
+        appRoot: '.tmp/public'
         // relative: true
         // ^^ Uncomment this if compiling assets for use in PhoneGap, CDN, etc.
         //    (but be note that this can break custom font URLs)
       },
       files: {
-        '.tmp/public/**/*.html': ['.tmp/public/min/production.min.js'],
-        'views/**/*.html': ['.tmp/public/min/production.min.js'],
-        'views/**/*.ejs': ['.tmp/public/min/production.min.js']
+        '.tmp/public/**/*.html': [ '.tmp/public/min/production.min.js' ],
+        'views/**/*.html': [ '.tmp/public/min/production.min.js' ],
+        'views/**/*.ejs': [ '.tmp/public/min/production.min.js' ]
       }
     },
-
 
     // Stylesheets
     // Including CSS and compiled LESS
@@ -103,7 +99,7 @@ module.exports = function(grunt) {
         startTag: '<!--STYLES-->',
         endTag: '<!--STYLES END-->',
         fileTmpl: '<link rel="stylesheet" href="%s">',
-        appRoot: '.tmp/public',
+        appRoot: '.tmp/public'
         // relative: true
         // ^^ Uncomment this if compiling assets for use in PhoneGap, CDN, etc.
         //    (but be note that this can break custom font URLs)
@@ -124,9 +120,9 @@ module.exports = function(grunt) {
         appRoot: '.tmp/public'
       },
       files: {
-        '.tmp/public/index.html': ['.tmp/public/min/production.min.css'],
-        'views/**/*.html': ['.tmp/public/min/production.min.css'],
-        'views/**/*.ejs': ['.tmp/public/min/production.min.css']
+        '.tmp/public/index.html': [ '.tmp/public/min/production.min.css' ],
+        'views/**/*.html': [ '.tmp/public/min/production.min.css' ],
+        'views/**/*.ejs': [ '.tmp/public/min/production.min.css' ]
       }
     },
 
@@ -135,18 +131,17 @@ module.exports = function(grunt) {
         startTag: '<!--STYLES-->',
         endTag: '<!--STYLES END-->',
         fileTmpl: '<link rel="stylesheet" href="%s">',
-        appRoot: '.tmp/public',
+        appRoot: '.tmp/public'
         // relative: true
         // ^^ Uncomment this if compiling assets for use in PhoneGap, CDN, etc.
         //    (but be note that this can break custom font URLs)
       },
       files: {
-        '.tmp/public/index.html': ['.tmp/public/min/production.min.css'],
-        'views/**/*.html': ['.tmp/public/min/production.min.css'],
-        'views/**/*.ejs': ['.tmp/public/min/production.min.css']
+        '.tmp/public/index.html': [ '.tmp/public/min/production.min.css' ],
+        'views/**/*.html': [ '.tmp/public/min/production.min.css' ],
+        'views/**/*.ejs': [ '.tmp/public/min/production.min.css' ]
       }
     },
-
 
     // Precompiled HTML templates
     // Client-side lodash templates
@@ -158,9 +153,9 @@ module.exports = function(grunt) {
         appRoot: '.tmp/public'
       },
       files: {
-        '.tmp/public/index.html': ['.tmp/public/jst.js'],
-        'views/**/*.html': ['.tmp/public/jst.js'],
-        'views/**/*.ejs': ['.tmp/public/jst.js']
+        '.tmp/public/index.html': [ '.tmp/public/jst.js' ],
+        'views/**/*.html': [ '.tmp/public/jst.js' ],
+        'views/**/*.ejs': [ '.tmp/public/jst.js' ]
       }
     },
     clientSideTemplatesBuild: {
@@ -168,19 +163,18 @@ module.exports = function(grunt) {
         startTag: '<!--TEMPLATES-->',
         endTag: '<!--TEMPLATES END-->',
         fileTmpl: '<script type="text/javascript" src="%s"></script>',
-        appRoot: '.tmp/public',
+        appRoot: '.tmp/public'
         // relative: true
         // ^^ Uncomment this if compiling assets for use in PhoneGap, CDN, etc.
         //    (but be note that this can break custom font URLs)
       },
       files: {
-        '.tmp/public/index.html': ['.tmp/public/jst.js'],
-        'views/**/*.html': ['.tmp/public/jst.js'],
-        'views/**/*.ejs': ['.tmp/public/jst.js']
+        '.tmp/public/index.html': [ '.tmp/public/jst.js' ],
+        'views/**/*.html': [ '.tmp/public/jst.js' ],
+        'views/**/*.ejs': [ '.tmp/public/jst.js' ]
       }
-    },
-
-  });//</ grunt.config.set() >
+    }
+  }); // </ grunt.config.set() >
 
   // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
   // This Grunt plugin is part of the default asset pipeline in Sails,
@@ -205,5 +199,4 @@ module.exports = function(grunt) {
   // grunt.loadNpmTasks('grunt-sails-linker');
   // ```
   // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-
 };

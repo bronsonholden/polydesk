@@ -10,8 +10,7 @@
  *   https://sailsjs.com/anatomy/tasks/config/coffee.js
  *
  */
-module.exports = function(grunt) {
-
+module.exports = function (grunt) {
   grunt.config.set('coffee', {
     dev: {
       options: {
@@ -19,13 +18,15 @@ module.exports = function(grunt) {
         sourceMap: true,
         sourceRoot: './'
       },
-      files: [{
-        expand: true,
-        cwd: 'assets/js/',
-        src: ['**/*.coffee'],
-        dest: '.tmp/public/js/',
-        ext: '.js'
-      }]
+      files: [
+        {
+          expand: true,
+          cwd: 'assets/js/',
+          src: [ '**/*.coffee' ],
+          dest: '.tmp/public/js/',
+          ext: '.js'
+        }
+      ]
     }
   });
 
@@ -52,5 +53,4 @@ module.exports = function(grunt) {
   // grunt.loadNpmTasks('grunt-contrib-coffee');
   // ```
   // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-
 };

@@ -21,8 +21,7 @@ module.exports = {
       required: true
     },
     defaultAccount: {
-      model: 'Account',
-      required: true
+      model: 'Account'
     },
     accounts: {
       collection: 'Account',
@@ -40,10 +39,14 @@ module.exports = {
       createdAt: this.createdAt,
       updatedAt: this.updatedAt,
       defaultAccount: this.defaultAccount
-    }
+    };
   },
   beforeCreate: (user, callback) => {
     bcrypt.genSalt(10, (err, salt) => {
+      if (err) {
+        return callback(err);
+      }
+
       bcrypt.hash(user.password, salt, (err, hash) => {
         if (err) {
           return callback(err);

@@ -65,16 +65,19 @@ module.exports = {
 
     const collection = db.collection(collectionName);
 
-    collection.remove({
-      _key: `${prefix}${inputs.object}`
+    collection.removeByExample({
+      _object: `${prefix}${inputs.object}`,
+      _set: inputs.setName
     }, {
       waitForSync: true,
       silent: false
     }).catch((err) => {
       exits.error(new Error(err.message));
-    }).then((document) => {
-      if (document) {
-        exits.success(document);
+    }).then((res) => {
+      if (res) {
+        exits.success({
+          deleted: res.deleted
+        });
       }
     });
   }

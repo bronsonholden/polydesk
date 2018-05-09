@@ -1,6 +1,6 @@
 const passport = require('passport');
 const LocalStrategy = require('passport-local').Strategy;
-const  bcrypt = require('bcryptjs');
+const bcrypt = require('bcryptjs');
 
 passport.serializeUser((user, callback) => {
   callback(null, user.id);
@@ -32,6 +32,10 @@ passport.use(new LocalStrategy({
     }
 
     bcrypt.compare(password, user.password, (err, res) => {
+      if (err) {
+        return callback(err);
+      }
+
       if (!res) {
         return callback(null, false, {
           message: 'Incorrect email address or password'

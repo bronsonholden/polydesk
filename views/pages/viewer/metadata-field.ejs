@@ -1,0 +1,102 @@
+<div class="form-group pb-2 pt-3 px-3 m-0 metadata-field-wrapper">
+  <%
+    var value = metadataField.value;
+    var typeString, ionicon;
+
+    switch (metadataField.type) {
+    case 'N':
+      typeString = 'Number';
+      ionicon = 'ion-pound';
+      break;
+    case 'P':
+      typeString = 'Precision';
+      ionicon = 'ion-pinpoint';
+      break;
+    case 'S':
+      typeString = 'String';
+      ionicon = 'ion-quote';
+      break;
+    case 'B':
+      typeString = 'Boolean';
+      ionicon = 'ion-checkmark';
+      break;
+    case 'F':
+      typeString = 'Formula';
+      ionicon = 'ion-flash';
+      break;
+    case 'NL':
+      typeString = 'Number List';
+      ionicon = 'ion-grid';
+      break;
+    default:
+      break;
+    }
+  %>
+  <div class="mb-2 btn-group w-100">
+    <input class="form-control-plaintext metadata-field-label text-truncate" value="<%- fieldName %>" readonly></input>
+    <div class="">
+      <button class="ml-2 mr-1 btn rounded-circle btn-light metadata-field-type" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+        <i class="<%- ionicon %>"></i>
+      </button>
+      <div class="dropdown-menu metadata-field-type-dropdown">
+        <a class="dropdown-item" fieldtype="S" href="#"><i class="ion-quote mr-4"></i>Change to string</a>
+        <a class="dropdown-item" fieldtype="N" href="#"><i class="ion-pound mr-4"></i>Change to number</a>
+        <a class="dropdown-item" fieldtype="B" href="#"><i class="ion-checkmark mr-4"></i>Change to boolean</a>
+        <a class="dropdown-item" fieldtype="P" href="#"><i class="ion-pinpoint mr-4"></i>Change to precision</a>
+        <a class="dropdown-item" fieldtype="F" href="#"><i class="ion-flash mr-4"></i>Change to formula</a>
+      </div>
+    </div>
+    <div class="">
+      <button class="btn rounded-circle btn-light metadata-field-more" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+        <i class="ion-more"></i>
+      </button>
+      <div class="dropdown-menu metadata-field-actions-dropdown">
+        <a class="dropdown-item metadata-field-move-up" href="#"><i class="ion-chevron-up mr-4"></i>Move up</a>
+        <a class="dropdown-item metadata-field-move-down" href="#"><i class="ion-chevron-down mr-4"></i>Move down</a>
+        <a class="dropdown-item metadata-field-delete" href="#"><i class="ion-close mr-4"></i>Delete</a>
+      </div>
+    </div>
+  </div>
+  <%
+    if (metadataField.type.length === 2 && metadataField.type[1] === 'L') {
+      value.forEach(function (val, idx, arr) {
+  %>
+  <%-
+        include('shared/metadata-field-repeating.ejs', {
+          type: metadataField.type,
+          order: metadataField.order,
+          val: val
+        });
+  %>
+  <%
+      });
+    } else {
+      if (metadataField.type === 'F') {
+        var calculated = metadataField.err || metadataField.calculated;
+  %>
+  <%-
+        include('shared/metadata-field-formula.ejs', {
+          type: metadataField.type,
+          typeString: typeString,
+          calculated: calculated,
+          value: calculated,
+          formula: encodeURI(metadataField.value),
+          order: metadataField.order
+        });
+  %>
+  <%
+      } else {
+  %>
+  <%-
+        include('shared/metadata-field-simple.ejs', {
+          type: metadataField.type,
+          typeString: typeString,
+          value: metadataField.value,
+          order: metadataField.order
+        });
+  %>
+  <%
+      }
+    }
+  %>
+</div>

@@ -5,7 +5,7 @@ function WorkflowGraph(container) {
 
   var style;
 
-  style = new Object();
+  style = {};
   style[mxConstants.STYLE_FONTCOLOR] = '#774400';
   style[mxConstants.STYLE_PERIMETER] = mxPerimeter.RectanglePerimeter;
   style[mxConstants.STYLE_PERIMETER_SPACING] = '6';
@@ -19,7 +19,7 @@ function WorkflowGraph(container) {
   style[mxConstants.STYLE_IMAGE_HEIGHT] = '16';
   this.getStylesheet().putCellStyle('targetPort', style);
 
-  style = new Object();
+  style = {};
   style[mxConstants.STYLE_FONTCOLOR] = '#774400';
   style[mxConstants.STYLE_PERIMETER] = mxPerimeter.RectanglePerimeter;
   style[mxConstants.STYLE_PERIMETER_SPACING] = '6';
@@ -44,10 +44,9 @@ function WorkflowGraph(container) {
   this.connectionHandler.addListener(mxEvent.CONNECT, function (sender, evt) {
     var edge = evt.getProperty('cell');
     var source = graph.getModel().getTerminal(edge, true);
-    var target = graph.getModel().getTerminal(edge, false);
 
     // TODO: Set edge color based on port type
-    graph.setCellStyles('strokeColor', WorkflowTypeColor(source.getType()), [ edge ]);
+    graph.setCellStyles('strokeColor', workflowTypeColor(source.getType()), [ edge ]);
   });
 }
 
@@ -59,7 +58,7 @@ WorkflowGraph.prototype.isValidSource = function (terminal) {
   }
 
   return terminal.isOutput();
-}
+};
 
 WorkflowGraph.prototype.isValidTarget = function (terminal) {
   if (!(terminal instanceof WorkflowTerminal)) {
@@ -67,7 +66,7 @@ WorkflowGraph.prototype.isValidTarget = function (terminal) {
   }
 
   return terminal.isInput();
-}
+};
 
 WorkflowGraph.prototype.insertTerminal = function (parent, id, value, type, input, x, y, width, height, style, relative) {
   var geometry = new mxGeometry(x, y, width, height);
@@ -82,10 +81,10 @@ WorkflowGraph.prototype.insertTerminal = function (parent, id, value, type, inpu
   terminal.setConnectable(true);
 
   this.addCell(terminal, parent);
-  this.setCellStyles('fillColor', WorkflowTypeColor(type), [ terminal ]);
+  this.setCellStyles('fillColor', workflowTypeColor(type), [ terminal ]);
 
   return terminal;
-}
+};
 
 WorkflowGraph.prototype.isValidConnection = function (source, target) {
   if (!(source instanceof WorkflowTerminal) || !(target instanceof WorkflowTerminal)) {
@@ -101,4 +100,4 @@ WorkflowGraph.prototype.isValidConnection = function (source, target) {
   }
 
   return true;
-}
+};

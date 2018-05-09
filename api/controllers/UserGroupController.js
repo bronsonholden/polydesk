@@ -14,7 +14,7 @@ module.exports = {
     sails.helpers.addUserToUserGroup.with({
       user: req.param('user'),
       userGroup: req.param('userGroup')
-    }).intercept('E_INVALID_ARGINS', (err) => {
+    }).intercept('E_INVALID_ARGINS', (err) => { // eslint-disable-line handle-callback-err
       return 'One or more validation errors occurred';
     }).switch({
       success: (user) => {
@@ -46,10 +46,10 @@ module.exports = {
   create: (req, res) => {
     assert(req.session.account);
 
-    sails.helpers.createUserGroup.with({
+    sails.helpers.createNewUserGroup.with({
       account: req.session.account,
       name: req.param('name')
-    }).intercept('E_INVALID_ARGINS', (err) => {
+    }).intercept('E_INVALID_ARGINS', (err) => { // eslint-disable-line handle-callback-err
       return 'One or more validation errors occurred';
     }).switch({
       success: (userGroup) => {

@@ -1,4 +1,5 @@
 const arangoDb = require('arangojs');
+const BigNumber = require('bignumber.js');
 
 module.exports = {
   friendlyName: 'Add Object Metadata Set',
@@ -18,6 +19,11 @@ module.exports = {
       type: 'string',
       required: true,
       description: 'The name of the metadata set'
+    },
+    order: {
+      type: 'number',
+      required: true,
+      description: 'The ordering of the metadata set'
     },
     metadata: {
       type: 'json',
@@ -70,32 +76,146 @@ module.exports = {
 
     const collection = db.collection(collectionName);
     var document = {
-      _key: `${prefix}${inputs.object}`
+      _object: `${prefix}${inputs.object}`,
+      _set: inputs.setName,
+      _order: inputs.order
     };
 
     Object.keys(inputs.metadata).forEach((key, index) => {
       var val = inputs.metadata[key];
+      var big;
 
-      switch (typeof(val)) {
-      case 'string':
-      case 'boolean':
-      case 'number':
-        document[key] = val;
+      // TODO: D.R.Y.
+      switch (val.type) {
+      case 'S':
+        document['$' + key] = {
+          type: 'S',
+          value: val.value,
+          order: val.order
+        };
+        break;
+      case 'B':
+        document['$' + key] = {
+          type: 'B',
+          value: val.value,
+          order: val.order
+        };
+        break;
+      case 'N':
+        try {
+          big = new BigNumber(val.value);
+          var n = big.toNumber();
+
+          document['$' + key] = {
+            type: 'N',
+            value: n,
+            order: val.order
+          };
+        } catch (err) {
+          document['$' + key] = {
+            type: 'N',
+            value: 0,
+            order: val.order
+          };
+        }
+        break;
+      case 'P':
+        try {
+          big = new BigNumber(val.value);
+
+          document['$' + key] = {
+            type: 'P',
+            value: val.value,
+            order: val.order
+          };
+        } catch (err) {
+          document['$' + key] = {
+            type: 'P',
+            value: '0',
+            order: val.order
+          };
+        }
+        break;
+      case 'F':
+        document['$' + key] = {
+          type: 'F',
+          value: val.value,
+          order: val.order
+        };
+        break;
+      case 'NL':
+        try {
+          document['$' + key] = {
+            type: 'NL',
+            value: val.value.map((n) => {
+              var big = new BigNumber(n);
+              return big.toNumber();
+            }),
+            order: val.order
+          };
+        } catch (err) {
+          document['$' + key] = {
+            type: 'NL',
+            value: [],
+            order: val.order
+          };
+        }
         break;
       default:
-        return;
+        break;
       }
     });
 
-    collection.save(document, {
-      waitForSync: true,
-      silent: false
-    }).catch((err) => {
-      exits.error(new Error(err.message));
-    }).then((document) => {
-      if (document) {
-        exits.success(document);
+    async.waterfall([
+      (callback) => {
+        collection.byExample({
+          _object: `${prefix}${inputs.object}`,
+          _set: inputs.setName
+        }).catch((err) => {
+          callback(err);
+        }).then((cursor) => {
+          callback(null, cursor);
+        });
+      },
+      (cursor, callback) => {
+        if (cursor.hasNext()) {
+          var documents = [];
+
+          cursor.each(v => documents.push(v));
+
+          async.eachSeries(documents, (doc, callback) => {
+            collection.replace(doc, document, {
+              waitForSync: true,
+              silent: false
+            }).catch((err) => {
+              callback(err);
+            }).then((document) => {
+              if (document) {
+                callback();
+              }
+            });
+          }, (err) => {
+            callback(err, document);
+          });
+        } else {
+          collection.save(document, {
+            waitForSync: true,
+            silent: false
+          }).catch((err) => {
+            callback(err);
+          }).then((res) => {
+            if (res) {
+              callback(null, document);
+            }
+          });
+        }
       }
+    ], (err, document) => {
+      if (err) {
+        return exits.error(new Error(err.message));
+      }
+
+      exits.success(document);
     });
   }
 };

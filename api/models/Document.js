@@ -5,13 +5,11 @@
  * @docs        :: http://sailsjs.org/documentation/concepts/models-and-orm/models
  */
 
-const uuid = require('uuid/v4');
-
 module.exports = {
   attributes: {
     name: {
       type: 'string',
-      required: true,
+      required: true
     },
     account: {
       model: 'Account',
@@ -20,13 +18,7 @@ module.exports = {
     fileType: {
       type: 'string',
       required: true,
-      isIn: [
-        'pdf',
-        'txt',
-        'csv',
-        'json',
-        'xml'
-      ]
+      isIn: sails.config.polydesk.supportedFileTypes
     }
   }
 };

@@ -11,24 +11,27 @@
  *   https://sailsjs.com/anatomy/tasks/config/copy.js
  *
  */
-module.exports = function(grunt) {
-
+module.exports = function (grunt) {
   grunt.config.set('copy', {
     dev: {
-      files: [{
-        expand: true,
-        cwd: './assets',
-        src: ['**/*.!(coffee|less)'],
-        dest: '.tmp/public'
-      }]
+      files: [
+        {
+          expand: true,
+          cwd: './assets',
+          src: [ '**/*.!(coffee|less)' ],
+          dest: '.tmp/public'
+        }
+      ]
     },
     build: {
-      files: [{
-        expand: true,
-        cwd: '.tmp/public',
-        src: ['**/*'],
-        dest: 'www'
-      }]
+      files: [
+        {
+          expand: true,
+          cwd: '.tmp/public',
+          src: [ '**/*' ],
+          dest: 'www'
+        }
+      ]
     }
   });
 
@@ -55,5 +58,4 @@ module.exports = function(grunt) {
   // grunt.loadNpmTasks('grunt-contrib-copy');
   // ```
   // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-
 };

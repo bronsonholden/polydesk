@@ -7,11 +7,32 @@
 
 const skipperS3 = require('skipper-better-s3');
 const path = require('path');
-const uuid = require('uuid/v4');
 
 module.exports = {
   browse: (req, res) => {
-    res.view('pages/documents');
+    Document.find({
+      skip: req.param('skip') || 0,
+      limit: req.param('limit') || 20,
+      sort: 'id ASC'
+    }).exec((err, documents) => {
+      if (err) {
+        return res.status(500).send({
+          message: err.message
+        });
+      }
+
+      documents = documents.map((doc) => {
+        return {
+          id: doc.id,
+          name: doc.name,
+          href: `/viewer/${doc.id}`
+        };
+      });
+
+      res.view('pages/documents', {
+        documents: documents
+      });
+    });
   },
   view: (req, res) => {
     var adapter = skipperS3({
@@ -20,23 +41,50 @@ module.exports = {
       bucket: sails.config.documents.s3.bucket
     });
 
-    Document.findOne({
-      account: req.session.account,
-      id: req.param('document'),
-    }).exec((err, doc) => {
+    async.waterfall([
+      (callback) => {
+        Document.findOne({
+          account: req.session.account,
+          id: req.param('document')
+        }).exec((err, doc) => {
+          if (err) {
+            return callback(err);
+          }
+
+          if (!doc) {
+            return callback(new Error('No document exists with that ID in this account'));
+          }
+
+          return callback(null, doc);
+        });
+      },
+      (doc, callback) => {
+        sails.helpers.getObjectMetadata.with({
+          account: req.session.account,
+          object: doc.id,
+          objectType: 'document'
+        }).switch({
+          success: (metadataSets) => {
+            callback(null, metadataSets);
+          },
+          error: (err) => {
+            callback(err);
+          },
+          invalidObjectType: (err) => {
+            callback(err);
+          }
+        });
+      }
+    ], (err, metadataSets) => {
       if (err) {
         return res.status(500).send({
           message: err.message
         });
       }
 
-      if (!doc) {
-        return res.status(404).send({
-          message: 'No document exists with that ID in this account'
-        });
-      }
-
       return res.view('pages/viewer', {
+        metadataSets: metadataSets,
+        id: req.param('document'),
         layout: 'layouts/viewer',
         documentUrl: adapter.url('getObject', {
           s3params: {
@@ -45,6 +93,75 @@ module.exports = {
           }
         })
       });
+    });
+  },
+  // Web-only action. Replaces metadata set in the viewer metadata tab
+  applyMetadata: (req, res) => {
+    var metadataSets = req.body.metadataSets;
+    var metadataOrdering = req.body.metadataOrdering;
+
+    // TODO: Transaction? Or add sets, then remove sets not updated?
+    async.waterfall([
+      (callback) => {
+        sails.helpers.removeAllObjectMetadataSets.with({
+          account: req.session.account,
+          object: req.param('document'),
+          objectType: 'document'
+        }).switch({
+          success: (metadata) => {
+            callback();
+          },
+          error: (err) => {
+            callback(err);
+          },
+          invalidObjectType: (err) => {
+            callback(err);
+          }
+        });
+      },
+      (callback) => {
+        async.eachOf(metadataSets, (metadata, setName, callback) => {
+          var order = metadataOrdering.indexOf(setName);
+
+          if (order < 0) {
+            return callback(new Error('Metadata set not ordered'));
+          }
+
+          sails.helpers.addObjectMetadataSet.with({
+            account: req.session.account,
+            object: req.param('document'),
+            objectType: 'document',
+            setName: setName,
+            order: order,
+            metadata: metadata
+          }).switch({
+            success: (metadata) => {
+              callback();
+            },
+            error: (err) => {
+              callback(err);
+            },
+            invalidObjectType: (err) => {
+              callback(err);
+            }
+          });
+        }, callback);
+      }
+    ], (err) => {
+      if (err) {
+        return res.status(500).send({
+          message: err.message
+        });
+      }
+
+      if (req.body.save) {
+        res.redirect('/documents');
+      } else {
+        res.send({
+          success: true,
+          message: 'Metadata applied'
+        });
+      }
     });
   },
   upload: (req, res) => {
