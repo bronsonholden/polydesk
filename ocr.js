@@ -15,21 +15,7 @@ if (typeof process.env.NODE_ENV !== 'string' || process.env.NODE_ENV.indexOf('oc
 
 sails.load({
   hooks: {
-    blueprints: false,
-    controllers: false,
-    cors: false,
-    csrf: false,
-    grunt: false,
-    helpers: false,
     http: false,
-    i18n: false,
-    logger: false,
-    orm: true,
-    policies: false,
-    pubsub: false,
-    request: false,
-    responses: false,
-    session: false,
     sockets: false,
     views: false
   }
