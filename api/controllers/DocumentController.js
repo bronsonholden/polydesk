@@ -7,10 +7,14 @@
 
 const skipperS3 = require('skipper-better-s3');
 const path = require('path');
+const AWS = require('aws-sdk');
 
 module.exports = {
   browse: (req, res) => {
     Document.find({
+      where: {
+        account: req.session.account
+      },
       skip: req.param('skip') || 0,
       limit: req.param('limit') || 20,
       sort: 'id ASC'
@@ -174,12 +178,12 @@ module.exports = {
     }
 
     var filename = req.file('file')._files[0].stream.filename;
-    var ext = path.extname(filename).slice(1);
+    var ext = path.extname(filename);
 
     Document.create({
       name: path.basename(filename, ext),
       account: req.session.account,
-      fileType: ext
+      fileType: ext.slice(1) // so we don't get the dot before extension
     }).fetch().exec((err, file) => {
       if (err) {
         return res.status(500).send({
@@ -203,7 +207,27 @@ module.exports = {
           });
         }
 
-        res.status(200).send(files);
+        var sqs = new AWS.SQS({
+          accessKeyId: sails.config.documents.sqs.key,
+          secretAccessKey: sails.config.documents.sqs.secret,
+          region: sails.config.documents.sqs.region
+        });
+
+        sqs.sendMessage({
+          QueueUrl: sails.config.documents.sqs.url,
+          MessageBody: JSON.stringify({
+            document: file
+          }),
+          MessageGroupId: 'DocumentUpload'
+        }, (err, data) => {
+          if (err) {
+            return res.status(500).send({
+              message: err.message
+            });
+          }
+
+          res.redirect('/documents');
+        });
       });
     });
   },

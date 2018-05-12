@@ -2,24 +2,6 @@ let pdfDocument;
 let PAGE_HEIGHT;
 const DEFAULT_SCALE = 2;
 
-pdfjsLib.workerSrc = './pdf.worker.js';
-pdfjsLib.getDocument('/documents/sample.pdf').then(pdf => {
-  pdfDocument = pdf;
-
-  let viewer = document.getElementById('viewer');
-  for (let i = 0; i < pdf.pdfInfo.numPages; i++) {
-    let page = createEmptyPage(i + 1);
-    viewer.appendChild(page);
-  }
-
-  loadPage(1).then(pdfPage => {
-    let viewport = pdfPage.getViewport(DEFAULT_SCALE);
-    PAGE_HEIGHT = viewport.height;
-    viewer.width = `${viewport.width}px`;
-    $('.page').height(`${PAGE_HEIGHT}px`);
-  });
-});
-
 function createEmptyPage(num) {
   let page = document.createElement('div');
   let canvas = document.createElement('canvas');
@@ -88,6 +70,26 @@ $(document).ready(function () {
         $(this).attr('data-loaded', 'true');
         loadPage(parseInt($(this).attr('data-page-number')));
       }
+    });
+  });
+
+
+  let viewer = document.getElementById('viewer');
+
+  pdfjsLib.workerSrc = './pdf.worker.js';
+  pdfjsLib.getDocument(viewer.getAttribute('data-url')).then(pdf => {
+    pdfDocument = pdf;
+
+    for (let i = 0; i < pdf.pdfInfo.numPages; i++) {
+      let page = createEmptyPage(i + 1);
+      viewer.appendChild(page);
+    }
+
+    loadPage(1).then(pdfPage => {
+      let viewport = pdfPage.getViewport(DEFAULT_SCALE);
+      PAGE_HEIGHT = viewport.height;
+      viewer.width = `${viewport.width}px`;
+      $('.page').height(`${PAGE_HEIGHT}px`);
     });
   });
 });
