@@ -12,6 +12,9 @@ const AWS = require('aws-sdk');
 module.exports = {
   browse: (req, res) => {
     Document.find({
+      where: {
+        account: req.session.account
+      },
       skip: req.param('skip') || 0,
       limit: req.param('limit') || 20,
       sort: 'id ASC'
