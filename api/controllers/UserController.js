@@ -18,7 +18,11 @@ module.exports = {
       return 'One or more validation errors occurred';
     }).switch({
       success: (user) => {
-        return res.status(201).send(user);
+        if (req.wantsJSON) {
+          res.status(201).send(user);
+        } else {
+          res.redirect('/login');
+        }
       },
       error: (err) => {
         res.status(500).send({
