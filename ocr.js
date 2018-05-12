@@ -5,6 +5,7 @@ const path = require('path');
 const exec = require('child_process').exec;
 const skipperDisk = require('skipper-disk');
 const skipperS3 = require('skipper-better-s3');
+const AWS = require('aws-sdk');
 
 const sails = require('sails');
 
@@ -28,6 +29,12 @@ sails.load({
   var disk = skipperDisk();
   var s3 = skipperS3(sails.config.documents.s3);
   var shutdown = false;
+
+  var sqs = new AWS.SQS({
+    accessKeyId: sails.config.documents.sqs.key,
+    secretAccessKey: sails.config.documents.sqs.secret,
+    region: sails.config.documents.sqs.region
+  });
 
   if (!fs.existsSync('./.tmp/documents')) {
     fs.mkdirSync('./.tmp/documents');
@@ -54,13 +61,36 @@ sails.load({
   }, (callback) => {
     async.waterfall([
       (callback) => {
-        s3.ls('queue/', (err, files) => {
+        sqs.receiveMessage({
+          QueueUrl: sails.config.documents.sqs.url,
+          MaxNumberOfMessages: 1,
+          WaitTimeSeconds: 20
+        }, (err, data) => {
           if (err) {
             return callback(err);
           }
 
-          callback(null, files.slice(1));
+          callback(null, data);
         });
+      },
+      (data, callback) => {
+        async.eachSeries(_.get(data, 'Messages'), (message, callback) => {
+          sqs.deleteMessage({
+            QueueUrl: sails.config.documents.sqs.url,
+            ReceiptHandle: message.ReceiptHandle,
+          }, callback);
+        }, (err) => {
+          if (err) {
+            return callback(err);
+          }
+
+          callback(null, data);
+        });
+      },
+      (data, callback) => {
+          var docId = _.map(_.get(data, 'Messages'), message => _.get(JSON.parse(message.Body), 'document'));
+
+          callback(null, docId);
       },
       (files, callback) => {
         const gs = process.platform === 'win32' ? 'gswin64c' : 'gs';
@@ -68,7 +98,7 @@ sails.load({
         async.eachSeries(files, (file, callback) => {
           async.waterfall([
             (callback) => {
-              var id = path.basename(file, '.pdf');
+              var id = file.id;
               var tmp = path.join(__dirname, `.tmp/ocr-${id}`);
 
               fs.mkdir(tmp, (err) => {
@@ -81,7 +111,7 @@ sails.load({
             },
             (tmp, id, callback) => {
               var local = path.join(tmp, 'document.pdf');
-              var rs = s3.read(file);
+              var rs = s3.read(`queue/${id}.pdf`);
               var ws = fs.createWriteStream(local);
 
               rs.pipe(ws);
@@ -100,7 +130,7 @@ sails.load({
               });
             },
             (tmp, id, callback) => {
-              s3.rm(file, (err, res) => {
+              s3.rm(`queue/${id}.pdf`, (err, res) => {
                 if (err) {
                   return callback(err);
                 }
@@ -133,11 +163,11 @@ sails.load({
                     return callback(err);
                   }
 
-                  callback(null, tmp, dirname);
+                  callback(null, tmp, id, dirname);
                 });
               });
             },
-            (tmp, dirname, callback) => {
+            (tmp, id, dirname, callback) => {
               var local = path.join(tmp, 'document.pdf');
               var receiver = s3.receive({
                 dirname: dirname
@@ -148,6 +178,7 @@ sails.load({
                   return callback(err);
                 }
 
+                sails.log.info(`Uploaded ${id} to s3://${sails.config.documents.s3.bucket}/${dirname}/`);
                 callback(null, tmp);
               });
             },
