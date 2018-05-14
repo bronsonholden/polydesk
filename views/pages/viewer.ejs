@@ -1,6 +1,70 @@
-<div class="container-fluid d-flex h-100 flex-column">
-  <div class="row flex-row d-flex border border-bottom-1 border-top-0 border-left-0 border-right-0 border-secondary">
-    <div class="col-lg-3 col-md-4 col-sm-5 p-0 justify-content-between">
+<div class="p-0 container-fluid h-100">
+  <div class="row m-0 d-flex w-100 h-100">
+    <div class="m-0 p-0 col-sm-5 col-md-4 col-lg-3 flex-row">
+      <div class="d-flex flex-column h-100">
+        <div class="">
+          <div class="border border-bottom-1 border-top-0 border-left-0 border-right-0 border-secondary">
+            <nav class="navbar navbar-fixed-top">
+              <div class="d-inline">
+                <button type="button" class="btn btn-light btn-outline-primary document-viewer-apply">Apply</button>
+                <button type="button" class="btn btn-light btn-outline-primary document-viewer-save">Save</button>
+                <button type="button" class="btn btn-light btn-outline-secondary document-viewer-close">Close</button>
+              </div>
+            </nav>
+          </div>
+        </div>
+        <div id="properties" class="h-100">
+          <%-
+            include('viewer/metadata.ejs', {
+              metadataSets: metadataSets
+            });
+          %>
+        </div>
+      </div>
+    </div>
+    <div class="m-0 p-0 col-sm-7 col-md-8 col-lg-9 flex-row">
+      <div class="d-flex flex-column h-100">
+        <div class="border border-bottom-1 border-top-0 border-left-0 border-right-0 border-secondary">
+          <div id="viewer-menu">
+            <nav class="navbar navbar-fixed-top">
+              <div>
+                <button type="button" class="btn rounded-circle btn-light btn-outline-secondary viewer-action new-metadata-set" data-toggle="tooltip" data-placement="bottom" data-container="#viewer-menu" title="New Metadata Set"><i class="ion-compose"></i></button>
+                <button type="button" class="btn rounded-circle btn-light btn-outline-secondary viewer-action" data-toggle="tooltip" data-placement="bottom" data-container="#viewer-menu" title="Add Metadata Template"><i class="ion-code"></i></button>
+              </div>
+              <div>
+                <button type="button" class="btn rounded-circle btn-light btn-outline-secondary viewer-action" data-toggle="tooltip" data-placement="bottom" data-container="#viewer-menu" title="Zoom In"><i class="ion-plus"></i></button>
+                <button type="button" class="btn rounded-circle btn-light btn-outline-secondary viewer-action" data-toggle="tooltip" data-placement="bottom" data-container="#viewer-menu" title="Zoom Out"><i class="ion-minus"></i></button>
+              </div>
+              <div>
+              </div>
+            </nav>
+          </div>
+        </div>
+        <div id="viewer" class="pdf-viewer m-0 border bg-secondary-op" data-url="<%- documentUrl -%>">
+          <div id="search" class="modal" role="dialog">
+            <div class="modal-dialog">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h5 class="modal-title">Search</h5>
+                </div>
+                <div class="modal-body">
+                  <input id="search-input" type="text" placeholder="Enter your search text"></input>
+                </div>
+                <div class="modal-footer">
+                  <button id="search-next-result" type="button" class="btn">Next</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- <div class="container-fluid">
+  <div class="row col-lg-3 col-md-4 col-sm-5 p-0">
+    <div class="border border-bottom-1 border-top-0 border-left-0 border-right-0 border-secondary">
       <nav class="navbar navbar-fixed-top">
         <div class="d-inline">
           <button type="button" class="btn btn-light btn-outline-primary document-viewer-apply">Apply</button>
@@ -9,7 +73,18 @@
         </div>
       </nav>
     </div>
-    <div id="viewer-menu" class="col-lg-9 col-md-8 col-sm-7 p-0 justify-content-between">
+      <div class="row col-lg-3 col-md-4 col-sm-5 p-0">
+      <div id="properties" class="col-lg-3 col-md-4 col-sm-5 p-0">
+        <%-
+          include('viewer/metadata.ejs', {
+            metadataSets: metadataSets
+          });
+        %>
+      </div>
+    </div>
+  </div>
+  <div class="row col-lg-9 col-md-8 col-sm-7 p-0 justify-content-between">
+    <div id="viewer-menu">
       <nav class="navbar navbar-fixed-top">
         <div>
           <button type="button" class="btn rounded-circle btn-light btn-outline-secondary viewer-action new-metadata-set" data-toggle="tooltip" data-placement="bottom" data-container="#viewer-menu" title="New Metadata Set"><i class="ion-compose"></i></button>
@@ -23,34 +98,10 @@
         </div>
       </nav>
     </div>
-  </div>
-  <div class="row d-flex flex-row" style="flex: 1;">
-    <div id="properties" class="col-lg-3 col-md-4 col-sm-5 p-0">
-      <%-
-        include('viewer/metadata.ejs', {
-          metadataSets: metadataSets
-        });
-      %>
-    </div>
-    <div id="viewer" class="pdf-viewer m-0 col-lg-9 col-md-8 col-sm-7 border bg-secondary-op" data-url="<%- documentUrl -%>">
-      <div id="search" class="modal" role="dialog">
-        <div class="modal-dialog">
-          <div class="modal-content">
-            <div class="modal-header">
-              <h5 class="modal-title">Search</h5>
-            </div>
-            <div class="modal-body">
-              <input id="search-input" type="text" placeholder="Enter your search text"></input>
-            </div>
-            <div class="modal-footer">
-              <button id="search-next-result" type="button" class="btn">Next</button>
-            </div>
-          </div>
-        </div>
-      </div>
+    <div class="row col-lg-9 col-md-8 col-sm-7 p-0 justify-content-between">
     </div>
   </div>
-</div>
+</div> -->
 
 <script>
   $(document).ready(function () {
