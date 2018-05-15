@@ -6,10 +6,6 @@ html, body {
   display: none;
 }
 
-#viewer {
-  padding: 0px;
-}
-
 .page {
   position: relative;
   display: block;
@@ -28,19 +24,36 @@ input.form-control {
   left: 10px;
 }
 
-@media only screen and (min-width: 576px) {
+@media only screen and (max-width: 575px) {
+  /* Show properties panel above document */
   #properties {
-    overflow-y: scroll;
-  }
-
-  #viewer {
-    overflow-y: scroll;
+    z-index: 1000;
   }
 }
 
-@media only screen and (max-width: 575px) {
-  #properties {
+@media only screen and (min-width: 576px) {
+  .visible-xs-only {
+    display: none;
   }
+
+  /* Always display collapsed sections when not in mobile screen */
+  .collapse {
+    display: block !important;
+  }
+}
+
+#properties {
+  position: fixed;
+  overflow-y: scroll;
+  top: 55px;
+  bottom: 0px;
+}
+
+#viewer {
+  overflow-y: scroll;
+  position: fixed;
+  top: 55px;
+  bottom: 0px;
 }
 
 .metadata-set-lock i {
