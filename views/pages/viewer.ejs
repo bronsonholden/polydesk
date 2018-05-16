@@ -1,19 +1,41 @@
 <div class="container-fluid h-100">
-  <div class="row border border-bottom-1 border-top-0 border-left-0 border-right-0 border-secondary">
-    <nav class="navbar w-100 px-0 justify-content-between">
-      <div class="d-inline col-sm-5 col-md-4 col-lg-3">
-        <button type="button" class="mr-4 btn navbar-toggler btn-outline-secondary visible-xs-only" data-toggle="collapse" data-target="#properties"><i class="ion-navicon"></i></button>
-        <button type="button" class="btn btn-light btn-outline-primary document-viewer-apply">Apply</button>
-        <button type="button" class="btn btn-light btn-outline-primary document-viewer-save">Save</button>
-        <button type="button" class="btn btn-light btn-outline-secondary document-viewer-close">Close</button>
+  <div class="row border border-bottom-1 border-top-0 border-left-0 border-right-0 border-secondary bg-light">
+    <nav class="navbar navbar-expand-sm justify-content-between w-100">
+      <div>
+        <button class="navbar-toggler properties-panel-toggle" type="button">
+          <span><i class="ion-navicon"></i></span>
+        </button>
+        <button class="navbar-toggler text-primary viewer-panel-toggle" type="button">
+          <span><i class="ion-document"></i></span>
+        </button>
       </div>
-      <div class="d-inline col-sm-7 col-md-8 col-lg-9">
+      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#viewer-actions">
+        <span><i class="ion-more"></i></span>
+      </button>
+      <div id="viewer-actions" class="collapse navbar-collapse">
+        <div class="mt-2 hidden-sm-up"></div>
+        <button type="button" class="mr-sm-1 btn btn-light btn-outline-primary document-viewer-apply">Apply</button>
+        <button type="button" class="mr-sm-1 btn btn-light btn-outline-secondary document-viewer-close">Close</button>
+        <button type="button" class="mr-sm-1 btn rounded-circle btn-light btn-outline-secondary viewer-action new-metadata-set" data-toggle="tooltip" data-placement="bottom" data-container="#viewer-menu" title="New Metadata Set"><i class="ion-compose"></i></button>
+        <button type="button" class="mr-sm-1 btn rounded-circle btn-light btn-outline-secondary viewer-action" data-toggle="tooltip" data-placement="bottom" data-container="#viewer-menu" title="Add Metadata Template"><i class="ion-code"></i></button>
+        <button type="button" class="mr-sm-1 btn rounded-circle btn-light btn-outline-secondary viewer-action" data-toggle="tooltip" data-placement="bottom" data-container="#viewer-menu" title="Zoom In"><i class="ion-plus"></i></button>
+        <button type="button" class="mr-sm-1 btn rounded-circle btn-light btn-outline-secondary viewer-action" data-toggle="tooltip" data-placement="bottom" data-container="#viewer-menu" title="Zoom Out"><i class="ion-minus"></i></button>
+      </div>
+    </nav>
+    <!-- <nav class="navbar w-100 px-0 justify-content-between">
+      <div class="d-inline col-sm-5 col-md-4 col-lg-3">
+        <button type="button" class="btn btn-light btn-outline-secondary d-xs-block d-sm-none d-md-none d-lg-none d-xl-none" data-toggle="collapse" data-target="#properties"><i class="ion-navicon"></i></button>
+        <button type="button" class="btn btn-light btn-outline-primary document-viewer-apply">Apply</button>
+        <button type="button" class="btn btn-light btn-outline-secondary document-viewer-close">Close</button>
+        <button type="button" class="mr-4 btn btn-light btn-outline-secondary d-xs-block d-sm-none d-md-none d-lg-none d-xl-none" data-toggle="collapse" data-target="#viewer-actions"><i class="ion-more"></i></button>
+      </div>
+      <div id="viewer-actions" class="collapse p-4-sm bg-white col-sm-7 col-md-8 col-lg-9">
         <button type="button" class="btn rounded-circle btn-light btn-outline-secondary viewer-action new-metadata-set" data-toggle="tooltip" data-placement="bottom" data-container="#viewer-menu" title="New Metadata Set"><i class="ion-compose"></i></button>
         <button type="button" class="btn rounded-circle btn-light btn-outline-secondary viewer-action" data-toggle="tooltip" data-placement="bottom" data-container="#viewer-menu" title="Add Metadata Template"><i class="ion-code"></i></button>
         <button type="button" class="btn rounded-circle btn-light btn-outline-secondary viewer-action" data-toggle="tooltip" data-placement="bottom" data-container="#viewer-menu" title="Zoom In"><i class="ion-plus"></i></button>
         <button type="button" class="btn rounded-circle btn-light btn-outline-secondary viewer-action" data-toggle="tooltip" data-placement="bottom" data-container="#viewer-menu" title="Zoom Out"><i class="ion-minus"></i></button>
       </div>
-    </nav>
+    </nav> -->
     <div id="properties" class="px-0 collapse col-sm-5 col-md-4 col-lg-3 bg-white">
       <%-
         include('viewer/metadata.ejs', {
@@ -92,6 +114,20 @@
       setTimeout(function () {
         self.blur();
       }, 150);
+    });
+
+    $(document).on('click', '.properties-panel-toggle', function () {
+      $(this).addClass('text-primary');
+      $('.viewer-panel-toggle').removeClass('text-primary');
+      $('#viewer').addClass('collapse');
+      $('#properties').removeClass('collapse');
+    });
+
+    $(document).on('click', '.viewer-panel-toggle', function () {
+      $(this).addClass('text-primary');
+      $('.properties-panel-toggle').removeClass('text-primary');
+      $('#properties').addClass('collapse');
+      $('#viewer').removeClass('collapse');
     });
 
     // Move a field up

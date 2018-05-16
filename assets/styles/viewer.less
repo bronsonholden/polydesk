@@ -29,31 +29,39 @@ input.form-control {
   #properties {
     z-index: 1000;
   }
+
+  #viewer-actions {
+    z-index: 2000;
+  }
+
+  #metadata {
+    padding-bottom: 30px;
+  }
 }
 
 @media only screen and (min-width: 576px) {
-  .visible-xs-only {
-    display: none;
-  }
-
   /* Always display collapsed sections when not in mobile screen */
   .collapse {
     display: block !important;
   }
-}
 
-#properties {
-  position: fixed;
-  overflow-y: scroll;
-  top: 55px;
-  bottom: 0px;
-}
+  #metadata {
+    padding-bottom: 300px;
+  }
 
-#viewer {
-  overflow-y: scroll;
-  position: fixed;
-  top: 55px;
-  bottom: 0px;
+  #properties {
+    position: fixed;
+    overflow-y: scroll;
+    top: 55px;
+    bottom: 0px;
+  }
+
+  #viewer {
+    position: fixed;
+    overflow-y: scroll;
+    top: 55px;
+    bottom: 0px;
+  }
 }
 
 .metadata-set-lock i {
