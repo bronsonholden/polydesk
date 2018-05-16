@@ -1,6 +1,76 @@
-<div class="container-fluid d-flex h-100 flex-column">
-  <div class="row flex-row d-flex border border-bottom-1 border-top-0 border-left-0 border-right-0 border-secondary">
-    <div class="col-lg-3 col-md-4 col-sm-5 p-0 justify-content-between">
+<div class="container-fluid h-100">
+  <div class="row border border-bottom-1 border-top-0 border-left-0 border-right-0 border-secondary bg-light">
+    <nav class="navbar navbar-expand-sm justify-content-between w-100">
+      <div>
+        <button class="navbar-toggler properties-panel-toggle" type="button">
+          <span><i class="ion-navicon"></i></span>
+        </button>
+        <button class="navbar-toggler text-primary viewer-panel-toggle" type="button">
+          <span><i class="ion-document"></i></span>
+        </button>
+      </div>
+      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#viewer-actions">
+        <span><i class="ion-more"></i></span>
+      </button>
+      <div id="viewer-actions" class="collapse navbar-collapse">
+        <div class="mt-2 hidden-sm-up"></div>
+        <button type="button" class="mr-sm-1 btn btn-light btn-outline-primary document-viewer-apply">Apply</button>
+        <button type="button" class="mr-sm-1 btn btn-light btn-outline-secondary document-viewer-close">Close</button>
+        <button type="button" class="mr-sm-1 btn rounded-circle btn-light btn-outline-secondary viewer-action new-metadata-set" data-toggle="tooltip" data-placement="bottom" data-container="#viewer-menu" title="New Metadata Set"><i class="ion-compose"></i></button>
+        <button type="button" class="mr-sm-1 btn rounded-circle btn-light btn-outline-secondary viewer-action" data-toggle="tooltip" data-placement="bottom" data-container="#viewer-menu" title="Add Metadata Template"><i class="ion-code"></i></button>
+        <button type="button" class="mr-sm-1 btn rounded-circle btn-light btn-outline-secondary viewer-action" data-toggle="tooltip" data-placement="bottom" data-container="#viewer-menu" title="Zoom In"><i class="ion-plus"></i></button>
+        <button type="button" class="mr-sm-1 btn rounded-circle btn-light btn-outline-secondary viewer-action" data-toggle="tooltip" data-placement="bottom" data-container="#viewer-menu" title="Zoom Out"><i class="ion-minus"></i></button>
+      </div>
+    </nav>
+    <!-- <nav class="navbar w-100 px-0 justify-content-between">
+      <div class="d-inline col-sm-5 col-md-4 col-lg-3">
+        <button type="button" class="btn btn-light btn-outline-secondary d-xs-block d-sm-none d-md-none d-lg-none d-xl-none" data-toggle="collapse" data-target="#properties"><i class="ion-navicon"></i></button>
+        <button type="button" class="btn btn-light btn-outline-primary document-viewer-apply">Apply</button>
+        <button type="button" class="btn btn-light btn-outline-secondary document-viewer-close">Close</button>
+        <button type="button" class="mr-4 btn btn-light btn-outline-secondary d-xs-block d-sm-none d-md-none d-lg-none d-xl-none" data-toggle="collapse" data-target="#viewer-actions"><i class="ion-more"></i></button>
+      </div>
+      <div id="viewer-actions" class="collapse p-4-sm bg-white col-sm-7 col-md-8 col-lg-9">
+        <button type="button" class="btn rounded-circle btn-light btn-outline-secondary viewer-action new-metadata-set" data-toggle="tooltip" data-placement="bottom" data-container="#viewer-menu" title="New Metadata Set"><i class="ion-compose"></i></button>
+        <button type="button" class="btn rounded-circle btn-light btn-outline-secondary viewer-action" data-toggle="tooltip" data-placement="bottom" data-container="#viewer-menu" title="Add Metadata Template"><i class="ion-code"></i></button>
+        <button type="button" class="btn rounded-circle btn-light btn-outline-secondary viewer-action" data-toggle="tooltip" data-placement="bottom" data-container="#viewer-menu" title="Zoom In"><i class="ion-plus"></i></button>
+        <button type="button" class="btn rounded-circle btn-light btn-outline-secondary viewer-action" data-toggle="tooltip" data-placement="bottom" data-container="#viewer-menu" title="Zoom Out"><i class="ion-minus"></i></button>
+      </div>
+    </nav> -->
+    <div id="properties" class="px-0 collapse col-sm-5 col-md-4 col-lg-3 bg-white">
+      <%-
+        include('viewer/metadata.ejs', {
+          metadataSets: metadataSets
+        });
+      %>
+    </div>
+    <div id="viewer" class="pdf-viewer offset-sm-5 offset-md-4 offset-lg-3 col-xs-6 col-sm-7 col-md-8 col-lg-9 bg-secondary-op" data-url="<%- documentUrl -%>">
+    </div>
+  </div>
+</div>
+
+
+<!-- <div class="container-fluid">
+
+<div id="viewer" class="pdf-viewer m-0 border bg-secondary-op" data-url="<%- documentUrl -%>">
+  <div id="search" class="modal" role="dialog">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">Search</h5>
+        </div>
+        <div class="modal-body">
+          <input id="search-input" type="text" placeholder="Enter your search text"></input>
+        </div>
+        <div class="modal-footer">
+          <button id="search-next-result" type="button" class="btn">Next</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+  <div class="row col-lg-3 col-md-4 col-sm-5 p-0">
+    <div class="border border-bottom-1 border-top-0 border-left-0 border-right-0 border-secondary">
       <nav class="navbar navbar-fixed-top">
         <div class="d-inline">
           <button type="button" class="btn btn-light btn-outline-primary document-viewer-apply">Apply</button>
@@ -9,7 +79,13 @@
         </div>
       </nav>
     </div>
-    <div id="viewer-menu" class="col-lg-9 col-md-8 col-sm-7 p-0 justify-content-between">
+      <div class="row col-lg-3 col-md-4 col-sm-5 p-0">
+      <div id="properties" class="col-lg-3 col-md-4 col-sm-5 p-0">
+      </div>
+    </div>
+  </div>
+  <div class="row col-lg-9 col-md-8 col-sm-7 p-0 justify-content-between">
+    <div id="viewer-menu">
       <nav class="navbar navbar-fixed-top">
         <div>
           <button type="button" class="btn rounded-circle btn-light btn-outline-secondary viewer-action new-metadata-set" data-toggle="tooltip" data-placement="bottom" data-container="#viewer-menu" title="New Metadata Set"><i class="ion-compose"></i></button>
@@ -23,34 +99,10 @@
         </div>
       </nav>
     </div>
-  </div>
-  <div class="row d-flex flex-row" style="flex: 1;">
-    <div id="properties" class="col-lg-3 col-md-4 col-sm-5 p-0">
-      <%-
-        include('viewer/metadata.ejs', {
-          metadataSets: metadataSets
-        });
-      %>
-    </div>
-    <div id="viewer" class="pdf-viewer m-0 col-lg-9 col-md-8 col-sm-7 border bg-secondary-op" data-url="<%- documentUrl -%>">
-      <div id="search" class="modal" role="dialog">
-        <div class="modal-dialog">
-          <div class="modal-content">
-            <div class="modal-header">
-              <h5 class="modal-title">Search</h5>
-            </div>
-            <div class="modal-body">
-              <input id="search-input" type="text" placeholder="Enter your search text"></input>
-            </div>
-            <div class="modal-footer">
-              <button id="search-next-result" type="button" class="btn">Next</button>
-            </div>
-          </div>
-        </div>
-      </div>
+    <div class="row col-lg-9 col-md-8 col-sm-7 p-0 justify-content-between">
     </div>
   </div>
-</div>
+</div> -->
 
 <script>
   $(document).ready(function () {
@@ -62,6 +114,20 @@
       setTimeout(function () {
         self.blur();
       }, 150);
+    });
+
+    $(document).on('click', '.properties-panel-toggle', function () {
+      $(this).addClass('text-primary');
+      $('.viewer-panel-toggle').removeClass('text-primary');
+      $('#viewer').addClass('collapse');
+      $('#properties').removeClass('collapse');
+    });
+
+    $(document).on('click', '.viewer-panel-toggle', function () {
+      $(this).addClass('text-primary');
+      $('.properties-panel-toggle').removeClass('text-primary');
+      $('#properties').addClass('collapse');
+      $('#viewer').removeClass('collapse');
     });
 
     // Move a field up
