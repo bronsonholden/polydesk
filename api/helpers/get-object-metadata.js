@@ -104,12 +104,9 @@ module.exports = {
       },
       (metadataSets, metadataOrdering, callback) => {
         try {
-          var context = {
-            metadataSets: metadataSets,
-            formulaResults: {},
-            formulaStack: [],
-            setStack: []
-          };
+          var context = sails.helpers.createFormulaContext();
+
+          context.metadataSets = metadataSets;
 
           _.each(metadataSets, (set, setName) => {
             context.setStack.push(setName);
