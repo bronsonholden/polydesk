@@ -68,4 +68,55 @@ describe('Evaluate formula expressions', function () {
       done();
     });
   });
+
+  // Number comparison tests
+  [
+    {
+      expr: '1 < 2',
+      value: true
+    },
+    {
+      expr: '2 < 1',
+      value: false
+    },
+    {
+      expr: '1 == 1',
+      value: true
+    },
+    {
+      expr: '1 == 2',
+      value: false
+    },
+    {
+      expr: '1 <= 1',
+      value: true
+    },
+    {
+      expr: '1 <= 2',
+      value: true
+    },
+    {
+      expr: '1 >= 1',
+      value: true
+    },
+    {
+      expr: '1 >= 2',
+      value: false
+    },
+    {
+      expr: '1 != 2',
+      value: true
+    },
+    {
+      expr: '1 != 1',
+      value: false
+    }
+  ].forEach((test) => {
+    it(test.expr, function (done) {
+      const res = sails.helpers.evaluateExpressionNode(jsep(test.expr), this.context);
+      expect(res.value).to.be.a('boolean');
+      expect(res.value).to.equal(test.value);
+      done();
+    });
+  });
 });

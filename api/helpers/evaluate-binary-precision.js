@@ -21,7 +21,13 @@ module.exports = {
         '*',
         '/',
         '%',
-        '^'
+        '^',
+        '<',
+        '>',
+        '<=',
+        '>=',
+        '==',
+        '!='
       ]
     }
   },
@@ -55,6 +61,36 @@ module.exports = {
     case '^':
       res = lval.exponentiatedBy(rval.toNumber());
       break;
+    case '<':
+      return exits.success({
+        type: 'B',
+        value: lval.isLessThan(rval)
+      });
+    case '>':
+      return exits.success({
+        type: 'B',
+        value: lval.isGreaterThan(rval)
+      });
+    case '<=':
+      return exits.success({
+        type: 'B',
+        value: lval.isLessThanOrEqualTo(rval)
+      });
+    case '>=':
+      return exits.success({
+        type: 'B',
+        value: lval.isGreaterThanOrEqualTo(rval)
+      });
+    case '==':
+      return exits.success({
+        type: 'B',
+        value: lval.isEqualTo(rval)
+      });
+    case '!=':
+      return exits.success({
+        type: 'B',
+        value: !lval.isEqualTo(rval)
+      });
     default:
       res = lval;
       break;
