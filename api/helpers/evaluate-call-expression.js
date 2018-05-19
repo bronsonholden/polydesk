@@ -1,8 +1,8 @@
 const jsep = require('jsep');
 
 module.exports = {
-  friendlyName: 'Evaluate Binary Number',
-  description: 'Evaluates a binary operation on two native number metadata values',
+  friendlyName: 'Evaluate Call Expression',
+  description: 'Evaluates a formula function call expression',
   sync: true,
   inputs: {
     callee: {
