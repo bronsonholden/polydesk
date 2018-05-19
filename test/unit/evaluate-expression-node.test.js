@@ -10,7 +10,7 @@ describe('Evaluate formula expressions', function () {
     done();
   });
 
-  // Numebr tests
+  // Number tests
   [
     {
       expr: '-1',
