@@ -9,7 +9,8 @@ module.exports = {
       type: 'string',
       required: true,
       enum: [
-        'field'
+        'field',
+        'sum'
       ]
     },
     arguments: {
