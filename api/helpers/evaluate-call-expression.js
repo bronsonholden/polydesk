@@ -10,7 +10,8 @@ module.exports = {
       required: true,
       enum: [
         'field',
-        'sum'
+        'sum',
+        'avg', 'average', 'mean'
       ]
     },
     arguments: {
@@ -34,6 +35,10 @@ module.exports = {
       return exits.success(sails.helpers.evaluateCallField(inputs.arguments, inputs.context));
     case 'sum':
       return exits.success(sails.helpers.evaluateCallSum(inputs.arguments, inputs.context));
+    case 'avg':
+    case 'average':
+    case 'mean':
+      return exits.success(sails.helpers.evaluateCallAverage(inputs.arguments, inputs.context));
     default:
       return exits.success({
         err: 'Unknown function ' + inputs.callee

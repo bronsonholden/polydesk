@@ -165,6 +165,11 @@ module.exports = (sails) => {
                   type: 'F',
                   value: 'sum(field("numbers"))',
                   order: 1
+                },
+                'avg(numbers)': {
+                  type: 'F',
+                  value: 'avg(field("numbers"))',
+                  order: 2
                 }
               }
             }).switch({
