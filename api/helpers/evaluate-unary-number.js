@@ -4,7 +4,7 @@ module.exports = {
   sync: true,
   inputs: {
     operand: {
-      type: 'number',
+      type: 'ref',
       required: true
     },
     operator: {
