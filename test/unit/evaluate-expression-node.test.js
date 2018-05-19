@@ -119,4 +119,51 @@ describe('Evaluate formula expressions', function () {
       done();
     });
   });
+
+  // Boolean comparison
+  [
+    {
+      expr: 'true == false',
+      value: false
+    },
+    {
+      expr: 'true != false',
+      value: true
+    },
+    {
+      expr: 'false == false',
+      value: true
+    },
+    {
+      expr: 'true == true',
+      value: true
+    },
+    {
+      expr: 'true || true',
+      value: true
+    },
+    {
+      expr: 'true || false',
+      value: true
+    },
+    {
+      expr: 'true && true',
+      value: true
+    },
+    {
+      expr: 'true && false',
+      value: false
+    },
+    {
+      expr: 'false && false',
+      value: false
+    }
+  ].forEach((test) => {
+    it(test.expr, function (done) {
+      const res = sails.helpers.evaluateExpressionNode(jsep(test.expr), this.context);
+      expect(res.value).to.be.a('boolean');
+      expect(res.value).to.equal(test.value);
+      done();
+    });
+  });
 });

@@ -52,6 +52,7 @@ module.exports = {
         });
       }
     case 'BinaryExpression':
+    case 'LogicalExpression':
       var left = sails.helpers.evaluateExpressionNode(inputs.node.left, inputs.context);
       var right = sails.helpers.evaluateExpressionNode(inputs.node.right, inputs.context);
 
@@ -72,6 +73,9 @@ module.exports = {
       }
 
       var adapter = {
+        'B,B': (lval, rval, operator) => {
+          return sails.helpers.evaluateBinaryBoolean(lval, rval, operator);
+        },
         'N,N': (lval, rval, operator) => {
           return sails.helpers.evaluateBinaryNumber(lval, rval, operator);
         },
