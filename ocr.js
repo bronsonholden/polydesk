@@ -77,7 +77,7 @@ sails.load({
         async.eachSeries(_.get(data, 'Messages'), (message, callback) => {
           sqs.deleteMessage({
             QueueUrl: sails.config.documents.sqs.url,
-            ReceiptHandle: message.ReceiptHandle,
+            ReceiptHandle: message.ReceiptHandle
           }, callback);
         }, (err) => {
           if (err) {
@@ -88,9 +88,9 @@ sails.load({
         });
       },
       (data, callback) => {
-          var docId = _.map(_.get(data, 'Messages'), message => _.get(JSON.parse(message.Body), 'document'));
+        var docId = _.map(_.get(data, 'Messages'), message => _.get(JSON.parse(message.Body), 'document'));
 
-          callback(null, docId);
+        callback(null, docId);
       },
       (files, callback) => {
         const gs = process.platform === 'win32' ? 'gswin64c' : 'gs';

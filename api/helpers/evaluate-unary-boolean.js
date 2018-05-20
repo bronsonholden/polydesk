@@ -1,6 +1,6 @@
 module.exports = {
-  friendlyName: 'Evaluate Unary Number',
-  description: 'Evaluates a unary operation on a native number metadata value',
+  friendlyName: 'Evaluate Unary Boolean',
+  description: 'Evaluates a unary operation on a boolean metadata value',
   sync: true,
   inputs: {
     operand: {
@@ -10,8 +10,7 @@ module.exports = {
     operator: {
       type: 'string',
       enum: [
-        '+',
-        '-'
+        '!'
       ]
     }
   },
@@ -22,19 +21,22 @@ module.exports = {
     }
   },
   fn: (inputs, exits) => {
-    switch (inputs.operator) {
-    case '+':
+    if (inputs.lval.type !== 'B' || inputs.rval.type !== 'B') {
       return exits.success({
-        type: 'N',
-        value: inputs.operand.value
+        err: 'Invalid operands'
       });
-    case '-':
+    }
+
+    switch (inputs.operator) {
+    case '!':
       return exits.success({
-        type: 'N',
-        value: -inputs.operand.value
+        type: 'B',
+        value: !inputs.operand.value
       });
     default:
-      return exits.success(null);
+      return exits.success({
+        err: 'Invalid operator ' + inputs.operator
+      });
     }
   }
 };

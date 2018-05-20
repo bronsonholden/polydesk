@@ -19,7 +19,13 @@ module.exports = {
         '*',
         '/',
         '%',
-        '^'
+        '^',
+        '<',
+        '>',
+        '<=',
+        '>=',
+        '==',
+        '!='
       ]
     }
   },
@@ -60,6 +66,36 @@ module.exports = {
       return exits.success({
         type: 'N',
         value: inputs.lval.value ** inputs.rval.value
+      });
+    case '<':
+      return exits.success({
+        type: 'B',
+        value: inputs.lval.value < inputs.rval.value
+      });
+    case '>':
+      return exits.success({
+        type: 'B',
+        value: inputs.lval.value > inputs.rval.value
+      });
+    case '<=':
+      return exits.success({
+        type: 'B',
+        value: inputs.lval.value <= inputs.rval.value
+      });
+    case '>=':
+      return exits.success({
+        type: 'B',
+        value: inputs.lval.value >= inputs.rval.value
+      });
+    case '==':
+      return exits.success({
+        type: 'B',
+        value: inputs.lval.value === inputs.rval.value
+      });
+    case '!=':
+      return exits.success({
+        type: 'B',
+        value: inputs.lval.value !== inputs.rval.value
       });
     default:
       return exits.success(null);
