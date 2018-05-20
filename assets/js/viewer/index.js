@@ -73,7 +73,6 @@ $(document).ready(function () {
     });
   });
 
-
   let viewer = document.getElementById('viewer');
 
   pdfjsLib.workerSrc = './pdf.worker.js';

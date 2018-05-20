@@ -1,5 +1,4 @@
 const BigNumber = require('bignumber.js');
-const jsep = require('jsep');
 
 module.exports = {
   friendlyName: 'Evaluate Call Expression: sum()',

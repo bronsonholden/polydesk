@@ -1,5 +1,3 @@
-const jsep = require('jsep');
-
 module.exports = {
   friendlyName: 'Evaluate Call Expression',
   description: 'Evaluates a formula function call expression',

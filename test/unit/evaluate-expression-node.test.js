@@ -1,6 +1,5 @@
 const sails = require('sails');
-const async = require('async');
-const { describe, it } = require('mocha');
+const { describe, it, beforeEach } = require('mocha');
 const { expect } = require('chai');
 const jsep = require('jsep');
 
