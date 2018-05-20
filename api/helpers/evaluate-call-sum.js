@@ -1,3 +1,4 @@
+const BigNumber = require('bignumber.js');
 const jsep = require('jsep');
 
 module.exports = {
@@ -31,7 +32,14 @@ module.exports = {
       switch (result.type) {
       case 'NL':
         return sails.helpers.normalizeFormulaOperand(_.reduce(result.value, (sum, n) => sum + n, 0));
+      case 'PL':
+        var sum = _.reduce(result.value, (s, n) => s.plus(new BigNumber(n)), new BigNumber(0));
+        return {
+          type: 'P',
+          value: sum.toString()
+        };
       case 'N':
+      case 'P':
         return result;
       default:
         return {
@@ -51,7 +59,11 @@ module.exports = {
         };
       }
 
-      return sails.helpers.evaluateBinaryNumber(total, operand, '+');
+      if (operand.type === 'P' || total.type === 'P') {
+        return sails.helpers.evaluateBinaryPrecision(total, sails.helpers.castNumberToPrecision(operand), '+');
+      } else {
+        return sails.helpers.evaluateBinaryNumber(total, operand, '+');
+      }
     }, sails.helpers.normalizeFormulaOperand(0));
 
     return exits.success(total);

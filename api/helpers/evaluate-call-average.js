@@ -1,3 +1,4 @@
+const BigNumber = require('bignumber.js');
 const jsep = require('jsep');
 
 module.exports = {
@@ -33,7 +34,15 @@ module.exports = {
       case 'NL':
         count += result.value.length;
         return sails.helpers.normalizeFormulaOperand(_.reduce(result.value, (sum, n) => sum + n, 0));
+      case 'PL':
+        count += result.value.length;
+        var sum = _.reduce(result.value, (s, n) => s.plus(new BigNumber(n)), new BigNumber(0));
+        return {
+          type: 'P',
+          value: sum.toString()
+        };
       case 'N':
+      case 'P':
         count += 1;
         return result;
       default:
@@ -43,7 +52,7 @@ module.exports = {
       }
     });
 
-    var avg = _.reduce(operands, (total, operand) => {
+    var total = _.reduce(operands, (total, operand) => {
       if (total.err) {
         return total;
       }
@@ -54,9 +63,28 @@ module.exports = {
         };
       }
 
-      return sails.helpers.evaluateBinaryNumber(total, operand, '+');
+      if (operand.type === 'P' || total.type === 'P') {
+        return sails.helpers.evaluateBinaryPrecision(total, sails.helpers.castNumberToPrecision(operand), '+');
+      } else {
+        return sails.helpers.evaluateBinaryNumber(total, operand, '+');
+      }
     }, sails.helpers.normalizeFormulaOperand(0));
 
-    return exits.success(sails.helpers.evaluateBinaryNumber(avg, sails.helpers.normalizeFormulaOperand(count), '/'));
+    count = sails.helpers.normalizeFormulaOperand(count);
+
+    switch (total.type) {
+    case 'N':
+      total = sails.helpers.evaluateBinaryNumber(total, count, '/');
+      break;
+    case 'P':
+      total = sails.helpers.evaluateBinaryPrecision(total, sails.helpers.castNumberToPrecision(count), '/');
+      break;
+    default:
+      return exits.success({
+        err: 'Invalid total value'
+      });
+    }
+
+    return exits.success(total);
   }
 };
