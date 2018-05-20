@@ -165,6 +165,31 @@ module.exports = (sails) => {
                   type: 'F',
                   value: 'sum(field("numbers"))',
                   order: 1
+                },
+                'avg(numbers)': {
+                  type: 'F',
+                  value: 'avg(field("numbers"))',
+                  order: 2
+                },
+                'precisions': {
+                  type: 'PL',
+                  value: [
+                    '1.000000000000000001',
+                    '2.000000000000000001',
+                    '3.000000000000000001',
+                    '4.000000000000000001',
+                  ],
+                  order: 3
+                },
+                'sum(precisions)': {
+                  type: 'F',
+                  value: 'sum(field("precisions"))',
+                  order: 4
+                },
+                'avg(precisions)': {
+                  type: 'F',
+                  value: 'avg(field("precisions"))',
+                  order: 5
                 }
               }
             }).switch({

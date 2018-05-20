@@ -161,6 +161,24 @@ module.exports = {
           };
         }
         break;
+      case 'PL':
+        try {
+          document['$' + key] = {
+            type: 'PL',
+            value: val.value.map((n) => {
+              var big = new BigNumber(n);
+              return big.toString();
+            }),
+            order: val.order
+          };
+        } catch (err) {
+          document['$' + key] = {
+            type: 'PL',
+            value: [],
+            order: val.order
+          };
+        }
+        break;
       default:
         break;
       }

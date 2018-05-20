@@ -43,15 +43,16 @@ module.exports = {
 
       switch (operand.type) {
       case 'N':
-        return exits.success(sails.helpers.evaluateUnaryNumber(operand, inputs.node.operator));
+        return exits.success(sails.helpers.normalizeFormulaOperand(-operand.value));
       case 'P':
-        return exits.success(sails.helpers.evaluateUnaryPrecision(operand, inputs.node.operator));
+        return exits.success(sails.helpers.normalizeFormulaOperand('-' + operand.value));
       default:
         return exits.success({
           err: 'Unsupported operand type for operation ' + inputs.node.operator
         });
       }
     case 'BinaryExpression':
+    case 'LogicalExpression':
       var left = sails.helpers.evaluateExpressionNode(inputs.node.left, inputs.context);
       var right = sails.helpers.evaluateExpressionNode(inputs.node.right, inputs.context);
 
@@ -72,6 +73,9 @@ module.exports = {
       }
 
       var adapter = {
+        'B,B': (lval, rval, operator) => {
+          return sails.helpers.evaluateBinaryBoolean(lval, rval, operator);
+        },
         'N,N': (lval, rval, operator) => {
           return sails.helpers.evaluateBinaryNumber(lval, rval, operator);
         },
