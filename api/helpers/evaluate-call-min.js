@@ -49,7 +49,7 @@ module.exports = {
 
     var result = _.reduce(operands, (min, operand) => {
       if (min.err) {
-        return total;
+        return min;
       }
 
       if (operand.err) {
