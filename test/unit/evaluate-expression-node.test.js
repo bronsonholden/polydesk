@@ -12,6 +12,18 @@ describe('Evaluate formula expressions', function () {
   // Number tests
   [
     {
+      expr: '+1',
+      value: 1
+    },
+    {
+      expr: '-0',
+      value: 0
+    },
+    {
+      expr: '+0',
+      value: 0
+    },
+    {
       expr: '-1',
       value: -1
     },
@@ -121,6 +133,22 @@ describe('Evaluate formula expressions', function () {
 
   // Boolean comparison
   [
+    {
+      expr: '!true',
+      value: false
+    },
+    {
+      expr: '!false',
+      value: true
+    },
+    {
+      expr: '!!true',
+      value: true
+    },
+    {
+      expr: '!!false',
+      value: false
+    },
     {
       expr: 'true == false',
       value: false
