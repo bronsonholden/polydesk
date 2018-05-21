@@ -58,17 +58,20 @@ module.exports = {
       });
     }
 
-    var value = _.get(inputs.context.metadataSets, [ set, field ]);
+    var metadataField = _.get(inputs.context.metadataSets, [ set, field ]);
 
-    if (!value) {
+    if (!metadataField) {
       return exits.success({
         err: `Invalid metadata field <${set}, ${field}>`
       });
     }
 
     // If not a formula, just return the value
-    if (value.type !== 'F') {
-      return exits.success(value);
+    if (metadataField.type !== 'F') {
+      return exits.success({
+        type: metadataField.type,
+        value: metadataField.value
+      });
     }
 
     // If not already calculated, do so

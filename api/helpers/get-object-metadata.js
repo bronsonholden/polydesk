@@ -141,14 +141,7 @@ module.exports = {
             });
           });
 
-          var result = _.mergeWith(metadataSets, context.formulaResults, (objValue, srcValue, key, object, source, stack) => {
-            // Circular or invalid formulas result in null, but frontend needs a value to display
-            if (!srcValue) {
-              return {
-                value: ''
-              };
-            }
-          });
+          var result = _.defaultsDeep(metadataSets, context.formulaResults);
 
           result = _.mapValues(result, (set, setName) => {
             return {
