@@ -24,6 +24,7 @@ $(document).ready(function () {
         };
         break;
       case 'NL':
+      case 'PL':
         metadataSets[setName][fieldName] = {
           type: type,
           value: [],

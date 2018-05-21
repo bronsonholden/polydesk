@@ -37,6 +37,10 @@ module.exports = {
     case 'average':
     case 'mean':
       return exits.success(sails.helpers.evaluateCallAverage(inputs.arguments, inputs.context));
+    case 'min':
+      return exits.success(sails.helpers.evaluateCallMin(inputs.arguments, inputs.context));
+    case 'max':
+      return exits.success(sails.helpers.evaluateCallMax(inputs.arguments, inputs.context));
     default:
       return exits.success({
         err: 'Unknown function ' + inputs.callee
