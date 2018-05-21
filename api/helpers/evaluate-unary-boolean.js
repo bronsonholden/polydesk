@@ -21,9 +21,9 @@ module.exports = {
     }
   },
   fn: (inputs, exits) => {
-    if (inputs.lval.type !== 'B' || inputs.rval.type !== 'B') {
+    if (inputs.operand.type !== 'B') {
       return exits.success({
-        err: 'Invalid operands'
+        err: 'Invalid operand'
       });
     }
 

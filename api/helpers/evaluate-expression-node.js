@@ -43,9 +43,11 @@ module.exports = {
 
       switch (operand.type) {
       case 'N':
-        return exits.success(sails.helpers.normalizeFormulaOperand(-operand.value));
+        return exits.success(sails.helpers.evaluateUnaryNumber(operand, inputs.node.operator));
       case 'P':
-        return exits.success(sails.helpers.normalizeFormulaOperand('-' + operand.value));
+        return exits.success(sails.helpers.evaluateUnaryPrecision(operand, inputs.node.operator));
+      case 'B':
+        return exits.success(sails.helpers.evaluateUnaryBoolean(operand, inputs.node.operator));
       default:
         return exits.success({
           err: 'Unsupported operand type for operation ' + inputs.node.operator
