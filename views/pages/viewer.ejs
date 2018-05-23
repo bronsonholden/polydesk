@@ -336,6 +336,22 @@
           formula: ''
         }));
         break;
+      case 'NL':
+        metadataField = $(window.JST['views/pages/viewer/shared/metadata-field-repeating.ejs']({
+          type: fieldType,
+          typeString: 'Number List',
+          order: fieldOrder,
+          value: ''
+        }));
+        break;
+      case 'PL':
+        metadataField = $(window.JST['views/pages/viewer/shared/metadata-field-repeating.ejs']({
+          type: fieldType,
+          typeString: 'Precision List',
+          order: fieldOrder,
+          value: ''
+        }));
+        break;
       default:
         return;
       }
