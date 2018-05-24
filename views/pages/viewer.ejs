@@ -130,6 +130,43 @@
       $('#viewer').removeClass('collapse');
     });
 
+    // Move a value in a repeating metadata field up
+    $(document).on('click', '.metadata-field-repeating-move-up', function () {
+      var current = $(this).closest('.metadata-field');
+      var prev = current.prevAll('.metadata-field:first');
+
+      if (prev.length !== 1) {
+        return;
+      }
+
+      current.insertBefore(prev);
+    });
+
+    $(document).on('click', '.metadata-field-repeating-insert', function (e) {
+      var item = $(this).closest('.metadata-field');
+      var cloned = item.clone();
+
+      if (e.shiftKey) {
+        cloned.insertBefore(item).find('.form-control').val('');
+      } else {
+        cloned.insertAfter(item).find('.form-control').val('');
+      }
+
+      $(this).blur();
+    });
+
+    // Move a value in a repeating metadata field down
+    $(document).on('click', '.metadata-field-repeating-move-down', function () {
+      var current = $(this).closest('.metadata-field');
+      var next = current.nextAll('.metadata-field:first');
+
+      if (next.length !== 1) {
+        return;
+      }
+
+      current.insertAfter(next);
+    });
+
     // Move a field up
     $(document).on('click', '.metadata-field-move-up', function () {
       var current = $(this).closest('.form-group');
