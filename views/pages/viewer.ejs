@@ -196,7 +196,14 @@
     });
 
     $(document).on('click', '.metadata-field-delete-item', function () {
-      $(this).closest('.metadata-field').remove();
+      var field = $(this).closest('.metadata-field-wrapper');
+      var items = field.find('.metadata-field');
+
+      if (items.length > 1) {
+        $(this).closest('.metadata-field').remove();
+      } else {
+        $(this).closest('.metadata-field').find('.form-control').val('');
+      }
     });
 
     $(document).on('click', '.document-viewer-close', function () {

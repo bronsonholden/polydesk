@@ -65,17 +65,29 @@
   </div>
   <%
     if (metadataField.type.length === 2 && metadataField.type[1] === 'L') {
-      value.forEach(function (val, idx, arr) {
+      if (value.length > 0) {
+        value.forEach(function (val, idx, arr) {
+  %>
+  <%-
+          include('shared/metadata-field-repeating.ejs', {
+            type: metadataField.type,
+            order: metadataField.order,
+            value: val
+          });
+  %>
+  <%
+        });
+      } else {
   %>
   <%-
         include('shared/metadata-field-repeating.ejs', {
           type: metadataField.type,
           order: metadataField.order,
-          value: val
+          value: ''
         });
   %>
   <%
-      });
+      }
     } else {
       if (metadataField.type === 'F') {
         var calculated = metadataField.err || metadataField.calculated;
