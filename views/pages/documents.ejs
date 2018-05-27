@@ -1,16 +1,36 @@
-<h1>Documents</h1>
-<br>
-<table>
-  <% documents.forEach(function (doc) { %>
-    <tr>
-      <td><%- doc.id %>
-      </td>
-      <td><a href="<%- doc.href %>"><%- doc.name %></a>
-      </td>
-    </tr>
-  <% }); %>
-</table>
-<ul>
-  <li><a href="/upload">Upload Document</a></li>
-  <li><a href="<%- sails.getUrlFor('DashboardController.dashboard') %>">Back</a></li>
-</ul>
+<div class="container-fluid">
+  <div class="row">
+    <nav class="navbar navbar-expand-sm navbar-light bg-light w-100">
+      <a class="navbar-brand" href="/dashboard">Polydesk</a>
+      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbar-content" aria-controls="navbar-content" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbar-content">
+        <ul class="navbar-nav mr-auto">
+          <li class="nav-item">
+            <a class="nav-link" href="/dashboard">Dashboard</a>
+          </li>
+          <li class="nav-item active">
+            <a class="nav-link" href="/documents">Documents</a>
+          </li>
+        </ul>
+      </div>
+    </nav>
+  </div>
+  <div class="row">
+    <table>
+      <% documents.forEach(function (doc) { %>
+        <tr>
+          <td><%- doc.id %>
+          </td>
+          <td><a href="<%- doc.href %>"><%- doc.name %></a>
+          </td>
+        </tr>
+      <% }); %>
+    </table>
+    <ul>
+      <li><a href="/upload">Upload Document</a></li>
+      <li><a href="<%- sails.getUrlFor('DashboardController.dashboard') %>">Back</a></li>
+    </ul>
+  </div>
+</div>
