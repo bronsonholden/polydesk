@@ -28,16 +28,45 @@
     </nav>
   </div>
   <div class="row">
-    <table>
-      <% documents.forEach(function (doc) { %>
-        <tr>
-          <td><%- doc.id %>
-          </td>
-          <td><a href="<%- doc.href %>"><%- doc.name %></a>
-          </td>
-        </tr>
-      <% }); %>
-    </table>
+    <div class="jumbotron jumbotron-fluid m-0 px-0 w-100">
+      <div class="container">
+        <h1 class="display-4">Documents</h1>
+        <p class="lead">
+          Browse documents in bulk, by metadata, or in a structured view.
+        </p>
+      </div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-sm-2 border border-right-1 border-top-0 border-bottom-0 border-left-0 border-light">
+    </div>
+    <div class="col-sm-10">
+      <br>
+      <table class="table">
+        <thead>
+          <tr>
+            <th scope="col">ID</th>
+            <th scope="col">Document Name</th>
+            <th scope="col">Type</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% documents.forEach(function (doc) { %>
+            <tr>
+              <td>
+                <%- doc.id %>
+              </td>
+              <td>
+                <a href="<%- doc.href %>"><%- doc.name %></a>
+              </td>
+              <td>
+                <%- doc.fileType %>
+              </td>
+            </tr>
+          <% }); %>
+        </tbody>
+      </table>
+    </div>
     <ul>
       <li><a href="/upload">Upload Document</a></li>
       <li><a href="<%- sails.getUrlFor('DashboardController.dashboard') %>">Back</a></li>

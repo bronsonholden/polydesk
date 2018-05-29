@@ -29,6 +29,7 @@ module.exports = {
         return {
           id: doc.id,
           name: doc.name,
+          fileType: doc.fileType,
           href: `/viewer/${doc.id}`
         };
       });
