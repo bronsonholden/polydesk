@@ -37,11 +37,13 @@
       </div>
     </div>
   </div>
-  <div class="row">
+  <div class="row mt-4">
+    <div class="col-sm-2 border border-right-1 border-top-0 border-bottom-0 border-left-0 border-light">
+      <a href="/upload" class="btn btn-outline-secondary btn-block">Upload Document</a>
+    </div>
     <div class="col-sm-3 border border-right-1 border-top-0 border-bottom-0 border-left-0 border-light">
     </div>
-    <div class="col-sm-9">
-      <br>
+    <div class="col-sm-7">
       <table class="table">
         <thead>
           <tr>
@@ -67,9 +69,5 @@
         </tbody>
       </table>
     </div>
-    <ul>
-      <li><a href="/upload">Upload Document</a></li>
-      <li><a href="<%- sails.getUrlFor('DashboardController.dashboard') %>">Back</a></li>
-    </ul>
   </div>
 </div>
