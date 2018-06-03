@@ -61,6 +61,35 @@
       $('#viewer').removeClass('collapse');
     });
 
+    // Move a metadata set up
+    $(document).on('click', '.metadata-set-move-up', function () {
+      var current = $(this).closest('.metadata-set');
+      var prev = current.prevAll('.metadata-set:first');
+
+      if (prev.length !== 1) {
+        return;
+      }
+
+      current.insertBefore(prev);
+    });
+
+    // Move a metadata set down
+    $(document).on('click', '.metadata-set-move-down', function () {
+      var current = $(this).closest('.metadata-set');
+      var next = current.nextAll('.metadata-set:first');
+
+      if (next.length !== 1) {
+        return;
+      }
+
+      current.insertAfter(next);
+    });
+
+    // Move a metadata set down
+    $(document).on('click', '.metadata-set-delete', function () {
+      $(this).closest('.metadata-set').remove();
+    });
+
     // Move a value in a repeating metadata field up
     $(document).on('click', '.metadata-field-repeating-move-up', function () {
       var current = $(this).closest('.metadata-field');
