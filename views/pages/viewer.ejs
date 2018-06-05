@@ -195,7 +195,6 @@
     $(document).on('dblclick', '.metadata-field .form-control[fieldtype="F"]', function () {
       var metadataField = $(this).closest('.metadata-field');
 
-
       $(this).removeAttr('readonly');
       $(this).val(decodeURI($(this).attr('formula')));
 
@@ -335,8 +334,8 @@
           type: fieldType,
           typeString: 'Formula',
           order: fieldOrder,
-          value: '',
-          calculated: '',
+          value: 'Please enter your formula',
+          calculated: 'Please enter your formula',
           formula: ''
         }));
         break;
