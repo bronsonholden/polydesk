@@ -30,6 +30,21 @@
       %>
     </div>
     <div id="viewer" class="pdf-viewer offset-sm-5 offset-md-4 offset-lg-3 col-xs-6 col-sm-7 col-md-8 col-lg-9 bg-secondary-op" data-url="<%- documentUrl %>">
+      <div id="search" class="modal" role="dialog">
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title">Search</h5>
+            </div>
+            <div class="modal-body">
+              <input id="search-input" type="text" placeholder="Enter your search text"></input>
+            </div>
+            <div class="modal-footer">
+              <button id="search-next-result" type="button" class="btn">Next</button>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
 </div>
