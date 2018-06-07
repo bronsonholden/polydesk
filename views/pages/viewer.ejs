@@ -61,6 +61,47 @@
       $('#viewer').removeClass('collapse');
     });
 
+    $(document).on('click', '.metadata-set-expand', function () {
+      var fields = $(this).closest('.metadata-set').find('.metadata-set-fields');
+
+      if (fields.hasClass('show')) {
+        $(this).find('i').removeClass().addClass('ion-arrow-right-b');
+        fields.removeClass('show');
+      } else {
+        $(this).find('i').removeClass().addClass('ion-arrow-down-b');
+        fields.addClass('show');
+      }
+    });
+
+    // Move a metadata set up
+    $(document).on('click', '.metadata-set-move-up', function () {
+      var current = $(this).closest('.metadata-set');
+      var prev = current.prevAll('.metadata-set:first');
+
+      if (prev.length !== 1) {
+        return;
+      }
+
+      current.insertBefore(prev);
+    });
+
+    // Move a metadata set down
+    $(document).on('click', '.metadata-set-move-down', function () {
+      var current = $(this).closest('.metadata-set');
+      var next = current.nextAll('.metadata-set:first');
+
+      if (next.length !== 1) {
+        return;
+      }
+
+      current.insertAfter(next);
+    });
+
+    // Move a metadata set down
+    $(document).on('click', '.metadata-set-delete', function () {
+      $(this).closest('.metadata-set').remove();
+    });
+
     // Move a value in a repeating metadata field up
     $(document).on('click', '.metadata-field-repeating-move-up', function () {
       var current = $(this).closest('.metadata-field');
@@ -165,7 +206,6 @@
     // Clicking on a formula to edit
     $(document).on('dblclick', '.metadata-field .form-control[fieldtype="F"]', function () {
       var metadataField = $(this).closest('.metadata-field');
-
 
       $(this).removeAttr('readonly');
       $(this).val(decodeURI($(this).attr('formula')));
@@ -306,8 +346,8 @@
           type: fieldType,
           typeString: 'Formula',
           order: fieldOrder,
-          value: '',
-          calculated: '',
+          value: 'Please enter your formula',
+          calculated: 'Please enter your formula',
           formula: ''
         }));
         break;

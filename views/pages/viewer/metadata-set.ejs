@@ -1,8 +1,13 @@
 <div class="metadata-set" setname="<%- setName %>" setorder="<%- setOrder %>" locked="locked">
   <div class="px-3 pt-3">
     <div class="btn-group w-100">
+      <div class="mr-2">
+        <button type="button" class="btn rounded-circle btn-light metadata-set-expand">
+          <i class="ion-arrow-down-b" data-pack="default"></i>
+        </button>
+      </div>
       <input class="mr-2 form-control-plaintext text-truncate metadata-set-label font-weight-bold" value="<%- setName %>" readonly></input>
-      <div>
+      <div class="mr-1">
         <button class="btn rounded-circle btn-light metadata-add-field" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
           <i class="ion-plus"></i>
         </button>
@@ -12,22 +17,26 @@
           <a class="dropdown-item" fieldtype="B" href="#"><i class="ion-checkmark mr-4"></i>New boolean</a>
           <a class="dropdown-item" fieldtype="P" href="#"><i class="ion-pinpoint mr-4"></i>New precision number</a>
           <a class="dropdown-item" fieldtype="F" href="#"><i class="ion-flash mr-4"></i>New formula</a>
-          <a class="dropdown-item" fieldtype="S" href="#"><i class="ion-location mr-4"></i>New coordinates</a>
-          <a class="dropdown-item" fieldtype="S" href="#"><i class="ion-clock mr-4"></i>New timestamp</a>
-          <a class="dropdown-item" fieldtype="S" href="#"><i class="ion-calendar mr-4"></i>New date</a>
-          <a class="dropdown-item" fieldtype="N" href="#"><i class="ion-cash mr-4"></i>New currency</a>
-          <a class="dropdown-item" fieldtype="S" href="#"><i class="ion-link mr-4"></i>New URL</a>
-          <a class="dropdown-item" fieldtype="S" href="#"><i class="ion-at mr-4"></i>New email address</a>
           <hr>
           <h6 class="dropdown-header">List metadata</h6>
           <a class="dropdown-item" fieldtype="NL" href="#"><i class="ion-pound mr-4"></i>New number list</a>
           <a class="dropdown-item" fieldtype="PL" href="#"><i class="ion-pinpoint mr-4"></i>New precision number list</a>
         </div>
       </div>
+      <div>
+        <button class="btn rounded-circle btn-light metadata-set-actions" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+          <i class="ion-more"></i>
+        </button>
+        <div class="dropdown-menu metadata-set-actions-dropdown">
+          <a class="dropdown-item metadata-set-move-up" href="#"><i class="ion-arrow-up-a mr-4"></i>Move up</a>
+          <a class="dropdown-item metadata-set-move-down" href="#"><i class="ion-arrow-down-a mr-4"></i>Move down</a>
+          <a class="dropdown-item metadata-set-delete" href="#"><i class="ion-close mr-4"></i>Delete</a>
+        </div>
+      </div>
     </div>
   </div>
   <hr>
-  <div class="metadata-set-fields">
+  <div class="collapse show metadata-set-fields">
     <%
       var orderedFields = Object.keys(metadataSet).sort(function (a, b) {
         if (typeof(metadataSet[a].order) === 'number' && typeof(metadataSet[b].order) !== 'number') {
