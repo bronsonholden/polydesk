@@ -1,6 +1,11 @@
 <div class="metadata-set" setname="<%- setName %>" setorder="<%- setOrder %>" locked="locked">
   <div class="px-3 pt-3">
     <div class="btn-group w-100">
+      <div class="mr-2">
+        <button type="button" class="btn rounded-circle btn-light metadata-set-expand">
+          <i class="ion-arrow-down-b" data-pack="default"></i>
+        </button>
+      </div>
       <input class="mr-2 form-control-plaintext text-truncate metadata-set-label font-weight-bold" value="<%- setName %>" readonly></input>
       <div>
         <button class="btn rounded-circle btn-light metadata-add-field" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -31,7 +36,7 @@
     </div>
   </div>
   <hr>
-  <div class="metadata-set-fields">
+  <div class="collapse show metadata-set-fields">
     <!-- append metadata-field instances here -->
   </div>
 </div>

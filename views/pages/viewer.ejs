@@ -61,6 +61,18 @@
       $('#viewer').removeClass('collapse');
     });
 
+    $(document).on('click', '.metadata-set-expand', function () {
+      var fields = $(this).closest('.metadata-set').find('.metadata-set-fields');
+
+      if (fields.hasClass('show')) {
+        $(this).find('i').removeClass().addClass('ion-arrow-right-b');
+        fields.removeClass('show');
+      } else {
+        $(this).find('i').removeClass().addClass('ion-arrow-down-b');
+        fields.addClass('show');
+      }
+    });
+
     // Move a metadata set up
     $(document).on('click', '.metadata-set-move-up', function () {
       var current = $(this).closest('.metadata-set');
