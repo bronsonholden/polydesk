@@ -13,7 +13,10 @@ module.exports = (sails) => {
         return callback();
       }
 
-      sails.on('hook:orm:loaded', () => {
+      sails.after([
+        'hook:orm:loaded',
+        'hook:migrate-arangodb:loaded'
+      ], () => {
         async.waterfall([
           (callback) => {
             sails.helpers.createNewUserAndAccount.with({
