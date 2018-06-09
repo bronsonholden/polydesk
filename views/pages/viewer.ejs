@@ -51,8 +51,26 @@
 
 
 <script>
+  function initTooltips(el) {
+    var selector = '[data-hover="tooltip"]';
+    var tooltips;
+
+    if (el) {
+      tooltips = $(el).find(selector);
+    } else {
+      tooltips = $(selector);
+    }
+
+    tooltips.each(function () {
+      $(this).tooltip({
+        trigger: 'hover',
+        container: $(this).closest($(this).attr('data-container'))
+      });
+    });
+  }
+
   $(document).ready(function () {
-    $('[data-toggle="tooltip"]').tooltip();
+    initTooltips();
 
     $(document).on('click', '.viewer-action', function () {
       var self = this;
@@ -311,11 +329,15 @@
     $(document).on('click', '.new-metadata-set', function () {
       var order = $('.metadata-set').length;
 
-      $(window.JST['views/pages/viewer/shared/metadata-set.ejs']({
+      var set = $(window.JST['views/pages/viewer/shared/metadata-set.ejs']({
         setName: 'New Metadata Set',
         setOrder: order,
         metadataSet: {}
-      })).appendTo('#metadata');
+      }));
+
+      set.appendTo('#metadata');
+
+      initTooltips(set);
     });
 
     $(document).on('click', '.metadata-add-field-dropdown > .dropdown-item', function () {
@@ -393,6 +415,8 @@
 
       metadataFieldWrapper.appendTo(metadataSet.find('.metadata-set-fields'));
       metadataField.appendTo(metadataFieldWrapper);
+
+      initTooltips(metadataFieldWrapper);
     });
   });
 </script>

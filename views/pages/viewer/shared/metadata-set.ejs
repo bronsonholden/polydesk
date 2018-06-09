@@ -2,13 +2,13 @@
   <div class="px-3 pt-3">
     <div class="btn-group w-100">
       <div class="mr-2">
-        <button type="button" class="btn rounded-circle btn-light metadata-set-expand">
+        <button type="button" class="btn rounded-circle btn-light metadata-set-expand" data-hover="tooltip" data-placement="bottom" title="Expand" data-container=".metadata-set">
           <i class="ion-arrow-down-b" data-pack="default"></i>
         </button>
       </div>
       <input class="mr-2 form-control-plaintext text-truncate metadata-set-label font-weight-bold" value="<%- setName %>" readonly></input>
       <div class="mr-1">
-        <button class="btn rounded-circle btn-light metadata-add-field" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+        <button class="btn rounded-circle btn-light metadata-add-field" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" data-hover="tooltip" data-placement="bottom" title="New metadata field" data-container=".metadata-set">
           <i class="ion-plus"></i>
         </button>
         <div class="dropdown-menu metadata-add-field-dropdown">
@@ -24,7 +24,7 @@
         </div>
       </div>
       <div>
-        <button class="btn rounded-circle btn-light metadata-set-actions" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+        <button class="btn rounded-circle btn-light metadata-set-actions" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" data-hover="tooltip" data-placement="bottom" title="More actions" data-container=".metadata-set">
           <i class="ion-more"></i>
         </button>
         <div class="dropdown-menu metadata-set-actions-dropdown">
