@@ -157,6 +157,8 @@
         cloned.insertAfter(item).find('.form-control').val('');
       }
 
+      initTooltips(cloned);
+
       $(this).blur();
     });
 
@@ -273,6 +275,13 @@
       var items = field.find('.metadata-field');
 
       if (items.length > 1) {
+        var tooltip = $(this).attr('aria-describedby');
+
+        // Remove any tooltip
+        if (tooltip) {
+          $('#' + tooltip).remove();
+        }
+
         $(this).closest('.metadata-field').remove();
       } else {
         $(this).closest('.metadata-field').find('.form-control').val('');
