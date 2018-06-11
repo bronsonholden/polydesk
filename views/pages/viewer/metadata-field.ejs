@@ -1,4 +1,4 @@
-<div class="form-group pb-2 pt-3 px-3 m-0 metadata-field-wrapper">
+<div class="form-group pb-2 pt-3 px-3 m-0 metadata-field-wrapper" fieldname="<%- fieldName %>">
   <%
     var value = metadataField.value;
     var typeString, ionicon;
@@ -41,7 +41,7 @@
     <div class="ml-2">
     </div>
     <div>
-      <button class="mr-1 btn rounded-circle btn-light metadata-field-type" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+      <button class="mr-1 btn rounded-circle btn-light metadata-field-type" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" data-hover="tooltip" data-placement="bottom" title="Change field type" data-container=".metadata-field-wrapper">
         <i class="<%- ionicon %>"></i>
       </button>
       <div class="dropdown-menu metadata-field-type-dropdown">
@@ -53,7 +53,7 @@
       </div>
     </div>
     <div>
-      <button class="btn rounded-circle btn-light metadata-field-more" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+      <button class="btn rounded-circle btn-light metadata-field-more" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" data-hover="tooltip" data-placement="bottom" title="More actions" data-container=".metadata-field-wrapper">
         <i class="ion-more"></i>
       </button>
       <div class="dropdown-menu metadata-field-actions-dropdown">
