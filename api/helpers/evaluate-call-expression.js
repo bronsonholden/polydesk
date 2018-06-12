@@ -9,7 +9,9 @@ module.exports = {
       enum: [
         'field',
         'sum',
-        'avg', 'average', 'mean'
+        'avg', 'average', 'mean',
+        'min',
+        'max'
       ]
     },
     arguments: {
