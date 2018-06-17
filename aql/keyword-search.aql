@@ -1,8 +1,8 @@
 // Search metadata sets by keyword
 FOR doc IN `keywords-1`
-FILTER doc.keyword LIKE "%Contract%"
+FILTER doc.keyword LIKE "%contract%"
 LET results = (
-    FOR v, e, p IN 1 OUTBOUND doc._id GRAPH 'keyword-graph'
+    FOR v, e, p IN 1 OUTBOUND doc._id GRAPH 'keyword-graph-1'
     RETURN v
 )
-RETURN results
+RETURN { keyword: doc.keyword, results: results }
