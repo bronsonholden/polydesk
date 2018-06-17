@@ -1,0 +1,8 @@
+// Search metadata sets by keyword
+FOR doc IN `keywords-1`
+FILTER doc.keyword LIKE "%Contract%"
+LET results = (
+    FOR v, e, p IN 1 OUTBOUND doc._id GRAPH 'keyword-graph'
+    RETURN v
+)
+RETURN results
