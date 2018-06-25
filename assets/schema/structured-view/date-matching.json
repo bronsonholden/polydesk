@@ -1,0 +1,20 @@
+{
+  "type": "string",
+  "oneOf": [
+    {
+      "const": "now"
+    },
+    {
+      "const": "today"
+    },
+    {
+      "pattern": "^\\d+ days ago"
+    },
+    {
+      "pattern": "^in \\d+ days?$"
+    },
+    {
+      "pattern": "^\\d{2}\\/\\d{2}\\/\\d{4}$"
+    }
+  ]
+}

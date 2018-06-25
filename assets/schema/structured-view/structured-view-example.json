@@ -1,0 +1,21 @@
+{
+  "structuredView": {
+    "displayName": "Active Contracts",
+    "strict": true,
+    "include": [
+      {
+        "metadataSets": [
+          "Contract"
+        ],
+        "metadataFields": [
+          {
+            "fieldName": "Effective Date",
+            "fieldValue": {
+              "after": "2012"
+            }
+          }
+        ]
+      }
+    ]
+  }
+}
