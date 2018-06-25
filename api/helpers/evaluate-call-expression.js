@@ -6,10 +6,12 @@ module.exports = {
     callee: {
       type: 'string',
       required: true,
-      enum: [
+      isIn: [
         'field',
         'sum',
-        'avg', 'average', 'mean'
+        'avg', 'average', 'mean',
+        'min',
+        'max'
       ]
     },
     arguments: {

@@ -9,7 +9,7 @@ module.exports = {
     },
     operator: {
       type: 'string',
-      enum: [
+      isIn: [
         '+',
         '-'
       ]

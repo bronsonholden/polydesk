@@ -37,16 +37,37 @@
       </div>
     </div>
   </div>
+  <div class="row mt-3 border border-right-0 border-top-0 border-bottom-1 border-left-0 border-light">
+    <div class="col-12">
+      <ul class="list-inline">
+        <li class="list-inline-item">
+          <a href="/upload" class="btn btn-success btn-block">Upload</a>
+        </li>
+        <li class="list-inline-item">
+          <a href="#" class="btn btn-outline-primary btn-block disabled">Copy</a>
+        </li>
+        <li class="list-inline-item">
+          <a href="#" class="btn btn-outline-secondary btn-block disabled">Check Out</a>
+        </li>
+        <li class="list-inline-item">
+          <a href="#" class="btn btn-outline-secondary btn-block disabled">Check In</a>
+        </li>
+        <li class="list-inline-item">
+          <a href="#" class="btn btn-outline-danger btn-block disabled">Delete</a>
+        </li>
+      </ul>
+    </div>
+  </div>
   <div class="row mt-4">
-    <div class="col-sm-2 border border-right-1 border-top-0 border-bottom-0 border-left-0 border-light">
-      <a href="/upload" class="btn btn-outline-secondary btn-block">Upload Document</a>
+    <div class="col-sm-3">
+      <i>No structured views available</i>
     </div>
-    <div class="col-sm-3 border border-right-1 border-top-0 border-bottom-0 border-left-0 border-light">
-    </div>
-    <div class="col-sm-7">
-      <table class="table">
-        <thead>
+    <div class="col-sm-9">
+      <table class="table table-bordered">
+        <thead class="thead-light">
           <tr>
+            <th scope="col" class="document-list-toggle"><input type="checkbox"></th>
+            <th scope="col" class="document-list-toggle"><i class="ion-android-star-half"></i></th>
             <th scope="col">ID</th>
             <th scope="col">Document Name</th>
             <th scope="col">Type</th>
@@ -55,6 +76,12 @@
         <tbody>
           <% documents.forEach(function (doc) { %>
             <tr>
+              <td class="document-list-toggle">
+                <input type="checkbox">
+              </td>
+              <td class="document-list-toggle">
+                <i class="ion-android-star-outline"></i>
+              </td>
               <td>
                 <%- doc.id %>
               </td>
