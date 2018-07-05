@@ -29,5 +29,8 @@ module.exports.policies = {
     'addMetadataSet': [ 'notBusy', 'isAuthenticated', 'canAddDocumentMetadataSets' ],
     'updateMetadataSet': [ 'notBusy', 'isAuthenticated', 'canUpdateDocumentMetadataSets' ],
     'removeMetadataSet': [ 'notBusy', 'isAuthenticated', 'canRemoveDocumentMetadataSets' ]
+  },
+  'StructuredViewController': {
+    'generate': [ 'notBusy', 'isAuthenticated', 'canViewDocuments' ]
   }
 };

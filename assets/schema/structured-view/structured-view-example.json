@@ -1,5 +1,6 @@
 {
   "structuredView": {
+    "_view": 1,
     "displayName": "Active Contracts",
     "strict": true,
     "include": [

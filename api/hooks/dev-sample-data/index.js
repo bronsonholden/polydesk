@@ -5,6 +5,7 @@
  */
 
 const _ = require('lodash');
+const arangoDb = require('arangojs');
 
 module.exports = (sails) => {
   return {
@@ -199,13 +200,57 @@ module.exports = (sails) => {
               success: (metadataSet) => {
                 sails.log.info('Created sample document metadata set');
 
-                callback();
+                callback(null, user);
               },
               error: (err) => {
                 callback(err);
               },
               invalidObjectType: (err) => {
                 callback(err);
+              }
+            });
+          },
+          (user, callback) => {
+            /**
+             * Create a sample structured view
+             */
+
+            var db = new arangoDb.Database({
+              url: sails.config.metadata.arangoDb.url
+            });
+
+            db.useDatabase(sails.config.metadata.arangoDb.database);
+            db.useBasicAuth(sails.config.metadata.arangoDb.username, sails.config.metadata.arangoDb.password);
+
+            const collection = db.collection(`structured-views-${user.defaultAccount}`);
+
+            collection.save({
+              _view: 1,
+              displayName: 'Test View',
+              include: [
+                {
+                  metadataSets: [
+                    'Test Set'
+                  ],
+                  metadataFields: [
+                    {
+                      fieldName: 'Field 1',
+                      stringValue: {
+                        eq: 'StringValue'
+                      }
+                    }
+                  ]
+                }
+              ],
+              filterExpression: 'set["$Field 1"].value == "StringValue"'
+            }, {
+              waitForSync: true,
+              silent: false
+            }).catch((err) => {
+              callback(err);
+            }).then((res) => {
+              if (res) {
+                callback();
               }
             });
           }

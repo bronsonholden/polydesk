@@ -52,6 +52,7 @@ module.exports.routes = {
 
   'post /documents': 'DocumentController.upload',
   'get /documents': 'DocumentController.browse',
+  'get /documents/view/:view': 'StructuredViewController.generate',
   'get /upload': {
     view: 'pages/upload'
   },
