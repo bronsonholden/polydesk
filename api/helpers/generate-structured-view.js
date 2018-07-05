@@ -34,33 +34,25 @@ module.exports = {
 
     var metadataSetsColl = sails.config.metadata.arangoDb.collection.replace('%account', inputs.account);
     var structuredViewsColl = `structured-views-${inputs.account}`;
+
     async.waterfall([
       (callback) => {
-        db.query(`FOR view IN \`${structuredViewsColl}\` FILTER view._view == ${inputs.view} RETURN view`).catch((err) => {
-          callback(err);
-        }).then((cursor) => {
+        db.query(`FOR view IN \`${structuredViewsColl}\` FILTER view._view == ${inputs.view} RETURN view`).then((cursor) => {
+          var results = [];
 
-          if (cursor) {
-            var results = [];
+          cursor.each((val) => results.push(val));
 
-            cursor.each((val) => results.push(val));
-
-            if (results.length === 1) {
-              callback(null, results[0]);
-            } else {
-              callback(new Error('Missing/multiple views found for ID ' + inputs.view));
-            }
+          if (results.length === 1) {
+            callback(null, results[0]);
+          } else {
+            callback(new Error('Missing/multiple views found for ID ' + inputs.view));
           }
-        });
+        }).catch(callback);
       },
       (view, callback) => {
-        db.query(`FOR set IN \`${metadataSetsColl}\` FILTER ${view.filterExpression} RETURN DISTINCT set._object`).catch((err) => {
-          callback(err);
-        }).then((cursor) => {
-          if (cursor) {
-            return callback(null, cursor);
-          }
-        });
+        db.query(`FOR set IN \`${metadataSetsColl}\` FILTER ${view.filterExpression} RETURN DISTINCT set._object`).then((cursor) => {
+          callback(null, cursor);
+        }).catch(callback);
       }
     ], (err, cursor) => {
       if (err) {
