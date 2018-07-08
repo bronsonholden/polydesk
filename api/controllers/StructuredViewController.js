@@ -19,7 +19,29 @@ module.exports = {
       account: accountId
     }).switch({
       success: (view) => {
-        res.send(view);
+        Document.find({
+          where: {
+            id: view.documents.slice(0, 20)
+          }
+        }).exec((err, documents) => {
+          if (err) {
+            return res.send(err);
+          }
+
+          documents = documents.map((doc) => {
+            return {
+              id: doc.id,
+              name: doc.name,
+              fileType: doc.fileType,
+              href: `/viewer/${doc.id}`
+            };
+          });
+
+          res.view('pages/documents', {
+            layout: 'layouts/documents',
+            documents: documents
+          });
+        });
       },
       error: (err) => {
         res.send(err);

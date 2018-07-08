@@ -63,7 +63,17 @@ module.exports = {
 
       cursor.each((val) => results.push(val));
 
-      exits.success(results);
+      var view = {
+        documents: []
+      }
+
+      results.forEach((obj) => {
+        if (obj[0] === 'd') {
+          view.documents.push(parseInt(obj.slice(1)));
+        }
+      });
+
+      exits.success(view);
     });
   }
 };
