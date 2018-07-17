@@ -7,7 +7,7 @@ module.exports = {
     account: {
       type: 'number',
       required: true,
-      description: 'The account ID to create metadata for'
+      description: 'The account ID owning the structured view'
     },
     view: {
       type: 'number',
