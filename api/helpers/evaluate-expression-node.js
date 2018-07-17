@@ -101,6 +101,9 @@ module.exports = {
         },
         'P,P': (lval, rval, operator) => {
           return sails.helpers.evaluateBinaryPrecision(lval, rval, operator);
+        },
+        'S,S': (lval, rval, operator) => {
+          return sails.helpers.evaluateBinaryString(lval, rval, operator);
         }
       };
 
