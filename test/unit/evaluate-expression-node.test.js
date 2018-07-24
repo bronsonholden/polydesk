@@ -194,7 +194,6 @@ describe('Evaluate formula expressions', function () {
     });
   });
 
-
   // String tests
   [
     {
