@@ -36,7 +36,9 @@ module.exports = (sails) => {
         return db.createDatabase(sails.config.metadata.arangoDb.database);
       }).then(() => {
         sails.log.info(` ✓ ArangoDB ${sails.config.metadata.arangoDb.url} Auto-migration complete.`);
-      }).then(callback).catch(callback);
+
+        callback();
+      }).catch(callback);
     }
   };
 };
