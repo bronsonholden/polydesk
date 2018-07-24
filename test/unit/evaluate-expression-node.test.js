@@ -193,4 +193,27 @@ describe('Evaluate formula expressions', function () {
       done();
     });
   });
+
+  // String tests
+  [
+    {
+      expr: '"a" + "b"',
+      value: 'ab'
+    },
+    {
+      expr: '"1" + "b"',
+      value: '1b'
+    },
+    {
+      expr: '"a" + "2"',
+      value: 'a2'
+    }
+  ].forEach((test) => {
+    it(test.expr, function (done) {
+      const res = sails.helpers.evaluateExpressionNode(jsep(test.expr), this.context);
+      expect(res.value).to.be.a('string');
+      expect(res.value).to.equal(test.value);
+      done();
+    });
+  });
 });

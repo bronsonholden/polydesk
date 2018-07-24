@@ -189,11 +189,9 @@ module.exports = {
         collection.byExample({
           _object: `${prefix}${inputs.object}`,
           _set: inputs.setName
-        }).catch((err) => {
-          callback(err);
         }).then((cursor) => {
           callback(null, cursor);
-        });
+        }).catch(callback);
       },
       (cursor, callback) => {
         if (cursor.hasNext()) {
@@ -205,27 +203,23 @@ module.exports = {
             collection.replace(doc, document, {
               waitForSync: true,
               silent: false
-            }).catch((err) => {
-              callback(err);
             }).then((document) => {
-              if (document) {
-                callback();
-              }
-            });
+              callback();
+            }).catch(callback);
           }, (err) => {
-            callback(err, document);
+            if (err) {
+              return callback(err);
+            }
+
+            callback(null, document);
           });
         } else {
           collection.save(document, {
             waitForSync: true,
             silent: false
-          }).catch((err) => {
-            callback(err);
           }).then((res) => {
-            if (res) {
-              callback(null, document);
-            }
-          });
+            callback(null, document);
+          }).catch(callback);
         }
       }
     ], (err, document) => {

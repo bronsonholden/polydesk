@@ -11,7 +11,8 @@ module.exports = {
         'sum',
         'avg', 'average', 'mean',
         'min',
-        'max'
+        'max',
+        'length', 'len', 'size'
       ]
     },
     arguments: {
@@ -43,6 +44,11 @@ module.exports = {
       return exits.success(sails.helpers.evaluateCallMin(inputs.arguments, inputs.context));
     case 'max':
       return exits.success(sails.helpers.evaluateCallMax(inputs.arguments, inputs.context));
+    case 'length':
+    case 'len':
+    case 'size':
+    case 'count':
+      return exits.success(sails.helpers.evaluateCallLength(inputs.arguments, inputs.context));
     default:
       return exits.success({
         err: 'Unknown function ' + inputs.callee

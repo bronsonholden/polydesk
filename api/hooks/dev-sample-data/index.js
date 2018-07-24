@@ -135,6 +135,11 @@ module.exports = (sails) => {
                   type: 'F',
                   value: 'field("pi") ^ 2',
                   order: 15
+                },
+                'len(test)': {
+                  type: 'F',
+                  value: 'length("test")',
+                  order: 16
                 }
               }
             }).switch({
@@ -193,6 +198,11 @@ module.exports = (sails) => {
                   type: 'F',
                   value: 'avg(field("precisions"))',
                   order: 5
+                },
+                'len(numbers)': {
+                  type: 'F',
+                  value: 'length(field("numbers"))',
+                  order: 6
                 }
               }
             }).switch({
