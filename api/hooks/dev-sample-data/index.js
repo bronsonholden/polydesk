@@ -265,7 +265,7 @@ module.exports = (sails) => {
                     ]
                   }
                 ],
-                filterExpression: 'set["$Field 1"].value LIKE "%StringValue%" && set["$Field 1"].value == "%StringValue2%"'
+                filterExpression: 'set["$Field 1"].value LIKE "%StringValue%" && set["$Field 1"].value LIKE "%StringValue2%"'
               }
             ], {
               waitForSync: true,

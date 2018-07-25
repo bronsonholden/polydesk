@@ -36,7 +36,9 @@ module.exports = {
 
       res.view('pages/documents', {
         layout: 'layouts/documents',
-        documents: documents
+        documents: documents,
+        superview: null,
+        subviews: []
       });
     });
   },

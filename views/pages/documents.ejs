@@ -60,7 +60,19 @@
   </div>
   <div class="row mt-4">
     <div class="col-sm-3">
-      <i>No structured views available</i>
+      <%
+        if (superview) {
+      %>
+          <div>
+            <a href="/documents/view/<%- superview._view %>">.. <%- superview.displayName %></a>
+          </div>
+      <%
+        } else {
+      %>
+          <i>No structured views available</i>
+      <%
+        }
+      %>
     </div>
     <div class="col-sm-9">
       <table class="table table-bordered">

@@ -40,8 +40,8 @@ module.exports = {
           res.view('pages/documents', {
             layout: 'layouts/documents',
             documents: documents,
-            subviews: [],
-            superview: {}
+            subviews: view.subviews,
+            superview: view.superview
           });
         });
       },

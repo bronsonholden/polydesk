@@ -53,8 +53,21 @@ module.exports = {
         db.query(`FOR set IN \`${metadataSetsColl}\` FILTER ${view.filterExpression} RETURN DISTINCT set._object`).then((cursor) => {
           callback(null, cursor);
         }).catch(callback);
+      },
+      (cursor, callback) => {
+        sails.helpers.getStructuredViewSuperview.with({
+          account: inputs.account,
+          view: inputs.view
+        }).switch({
+          success: (superview) => {
+            callback(null, superview, cursor);
+          },
+          error: (err) => {
+            callback(err);
+          }
+        });
       }
-    ], (err, cursor) => {
+    ], (err, superview, cursor) => {
       if (err) {
         return exits.error(err);
       }
@@ -64,7 +77,9 @@ module.exports = {
       cursor.each((val) => results.push(val));
 
       var view = {
-        documents: []
+        documents: [],
+        superview: superview,
+        subviews: []
       }
 
       results.forEach((obj) => {
