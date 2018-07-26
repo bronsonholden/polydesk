@@ -60,14 +60,27 @@ module.exports = {
           view: inputs.view
         }).switch({
           success: (superview) => {
-            callback(null, superview, cursor);
+            callback(null, cursor, superview);
+          },
+          error: (err) => {
+            callback(err);
+          }
+        });
+      },
+      (cursor, superview, callback) => {
+        sails.helpers.getStructuredViewSubviews.with({
+          account: inputs.account,
+          view: inputs.view
+        }).switch({
+          success: (subviews) => {
+            callback(null, cursor, superview, subviews);
           },
           error: (err) => {
             callback(err);
           }
         });
       }
-    ], (err, superview, cursor) => {
+    ], (err, cursor, superview, subviews) => {
       if (err) {
         return exits.error(err);
       }
@@ -79,7 +92,7 @@ module.exports = {
       var view = {
         documents: [],
         superview: superview,
-        subviews: []
+        subviews: subviews
       }
 
       results.forEach((obj) => {
