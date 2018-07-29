@@ -61,6 +61,14 @@
   <div class="row mt-4">
     <div class="col-sm-3">
       <%
+        if (bulkViewLink) {
+      %>
+          <div>
+            <a href="/documents">= Bulk view</a>
+          </div>
+      <%
+        }
+
         if (superview) {
       %>
           <div>
@@ -78,8 +86,7 @@
       <%
           });
         }
-      %>
-      <%
+
         if (!superview && subviews.length === 0) {
       %>
           <i>No structured views available</i>

@@ -34,11 +34,21 @@ module.exports = {
         };
       });
 
-      res.view('pages/documents', {
-        layout: 'layouts/documents',
-        documents: documents,
-        superview: null,
-        subviews: []
+      sails.helpers.getRootStructuredViews.with({
+        account: req.session.account
+      }).switch({
+        success: (results) => {
+          res.view('pages/documents', {
+            layout: 'layouts/documents',
+            documents: documents,
+            superview: null,
+            subviews: results,
+            bulkViewLink: false
+          });
+        },
+        error: (err) => {
+          res.send(err);
+        }
       });
     });
   },
@@ -73,7 +83,8 @@ module.exports = {
             layout: 'layouts/documents',
             documents: documents,
             subviews: view.subviews,
-            superview: view.superview
+            superview: view.superview,
+            bulkViewLink: true
           });
         });
       },
