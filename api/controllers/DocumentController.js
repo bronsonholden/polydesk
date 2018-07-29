@@ -34,10 +34,63 @@ module.exports = {
         };
       });
 
-      res.view('pages/documents', {
-        layout: 'layouts/documents',
-        documents: documents
+      sails.helpers.getRootStructuredViews.with({
+        account: req.session.account
+      }).switch({
+        success: (results) => {
+          res.view('pages/documents', {
+            layout: 'layouts/documents',
+            documents: documents,
+            superview: null,
+            subviews: results,
+            bulkViewLink: false
+          });
+        },
+        error: (err) => {
+          res.send(err);
+        }
       });
+    });
+  },
+  structuredView: (req, res) => {
+    var viewId = req.param('view');
+    var accountId = req.session.account;
+
+    sails.helpers.generateStructuredView.with({
+      view: viewId,
+      account: accountId
+    }).switch({
+      success: (view) => {
+        Document.find({
+          where: {
+            id: view.documents.slice(0, 20)
+          }
+        }).exec((err, documents) => {
+          if (err) {
+            return res.send(err);
+          }
+
+          documents = documents.map((doc) => {
+            return {
+              id: doc.id,
+              name: doc.name,
+              fileType: doc.fileType,
+              href: `/viewer/${doc.id}`
+            };
+          });
+
+          res.view('pages/documents', {
+            layout: 'layouts/documents',
+            documents: documents,
+            subviews: view.subviews,
+            superview: view.superview,
+            bulkViewLink: true
+          });
+        });
+      },
+      error: (err) => {
+        res.send(err);
+      }
     });
   },
   view: (req, res) => {

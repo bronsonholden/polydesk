@@ -1,0 +1,41 @@
+{
+  "type": "object",
+  "properties": {
+    "before": {
+      "$ref": "date-matching.json"
+    },
+    "after": {
+      "$ref": "date-matching.json"
+    },
+    "exactly": {
+      "$ref": "date-matching.json"
+    }
+  },
+  "oneOf": [
+    {
+      "type": "object",
+      "required": [
+        "before",
+        "after"
+      ]
+    },
+    {
+      "type": "object",
+      "required": [
+        "before"
+      ]
+    },
+    {
+      "type": "object",
+      "required": [
+        "after"
+      ]
+    },
+    {
+      "type": "object",
+      "required": [
+        "exactly"
+      ]
+    }
+  ]
+}

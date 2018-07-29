@@ -5,6 +5,7 @@
  */
 
 const _ = require('lodash');
+const arangoDb = require('arangojs');
 
 module.exports = (sails) => {
   return {
@@ -209,7 +210,7 @@ module.exports = (sails) => {
               success: (metadataSet) => {
                 sails.log.info('Created sample document metadata set');
 
-                callback();
+                callback(null, user);
               },
               error: (err) => {
                 callback(err);
@@ -218,6 +219,93 @@ module.exports = (sails) => {
                 callback(err);
               }
             });
+          },
+          (user, callback) => {
+            /**
+             * Create a sample structured view
+             */
+
+            var db = new arangoDb.Database({
+              url: sails.config.metadata.arangoDb.url
+            });
+
+            db.useDatabase(sails.config.metadata.arangoDb.database);
+            db.useBasicAuth(sails.config.metadata.arangoDb.username, sails.config.metadata.arangoDb.password);
+
+            const collection = db.collection(`structured-views-${user.defaultAccount}`);
+
+            collection.import([
+              {
+                _key: 'test-view-1',
+                _view: 1,
+                displayName: 'Test View',
+                include: [
+                  {
+                    metadataSets: [
+                      'Test Set'
+                    ],
+                    metadataFields: [
+                      {
+                        fieldName: 'Field 1',
+                        stringValue: {
+                          contains: 'StringValue'
+                        }
+                      }
+                    ]
+                  }
+                ],
+                filterExpression: 'set["$Field 1"].value LIKE "%StringValue%"'
+              },
+              {
+                _key: 'test-view-2',
+                _view: 2,
+                displayName: 'Test View 2',
+                include: [
+                  {
+                    metadataSets: [
+                      'Test Set'
+                    ],
+                    metadataFields: [
+                      {
+                        fieldName: 'Field 1',
+                        stringValue: {
+                          contains: 'StringValue2'
+                        }
+                      }
+                    ]
+                  }
+                ],
+                filterExpression: 'set["$Field 1"].value LIKE "%StringValue%" && set["$Field 1"].value LIKE "%StringValue2%"'
+              }
+            ], {
+              waitForSync: true,
+              silent: false
+            }).then((res) => {
+              callback(null, user);
+            }).catch(callback);
+          },
+          (user, callback) => {
+            /**
+             * Create a relation between our two example views
+             */
+
+            var db = new arangoDb.Database({
+              url: sails.config.metadata.arangoDb.url
+            });
+
+            db.useDatabase(sails.config.metadata.arangoDb.database);
+            db.useBasicAuth(sails.config.metadata.arangoDb.username, sails.config.metadata.arangoDb.password);
+
+            const edgeCollection = db.edgeCollection(`structured-view-edges-${user.defaultAccount}`);
+
+            edgeCollection.create().then(() => {
+              return edgeCollection.save({
+                _from: `structured-views-${user.defaultAccount}/test-view-2`,
+                _to: `structured-views-${user.defaultAccount}/test-view-1`
+              });
+            }).then((res) => {
+              callback();
+            }).catch(callback);
           }
         ], callback);
       });

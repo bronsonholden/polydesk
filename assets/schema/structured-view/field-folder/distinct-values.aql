@@ -1,0 +1,6 @@
+// This gets unique (distinct) values for a field
+// Used to present subviews
+
+FOR set in `metadata-sets-1`
+FILTER set._set == 'Contract'
+RETURN DISTINCT set.$Company.value

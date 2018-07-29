@@ -1,0 +1,41 @@
+{
+  "structuredView": {
+    "_view": 1,
+    "displayName": "Active Contracts",
+    "strict": true,
+    "include": [
+      {
+        "metadataSets": [
+          "Contract"
+        ],
+        "metadataFields": [
+          {
+            "fieldName": "Effective Date",
+            "dateValue": {
+              "after": "2012"
+            },
+            "nullValue": false,
+            "boolValue": "identity",
+            "numberValue": {
+              "gt": 1000
+            },
+            "precisionValue": {
+              "lte": 100
+            },
+            "coordinatesValue": {
+              "in": {
+                "country": "United States",
+                "hemisphere": "northern",
+                "continent": "arctic",
+                "timezone": "America/Los_Angeles"
+              },
+              "out": {
+                "hemisphere": "southern"
+              }
+            }
+          }
+        ]
+      }
+    ]
+  }
+}

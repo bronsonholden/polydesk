@@ -60,7 +60,39 @@
   </div>
   <div class="row mt-4">
     <div class="col-sm-3">
-      <i>No structured views available</i>
+      <%
+        if (bulkViewLink) {
+      %>
+          <div>
+            <a href="/documents">= Bulk view</a>
+          </div>
+      <%
+        }
+
+        if (superview) {
+      %>
+          <div>
+            <a href="/documents/view/<%- superview._view %>">- <%- superview.displayName %></a>
+          </div>
+      <%
+        }
+
+        if (subviews) {
+          subviews.forEach(function (subview) {
+      %>
+            <div>
+              <a href="/documents/view/<%- subview._view %>">+ <%- subview.displayName %></a>
+            </div>
+      <%
+          });
+        }
+
+        if (!superview && subviews.length === 0) {
+      %>
+          <i>No structured views available</i>
+      <%
+        }
+      %>
     </div>
     <div class="col-sm-9">
       <table class="table table-bordered">
