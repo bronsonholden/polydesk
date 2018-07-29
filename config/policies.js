@@ -24,13 +24,11 @@ module.exports.policies = {
   },
   'DocumentController': {
     'browse': [ 'notBusy', 'isAuthenticated', 'canViewDocuments' ],
+    'structuredView': [ 'notBusy', 'isAuthenticated', 'canViewDocuments' ],
     'upload': [ 'notBusy', 'isAuthenticated', 'canUploadDocuments' ],
     'view': [ 'notBusy', 'isAuthenticated', 'canViewDocuments' ],
     'addMetadataSet': [ 'notBusy', 'isAuthenticated', 'canAddDocumentMetadataSets' ],
     'updateMetadataSet': [ 'notBusy', 'isAuthenticated', 'canUpdateDocumentMetadataSets' ],
     'removeMetadataSet': [ 'notBusy', 'isAuthenticated', 'canRemoveDocumentMetadataSets' ]
-  },
-  'StructuredViewController': {
-    'generate': [ 'notBusy', 'isAuthenticated', 'canViewDocuments' ]
   }
 };
