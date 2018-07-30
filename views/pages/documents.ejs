@@ -60,39 +60,35 @@
   </div>
   <div class="row mt-4">
     <div class="col-sm-3">
-      <%
-        if (bulkViewLink) {
-      %>
-          <div>
-            <a href="/documents">= Bulk view</a>
-          </div>
-      <%
-        }
+      <div class="list-group">
+        <%
+          if (bulkViewLink) {
+        %>
+            <a class="list-group-item list-group-item-action" href="/documents"><i style="display: inline-block; width: 14px;" class="ion-filing"></i> Bulk view</a>
+        <%
+          }
 
-        if (superview) {
-      %>
-          <div>
-            <a href="/documents/view/<%- superview._view %>">- <%- superview.displayName %></a>
-          </div>
-      <%
-        }
+          if (superview) {
+        %>
+            <a class="list-group-item list-group-item-action" href="/documents/view/<%- superview._view %>"><i style="display: inline-block; width: 14px;" class="ion-chevron-up"></i> <%- superview.displayName %></a>
+        <%
+          }
 
-        if (subviews) {
-          subviews.forEach(function (subview) {
-      %>
-            <div>
-              <a href="/documents/view/<%- subview._view %>">+ <%- subview.displayName %></a>
-            </div>
-      <%
-          });
-        }
+          if (subviews) {
+            subviews.forEach(function (subview) {
+        %>
+              <a class="list-group-item list-group-item-action" href="/documents/view/<%- subview._view %>"><i style="display: inline-block; width: 14px;" class="ion-chevron-right"></i> <%- subview.displayName %></a>
+        <%
+            });
+          }
 
-        if (!superview && subviews.length === 0) {
-      %>
-          <i>No structured views available</i>
-      <%
-        }
-      %>
+          if (!superview && subviews.length === 0) {
+        %>
+            <i>No structured views available</i>
+        <%
+          }
+        %>
+      </div>
     </div>
     <div class="col-sm-9">
       <table class="table table-bordered">
