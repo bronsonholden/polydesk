@@ -276,6 +276,20 @@ module.exports = (sails) => {
                   }
                 ],
                 filterExpression: 'set["$Field 1"].value LIKE "%StringValue%" && set["$Field 1"].value LIKE "%StringValue2%"'
+              },
+              {
+                _key: 'test-view-3',
+                _view: 3,
+                displayName: {
+                  "metadataSet": "Test Set",
+                  "metadataField": "Field 1"
+                }
+              },
+              {
+                _key: 'test-view-4',
+                _view: 4,
+                displayName: 'Field 1 Values',
+                filterExpression: 'set["$Field 1"].value != NULL'
               }
             ], {
               waitForSync: true,
@@ -299,10 +313,16 @@ module.exports = (sails) => {
             const edgeCollection = db.edgeCollection(`structured-view-edges-${user.defaultAccount}`);
 
             edgeCollection.create().then(() => {
-              return edgeCollection.save({
-                _from: `structured-views-${user.defaultAccount}/test-view-2`,
-                _to: `structured-views-${user.defaultAccount}/test-view-1`
-              });
+              return edgeCollection.import([
+                {
+                  _from: `structured-views-${user.defaultAccount}/test-view-2`,
+                  _to: `structured-views-${user.defaultAccount}/test-view-1`
+                },
+                {
+                  _from: `structured-views-${user.defaultAccount}/test-view-3`,
+                  _to: `structured-views-${user.defaultAccount}/test-view-4`
+                }
+              ]);
             }).then((res) => {
               callback();
             }).catch(callback);

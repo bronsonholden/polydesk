@@ -13,6 +13,10 @@ module.exports = {
       type: 'number',
       required: true,
       description: 'The structured view ID to generate'
+    },
+    filter: {
+      type: 'ref',
+      description: 'Filter object'
     }
   },
   exits: {
@@ -50,44 +54,56 @@ module.exports = {
         }).catch(callback);
       },
       (view, callback) => {
-        db.query(`FOR set IN \`${metadataSetsColl}\` FILTER ${view.filterExpression} RETURN DISTINCT set._object`).then((cursor) => {
-          callback(null, cursor);
-        }).catch(callback);
+        if (view.filterExpression) {
+          db.query(`FOR set IN \`${metadataSetsColl}\` FILTER ${view.filterExpression} RETURN DISTINCT set._object`).then((cursor) => {
+            var results = [];
+
+            cursor.each((val) => results.push(val));
+
+            callback(null, results);
+          }).catch(callback);
+        } else {
+          var q = `FOR set IN \`${metadataSetsColl}\` FILTER set._set == "${view.displayName.metadataSet}" AND set["$${view.displayName.metadataField}"].value == "${inputs.filter[view.displayName.metadataField]}" RETURN set._object`;
+
+          db.query(q).then((cursor) => {
+            var results = [];
+
+            cursor.each((val) => results.push(val));
+
+            callback(null, results);
+          }).catch(callback);
+        }
       },
-      (cursor, callback) => {
+      (results, callback) => {
         sails.helpers.getStructuredViewSuperview.with({
           account: inputs.account,
           view: inputs.view
         }).switch({
           success: (superview) => {
-            callback(null, cursor, superview);
+            callback(null, results, superview);
           },
           error: (err) => {
             callback(err);
           }
         });
       },
-      (cursor, superview, callback) => {
+      (results, superview, callback) => {
         sails.helpers.getStructuredViewSubviews.with({
           account: inputs.account,
           view: inputs.view
         }).switch({
           success: (subviews) => {
-            callback(null, cursor, superview, subviews);
+            callback(null, results, superview, subviews);
           },
           error: (err) => {
             callback(err);
           }
         });
       }
-    ], (err, cursor, superview, subviews) => {
+    ], (err, results, superview, subviews) => {
       if (err) {
         return exits.error(err);
       }
-
-      var results = [];
-
-      cursor.each((val) => results.push(val));
 
       var view = {
         documents: [],

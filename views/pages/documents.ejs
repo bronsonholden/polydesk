@@ -76,9 +76,16 @@
 
           if (subviews) {
             subviews.forEach(function (subview) {
+              if (subview.filterExpression) {
         %>
-              <a class="list-group-item list-group-item-action" href="/documents/view/<%- subview._view %>"><i style="display: inline-block; width: 14px;" class="ion-chevron-right"></i> <%- subview.displayName %></a>
+                <a class="list-group-item list-group-item-action" href="/documents/view/<%- subview._view %>"><i style="display: inline-block; width: 14px;" class="ion-chevron-right"></i> <%- subview.displayName %></a>
         <%
+              } else {
+                var qs = `${encodeURIComponent(subview.filter.field)}=${encodeURIComponent(subview.filter.value)}`;
+        %>
+                <a class="list-group-item list-group-item-action" href="/documents/view/<%- subview._view %>?<%- qs %>"><i style="display: inline-block; width: 14px;" class="ion-chevron-right"></i> <%- subview.filter.value %></a>
+        <%
+              }
             });
           }
 

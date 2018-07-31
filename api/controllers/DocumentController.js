@@ -58,7 +58,8 @@ module.exports = {
 
     sails.helpers.generateStructuredView.with({
       view: viewId,
-      account: accountId
+      account: accountId,
+      filter: req.allParams()
     }).switch({
       success: (view) => {
         Document.find({

@@ -1,0 +1,29 @@
+{
+  "documents": [
+    {
+      "_view": 1,
+      "displayName": "Employee Files",
+      "filterExpression": "set[\"$Document Type\"] == \"Employee Files\""
+    },
+    {
+      "_view": 2,
+      "displayName": "Legal",
+      "filterExpression": "set[\"$Document Type\"] == \"Legal\""
+    },
+    {
+      "_view": 3,
+      "displayName": "Onboarding",
+      "filterExpression": "set[\"$Document Category\"] == \"Onboarding\""
+    },
+    {
+      "_view": 4,
+      "displayName": "Personal",
+      "filterExpression": "set[\"$Document Category\"] == \"Personal\""
+    },
+    {
+      "_view": 5,
+      "displayName": "Confidential",
+      "filterExpression": "set[\"$Document Category\"] == \"Confidential\""
+    }
+  ]
+}

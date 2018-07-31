@@ -37,10 +37,32 @@ module.exports = {
       ) RETURN view`
     ).then((cursor) => {
       var results = [];
+      var views = [];
 
       cursor.each((val) => results.push(val));
 
-      exits.success(results);
+      async.eachSeries(results, (view, callback) => {
+        if (view.filterExpression) {
+          views.push(view);
+          callback();
+        } else {
+          db.query(`FOR set IN \`metadata-sets-${inputs.account}\` FILTER set._set == "${view.displayName.metadataSet}" RETURN DISTINCT set["$${view.displayName.metadataField}"]`).then((cursor) => {
+            cursor.each((val) => {
+              views.push({
+                _view: view._view,
+                filter: {
+                  field: view.displayName.metadataField,
+                  value: val.value
+                }
+              });
+            });
+
+            callback();
+          }).catch(callback);
+        }
+      }, () => {
+        exits.success(views);
+      });
     }).catch(exits.error);
   }
 };
