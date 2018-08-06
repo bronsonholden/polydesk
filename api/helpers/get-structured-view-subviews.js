@@ -14,6 +14,10 @@ module.exports = {
       type: 'number',
       required: true,
       description: 'The structured view ID to generate subviews for'
+    },
+    filter: {
+      type: 'ref',
+      description: 'Filter object'
     }
   },
   exits: {
@@ -63,7 +67,17 @@ module.exports = {
             views.push(view);
             callback();
           } else {
-            db.query(`FOR set IN \`metadata-sets-${inputs.account}\` FILTER set._set == "${view.displayName.metadataSet}" RETURN DISTINCT set["$${view.displayName.metadataField}"]`).then((cursor) => {
+            var filters = [];
+
+            if (inputs.filter) {
+              Object.keys(inputs.filter).forEach((key) => {
+                filters.push(`set["$${key}"].value LIKE "${inputs.filter[key]}"`);
+              });
+            }
+
+            var q = `FOR set IN \`metadata-sets-${inputs.account}\` FILTER set._set == "${view.displayName.metadataSet}" ${filters.length > 0 ? ' AND ' + filters.join(' AND ') : ''} RETURN DISTINCT set["$${view.displayName.metadataField}"]`;
+
+            db.query(q).then((cursor) => {
               cursor.each((val) => {
                 views.push({
                   _view: view._view,

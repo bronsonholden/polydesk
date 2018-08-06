@@ -236,60 +236,41 @@ module.exports = (sails) => {
 
             collection.import([
               {
-                _key: 'test-view-1',
+                _key: 'view-1',
                 _view: 1,
-                displayName: 'Test View',
+                displayName: 'Employee Files',
                 include: [
                   {
                     metadataSets: [
-                      'Test Set'
-                    ],
-                    metadataFields: [
-                      {
-                        fieldName: 'Field 1',
-                        stringValue: {
-                          contains: 'StringValue'
-                        }
-                      }
+                      'Employee Files'
                     ]
                   }
                 ],
-                filterExpression: 'set["$Field 1"].value LIKE "%StringValue%"'
+                filterExpression: 'set._set == "Employee Files"'
               },
               {
-                _key: 'test-view-2',
+                _key: 'view-2',
                 _view: 2,
-                displayName: 'Test View 2',
-                include: [
-                  {
-                    metadataSets: [
-                      'Test Set'
-                    ],
-                    metadataFields: [
-                      {
-                        fieldName: 'Field 1',
-                        stringValue: {
-                          contains: 'StringValue2'
-                        }
-                      }
-                    ]
-                  }
-                ],
-                filterExpression: 'set["$Field 1"].value LIKE "%StringValue%" && set["$Field 1"].value LIKE "%StringValue2%"'
-              },
-              {
-                _key: 'test-view-3',
-                _view: 3,
                 displayName: {
-                  "metadataSet": "Test Set",
-                  "metadataField": "Field 1"
+                  metadataSet: 'Employee Files',
+                  metadataField: 'Status'
                 }
               },
               {
-                _key: 'test-view-4',
+                _key: 'view-3',
+                _view: 3,
+                displayName: {
+                  metadataSet: 'Employee Files',
+                  metadataField: 'Company'
+                }
+              },
+              {
+                _key: 'view-4',
                 _view: 4,
-                displayName: 'Field 1 Values',
-                filterExpression: 'set["$Field 1"].value != NULL'
+                displayName: {
+                  metadataSet: 'Employee Files',
+                  metadataField: 'Employee ID'
+                }
               }
             ], {
               waitForSync: true,
@@ -315,12 +296,16 @@ module.exports = (sails) => {
             edgeCollection.create().then(() => {
               return edgeCollection.import([
                 {
-                  _from: `structured-views-${user.defaultAccount}/test-view-2`,
-                  _to: `structured-views-${user.defaultAccount}/test-view-1`
+                  _from: `structured-views-${user.defaultAccount}/view-2`,
+                  _to: `structured-views-${user.defaultAccount}/view-1`
                 },
                 {
-                  _from: `structured-views-${user.defaultAccount}/test-view-3`,
-                  _to: `structured-views-${user.defaultAccount}/test-view-4`
+                  _from: `structured-views-${user.defaultAccount}/view-3`,
+                  _to: `structured-views-${user.defaultAccount}/view-2`
+                },
+                {
+                  _from: `structured-views-${user.defaultAccount}/view-4`,
+                  _to: `structured-views-${user.defaultAccount}/view-3`
                 }
               ]);
             }).then((res) => {

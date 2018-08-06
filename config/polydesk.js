@@ -15,6 +15,11 @@ module.exports.polydesk = {
     'txt',
     'csv',
     'json',
-    'xml'
+    'xml',
+    'xls',
+    'xslx',
+    'ppt',
+    'doc',
+    'docx'
   ]
 };

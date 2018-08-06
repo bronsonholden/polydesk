@@ -60,58 +60,72 @@ module.exports = {
 
             cursor.each((val) => results.push(val));
 
-            callback(null, results);
+            view.results = results;
+
+            callback(null, view);
           }).catch(callback);
         } else {
-          var q = `FOR set IN \`${metadataSetsColl}\` FILTER set._set == "${view.displayName.metadataSet}" AND set["$${view.displayName.metadataField}"].value == "${inputs.filter[view.displayName.metadataField]}" RETURN set._object`;
+          var filters = [];
+
+          filters.push(`set["$${view.displayName.metadataField}"].value LIKE "${inputs.filter[view.displayName.metadataField]}"`);
+
+          if (inputs.filter) {
+            Object.keys(inputs.filter).forEach((key) => {
+              filters.push(`set["$${key}"].value LIKE "${inputs.filter[key]}"`);
+            });
+          }
+
+          var q = `FOR set IN \`${metadataSetsColl}\` FILTER set._set == "${view.displayName.metadataSet}" AND ${filters.join(' AND ')} RETURN set._object`;
 
           db.query(q).then((cursor) => {
             var results = [];
 
             cursor.each((val) => results.push(val));
 
-            callback(null, results);
+            view.results = results;
+
+            callback(null, view);
           }).catch(callback);
         }
       },
-      (results, callback) => {
+      (view, callback) => {
         sails.helpers.getStructuredViewSuperview.with({
           account: inputs.account,
           view: inputs.view
         }).switch({
           success: (superview) => {
-            callback(null, results, superview);
+            view.superview = superview;
+
+            callback(null, view);
           },
           error: (err) => {
             callback(err);
           }
         });
       },
-      (results, superview, callback) => {
+      (view, callback) => {
         sails.helpers.getStructuredViewSubviews.with({
           account: inputs.account,
-          view: inputs.view
+          view: inputs.view,
+          filter: inputs.filter
         }).switch({
           success: (subviews) => {
-            callback(null, results, superview, subviews);
+            view.subviews = subviews;
+
+            callback(null, view);
           },
           error: (err) => {
             callback(err);
           }
         });
       }
-    ], (err, results, superview, subviews) => {
+    ], (err, view) => {
       if (err) {
         return exits.error(err);
       }
 
-      var view = {
-        documents: [],
-        superview: superview,
-        subviews: subviews
-      }
-
-      results.forEach((obj) => {
+      view.documents = [];
+      view.results.forEach((obj) => {
         if (obj[0] === 'd') {
           view.documents.push(parseInt(obj.slice(1)));
         }
