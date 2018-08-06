@@ -1,5 +1,3 @@
-const arangoDb = require('arangojs');
-
 module.exports = {
   friendlyName: 'Get Structured View Filter Expression',
   description: 'Get an AQL filter expression for use in structured view queries',

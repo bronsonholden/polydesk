@@ -41,9 +41,9 @@ module.exports = {
       if (documents._result.length === 1) {
         return edgeCollection.outEdges(documents._result[0]._id);
       } else if (documents._result.length === 0) {
-        return Promise.reject('No structured view with that ID exists');
+        return Promise.reject(new Error('No structured view with that ID exists'));
       } else {
-        return Promise.reject('Multiple structured views with ID ' + inputs.view + ' found');
+        return Promise.reject(new Error('Multiple structured views with ID ' + inputs.view + ' found'));
       }
     }).then((edges) => {
       if (edges.length === 1) {

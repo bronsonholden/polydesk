@@ -27,9 +27,6 @@ module.exports = {
     db.useDatabase(sails.config.metadata.arangoDb.database);
     db.useBasicAuth(sails.config.metadata.arangoDb.username, sails.config.metadata.arangoDb.password);
 
-    const viewsCollection = db.collection(`structured-views-${inputs.account}`);
-    const edgeCollection = db.edgeCollection(`structured-view-edges-${inputs.account}`);
-
     db.query(
       `FOR view IN \`structured-views-${inputs.account}\`
       FILTER view._id NOT IN (

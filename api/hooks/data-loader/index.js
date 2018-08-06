@@ -1,11 +1,8 @@
 /**
- *
+ * Load sample data from files
  */
 
-
 const _ = require('lodash');
-const arangoDb = require('arangojs');
-const fs = require('fs');
 const loadModels = require('./load-models');
 const loadArango = require('./load-arango');
 
