@@ -9,7 +9,7 @@ const loadArango = require('./load-arango');
 module.exports = (sails) => {
   return {
     initialize: (callback) => {
-      if (process.env.NODE_ENV === 'production' || !_.get(sails, 'config.polydesk.generateSampleData')) {
+      if (process.env.NODE_ENV === 'production' || !_.get(sails, 'config.polydesk.loadSampleData')) {
         return callback();
       }
 
@@ -29,6 +29,8 @@ module.exports = (sails) => {
           }
 
           sails.log.info(`·• data-loader: Done!`);
+
+          callback();
         });
       });
     }
