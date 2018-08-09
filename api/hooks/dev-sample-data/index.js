@@ -5,6 +5,7 @@
  */
 
 const _ = require('lodash');
+const arangoDb = require('arangojs');
 
 module.exports = (sails) => {
   return {
@@ -209,7 +210,7 @@ module.exports = (sails) => {
               success: (metadataSet) => {
                 sails.log.info('Created sample document metadata set');
 
-                callback();
+                callback(null, user);
               },
               error: (err) => {
                 callback(err);
@@ -218,6 +219,98 @@ module.exports = (sails) => {
                 callback(err);
               }
             });
+          },
+          (user, callback) => {
+            /**
+             * Create a sample structured view
+             */
+
+            var db = new arangoDb.Database({
+              url: sails.config.metadata.arangoDb.url
+            });
+
+            db.useDatabase(sails.config.metadata.arangoDb.database);
+            db.useBasicAuth(sails.config.metadata.arangoDb.username, sails.config.metadata.arangoDb.password);
+
+            const collection = db.collection(`structured-views-${user.defaultAccount}`);
+
+            collection.import([
+              {
+                _key: 'view-1',
+                _view: 1,
+                displayName: 'Employee Files',
+                include: [
+                  {
+                    metadataSets: [
+                      'Employee Files'
+                    ]
+                  }
+                ],
+                filterExpression: 'set._set == "Employee Files"'
+              },
+              {
+                _key: 'view-2',
+                _view: 2,
+                displayName: {
+                  metadataSet: 'Employee Files',
+                  metadataField: 'Status'
+                }
+              },
+              {
+                _key: 'view-3',
+                _view: 3,
+                displayName: {
+                  metadataSet: 'Employee Files',
+                  metadataField: 'Company'
+                }
+              },
+              {
+                _key: 'view-4',
+                _view: 4,
+                displayName: {
+                  metadataSet: 'Employee Files',
+                  metadataField: 'Employee ID'
+                }
+              }
+            ], {
+              waitForSync: true,
+              silent: false
+            }).then((res) => {
+              callback(null, user);
+            }).catch(callback);
+          },
+          (user, callback) => {
+            /**
+             * Create a relation between our two example views
+             */
+
+            var db = new arangoDb.Database({
+              url: sails.config.metadata.arangoDb.url
+            });
+
+            db.useDatabase(sails.config.metadata.arangoDb.database);
+            db.useBasicAuth(sails.config.metadata.arangoDb.username, sails.config.metadata.arangoDb.password);
+
+            const edgeCollection = db.edgeCollection(`structured-view-edges-${user.defaultAccount}`);
+
+            edgeCollection.create().then(() => {
+              return edgeCollection.import([
+                {
+                  _from: `structured-views-${user.defaultAccount}/view-2`,
+                  _to: `structured-views-${user.defaultAccount}/view-1`
+                },
+                {
+                  _from: `structured-views-${user.defaultAccount}/view-3`,
+                  _to: `structured-views-${user.defaultAccount}/view-2`
+                },
+                {
+                  _from: `structured-views-${user.defaultAccount}/view-4`,
+                  _to: `structured-views-${user.defaultAccount}/view-3`
+                }
+              ]);
+            }).then((res) => {
+              callback();
+            }).catch(callback);
           }
         ], callback);
       });

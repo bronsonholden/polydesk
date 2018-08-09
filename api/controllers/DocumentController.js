@@ -5,6 +5,7 @@
  * @help        :: See http://sailsjs.org/#!/documentation/concepts/Controllers
  */
 
+const querystring = require('querystring');
 const skipperS3 = require('skipper-better-s3');
 const path = require('path');
 const AWS = require('aws-sdk');
@@ -34,10 +35,78 @@ module.exports = {
         };
       });
 
-      res.view('pages/documents', {
-        layout: 'layouts/documents',
-        documents: documents
+      sails.helpers.getRootStructuredViews.with({
+        account: req.session.account
+      }).switch({
+        success: (results) => {
+          res.view('pages/documents', {
+            layout: 'layouts/documents',
+            documents: documents,
+            superview: null,
+            subviews: results,
+            bulkViewLink: false
+          });
+        },
+        error: (err) => {
+          res.send(err);
+        }
       });
+    });
+  },
+  structuredView: (req, res) => {
+    var viewId = req.param('view');
+    var accountId = req.session.account;
+
+    sails.helpers.generateStructuredView.with({
+      view: viewId,
+      account: accountId,
+      filter: req.query
+    }).switch({
+      success: (view) => {
+        Document.find({
+          where: {
+            id: view.documents.slice(0, 20)
+          }
+        }).exec((err, documents) => {
+          if (err) {
+            return res.send(err);
+          }
+
+          documents = documents.map((doc) => {
+            return {
+              id: doc.id,
+              name: doc.name,
+              fileType: doc.fileType,
+              href: `/viewer/${doc.id}`
+            };
+          });
+
+          var query = querystring.stringify(req.query);
+
+          // If we're looking at field folders, delete the metadata field
+          // being expanded from the filter to get superview query
+          if (typeof view.displayName === 'object') {
+            delete req.query[view.displayName.metadataField];
+          }
+
+          // Query string for superview
+          var upQuery = querystring.stringify(req.query);
+
+          res.view('pages/documents', {
+            layout: 'layouts/documents',
+            documents: documents,
+            subviews: view.subviews,
+            superview: view.superview,
+            bulkViewLink: true,
+            query: query,
+            queryObject: req.query,
+            upQuery: upQuery
+          });
+        });
+      },
+      error: (err) => {
+        res.send(err);
+      }
     });
   },
   view: (req, res) => {
