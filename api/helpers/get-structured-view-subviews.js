@@ -75,15 +75,16 @@ module.exports = {
               });
             }
 
-            var q = `FOR set IN \`metadata-sets-${inputs.account}\` FILTER set._set == "${view.displayName.metadataSet}" ${filters.length > 0 ? ' AND ' + filters.join(' AND ') : ''} RETURN DISTINCT set["$${view.displayName.metadataField}"]`;
+            var q = `FOR set IN \`metadata-sets-${inputs.account}\` FILTER set._set == "${view.displayName.metadataSet}" ${filters.length > 0 ? ' AND ' + filters.join(' AND ') : ''} RETURN DISTINCT set["$${view.displayName.metadataField}"].value`;
 
             db.query(q).then((cursor) => {
               cursor.each((val) => {
+                console.log(val);
                 views.push({
                   _view: view._view,
                   filter: {
                     field: view.displayName.metadataField,
-                    value: val.value
+                    value: val
                   }
                 });
               });
