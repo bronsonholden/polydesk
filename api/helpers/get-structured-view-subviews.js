@@ -79,7 +79,6 @@ module.exports = {
 
             db.query(q).then((cursor) => {
               cursor.each((val) => {
-                console.log(val);
                 views.push({
                   _view: view._view,
                   filter: {

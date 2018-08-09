@@ -1,0 +1,19 @@
+.bg-primary-op {
+  background-color: rgba(0, 123, 255, 0.3) !important;
+}
+
+.bg-secondary-op {
+  background-color: rgba(108, 117, 125, 0.3) !important;
+}
+
+.bg-success-op {
+  background-color: rgba(40, 167, 69, 0.3) !important;
+}
+
+.bg-danger-op {
+  background-color: rgba(220, 53, 69, 0.3) !important;
+}
+
+.bg-warning-op {
+  background-color: rgba(255, 193, 7, 0.3) !important;
+}
