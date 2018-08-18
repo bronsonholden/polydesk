@@ -240,65 +240,67 @@ module.exports = {
     });
   },
   upload: (req, res) => {
-    var empty = req.file('file')._files.length === 0;
-
-    if (empty) {
-      return res.status(403).send({
-        message: 'A file must be attached'
-      });
-    }
-
-    var filename = req.file('file')._files[0].stream.filename;
-    var ext = path.extname(filename);
-
-    Document.create({
-      name: path.basename(filename, ext),
-      account: req.session.account,
-      fileType: ext.slice(1) // so we don't get the dot before extension
-    }).fetch().exec((err, file) => {
+    req.file('file').upload({
+      adapter: skipperS3,
+      key: sails.config.documents.s3.key,
+      secret: sails.config.documents.s3.secret,
+      bucket: sails.config.documents.s3.bucket,
+      region: 'us-west-2',
+      s3params: {
+        Key: 'queue/a.pdf'
+      }
+    }, (err, files) => {
       if (err) {
         return res.status(500).send({
           message: err.message
         });
       }
 
-      req.file('file').upload({
-        adapter: skipperS3,
-        key: sails.config.documents.s3.key,
-        secret: sails.config.documents.s3.secret,
-        bucket: sails.config.documents.s3.bucket,
-        region: 'us-west-2',
-        s3params: {
-          Key: 'queue/' + file.id + '.pdf'
-        }
-      }, (err, files) => {
-        if (err) {
-          return res.status(500).send({
-            message: err.message
-          });
-        }
-
-        var sqs = new AWS.SQS({
-          accessKeyId: sails.config.documents.sqs.key,
-          secretAccessKey: sails.config.documents.sqs.secret,
-          region: sails.config.documents.sqs.region
+      if (files.length === 0) {
+        return res.status(400).send({
+          message: 'A file must be attached'
         });
+      }
 
-        sqs.sendMessage({
-          QueueUrl: sails.config.documents.sqs.url,
-          MessageBody: JSON.stringify({
-            document: file
-          }),
-          MessageGroupId: 'DocumentUpload'
-        }, (err, data) => {
+      var sqs = new AWS.SQS({
+        accessKeyId: sails.config.documents.sqs.key,
+        secretAccessKey: sails.config.documents.sqs.secret,
+        region: sails.config.documents.sqs.region
+      });
+
+      async.mapSeries(files, (file, callback) => {
+        var filename = file.filename;
+        var ext = path.extname(file.filename);
+
+        Document.create({
+          name: path.basename(filename, ext),
+          account: req.session.account,
+          fileType: ext.slice(1) // so we don't get the dot before extension
+        }).fetch().exec((err, doc) => {
           if (err) {
-            return res.status(500).send({
-              message: err.message
-            });
+            return callback(err);
           }
 
-          res.redirect('/documents');
+          sqs.sendMessage({
+            QueueUrl: sails.config.documents.sqs.url,
+            MessageBody: JSON.stringify({
+              document: doc
+            }),
+            MessageGroupId: 'DocumentUpload'
+          }, (err, data) => {
+            if (err) {
+              return callback(err);
+            }
+
+            callback(null, doc);
+          });
         });
+      }, (err, documents) => {
+        if (err) {
+          return res.status(500).send(err);
+        }
+
+        res.redirect('/documents');
       });
     });
   },
