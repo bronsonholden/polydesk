@@ -18,25 +18,21 @@ module.exports = {
       return 'One or more validation errors occurred';
     }).switch({
       success: (user) => {
-        if (req.wantsJSON) {
-          res.status(201).send(user);
-        } else {
-          res.redirect('/login');
-        }
+        res.created('pages/homepage', user);
       },
       error: (err) => {
-        res.status(500).send({
+        res.serverError('pages/homepage', {
           message: err.message,
           problems: err.problems
         });
       },
       accountAlreadyExists: (err) => {
-        return res.status(409).send({
+        return res.conflict('pages/homepage', {
           message: err.message
         });
       },
       userAlreadyExists: (err) => {
-        return res.status(409).send({
+        return res.conflict('pages/homepage', {
           message: err.message
         });
       }

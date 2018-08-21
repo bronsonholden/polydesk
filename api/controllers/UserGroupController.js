@@ -18,26 +18,26 @@ module.exports = {
       return 'One or more validation errors occurred';
     }).switch({
       success: (user) => {
-        return res.status(200).send(user);
+        return res.ok('pages/dashboard', user);
       },
       error: (err) => {
-        return res.status(500).send({
+        return res.serverError('pages/dashboard', {
           message: err.message,
           problems: err.problems
         });
       },
       noSuchUser: (err) => {
-        return res.status(404).send({
+        return res.notFound('pages/dashboard', {
           message: err.message
         });
       },
       noSuchUserGroup: (err) => {
-        return res.status(404).send({
+        return res.notFound('pages/dashboard', {
           message: err.message
         });
       },
       notInSameAccount: (err) => {
-        return res.status(409).send({
+        return res.conflict('pages/dashboard', {
           message: err.message
         });
       }
@@ -53,21 +53,21 @@ module.exports = {
       return 'One or more validation errors occurred';
     }).switch({
       success: (userGroup) => {
-        return res.status(201).send(userGroup);
+        return res.created('pages/dashboard', userGroup);
       },
       error: (err) => {
-        res.status(500).send({
+        res.serverError('pages/dashboard', {
           message: err.message,
           problems: err.problems
         });
       },
       userGroupAlreadyExists: (err) => {
-        return res.status(409).send({
+        return res.conflict('pages/dashboard', {
           message: err.message
         });
       },
       noSuchAccount: (err) => {
-        return res.status(404).send({
+        return res.notFound('pages/dashboard', {
           message: err.message
         });
       }

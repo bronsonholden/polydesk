@@ -21,7 +21,7 @@ module.exports = {
       sort: 'id ASC'
     }).exec((err, documents) => {
       if (err) {
-        return res.status(500).send({
+        return res.serverError('pages/documents', {
           message: err.message
         });
       }
@@ -48,7 +48,7 @@ module.exports = {
           });
         },
         error: (err) => {
-          res.send(err);
+          res.serverError(null, err);
         }
       });
     });
@@ -69,7 +69,7 @@ module.exports = {
           }
         }).exec((err, documents) => {
           if (err) {
-            return res.send(err);
+            return res.serverError('pages/documents', err);
           }
 
           documents = documents.map((doc) => {
@@ -105,7 +105,7 @@ module.exports = {
         });
       },
       error: (err) => {
-        res.send(err);
+        res.serverError(null, err);
       }
     });
   },
@@ -224,7 +224,7 @@ module.exports = {
       }
     ], (err) => {
       if (err) {
-        return res.status(500).send({
+        return res.serverError('pages/documents', {
           message: err.message
         });
       }
@@ -251,13 +251,13 @@ module.exports = {
       }
     }, (err, files) => {
       if (err) {
-        return res.status(500).send({
+        return res.serverError('pages/documents', {
           message: err.message
         });
       }
 
       if (files.length === 0) {
-        return res.status(400).send({
+        return res.badRequest('pages/documents', {
           message: 'A file must be attached'
         });
       }
@@ -297,7 +297,7 @@ module.exports = {
         });
       }, (err, documents) => {
         if (err) {
-          return res.status(500).send(err);
+          return res.serverError('pages/documents', err);
         }
 
         res.redirect('/documents');
@@ -313,15 +313,15 @@ module.exports = {
       metadata: req.body.metadata
     }).switch({
       success: (data) => {
-        return res.status(201).send(data);
+        return res.created('pages/documents', data);
       },
       error: (err) => {
-        return res.status(500).send({
+        return res.serverError('pages/documents', {
           message: err.message
         });
       },
       invalidObjectType: (err) => {
-        return res.status(403).send({
+        return res.forbidden('pages/documents', {
           message: err.message
         });
       }
@@ -336,15 +336,15 @@ module.exports = {
       metadata: req.body.metadata
     }).switch({
       success: (data) => {
-        return res.status(200).send(data);
+        return res.ok('pages/documents', data);
       },
       error: (err) => {
-        return res.status(500).send({
+        return res.serverError('pages/documents', {
           message: err.message
         });
       },
       invalidObjectType: (err) => {
-        return res.status(403).send({
+        return res.forbidden('pages/documents', {
           message: err.message
         });
       }
@@ -358,15 +358,15 @@ module.exports = {
       setName: req.body.setName
     }).switch({
       success: (data) => {
-        return res.status(200).send(data);
+        return res.ok('pages/documents', data);
       },
       error: (err) => {
-        return res.status(500).send({
+        return res.serverError('pages/documents', {
           message: err.message
         });
       },
       invalidObjectType: (err) => {
-        return res.status(403).send({
+        return res.forbidden('pages/documents', {
           message: err.message
         });
       }

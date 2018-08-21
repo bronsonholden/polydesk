@@ -16,16 +16,18 @@ module.exports = {
   login: (req, res) => {
     passport.authenticate('local', (err, user, info) => {
       if (err) {
-        return res.status(500).send(err);
+        return res.serverError('pages/login', err);
       }
 
       if (!user) {
-        return res.redirect('/login');
+        return res.badRequest('pages/login', {
+          message: 'Username or password is invalid'
+        });
       }
 
       req.login(user, (err) => {
         if (err) {
-          return res.send(err);
+          return res.serverError('pages/login', err);
         }
 
         req.session.user = user.id;

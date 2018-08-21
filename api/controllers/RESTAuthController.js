@@ -16,7 +16,7 @@ module.exports = {
   login: (req, res) => {
     passport.authenticate('local', (err, user, info) => {
       if (err) {
-        return res.status(500).send(err);
+        return res.serverError(null, err);
       }
 
       if (!user) {
@@ -25,19 +25,19 @@ module.exports = {
 
       req.login(user, (err) => {
         if (err) {
-          return res.status(500).send(err);
+          return res.serverError(null, err);
         }
 
         req.session.user = user.id;
         req.session.account = user.defaultAccount;
 
-        res.status(200).send(info);
+        res.ok(null, info);
       });
     })(req, res);
   },
   logout: (req, res) => {
     req.logout();
-    res.ok({
+    res.ok(null, {
       message: 'Logout successful'
     });
   }

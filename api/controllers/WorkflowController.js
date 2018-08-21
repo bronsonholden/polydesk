@@ -8,7 +8,9 @@
 module.exports = {
   create: (req, res) => {
     // Stub
-    res.status(200).send('ok');
+    res.ok('pages/dashboard', {
+      message: 'Workflow created'
+    });
   },
   edit: (req, res) => {
     res.view('pages/workflow');

@@ -14,27 +14,29 @@ module.exports = {
       return 'One or more validation errors occurred';
     }).switch({
       error: (err) => {
-        res.status(500).send({
+        res.serverError(null, {
           message: err.message,
           problems: err.problems
         });
       },
       success: (activation) => {
-        res.status(200).send(activation);
+        res.ok(null, activation);
       },
       noSuchUser: (err) => {
-        res.status(404).send({
+        res.notFound(null, {
           message: err.message
         });
       },
       alreadyActivated: (err) => {
-        res.status(409).send({
+        res.conflict(null, {
           message: err.message
         });
       }
     });
   },
   activate: (req, res) => {
-    res.status(200).send('ok');
+    res.ok(null, {
+      message: 'Account acitvated'
+    });
   }
 };

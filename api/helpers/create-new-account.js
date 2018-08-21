@@ -69,6 +69,7 @@ module.exports = {
           db.useBasicAuth(sails.config.metadata.arangoDb.username, sails.config.metadata.arangoDb.password);
           db.collection(collectionName).create();
           db.collection(`structured-views-${account.id}`).create();
+          db.collection(`structured-view-edges-${account.id}`).create();
 
           callback(null, account);
         }

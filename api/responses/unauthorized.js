@@ -3,7 +3,7 @@ module.exports = function (view, result) {
   var res = this.res;
 
   if (req.wantsJSON || !view) {
-    return res.status(200).json(result);
+    return res.status(401).json(result);
   } else {
     res.view(view, result);
   }
