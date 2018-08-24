@@ -293,22 +293,20 @@ module.exports = (sails) => {
 
             const edgeCollection = db.edgeCollection(`structured-view-edges-${user.defaultAccount}`);
 
-            edgeCollection.create().then(() => {
-              return edgeCollection.import([
-                {
-                  _from: `structured-views-${user.defaultAccount}/view-2`,
-                  _to: `structured-views-${user.defaultAccount}/view-1`
-                },
-                {
-                  _from: `structured-views-${user.defaultAccount}/view-3`,
-                  _to: `structured-views-${user.defaultAccount}/view-2`
-                },
-                {
-                  _from: `structured-views-${user.defaultAccount}/view-4`,
-                  _to: `structured-views-${user.defaultAccount}/view-3`
-                }
-              ]);
-            }).then((res) => {
+            edgeCollection.import([
+              {
+                _from: `structured-views-${user.defaultAccount}/view-2`,
+                _to: `structured-views-${user.defaultAccount}/view-1`
+              },
+              {
+                _from: `structured-views-${user.defaultAccount}/view-3`,
+                _to: `structured-views-${user.defaultAccount}/view-2`
+              },
+              {
+                _from: `structured-views-${user.defaultAccount}/view-4`,
+                _to: `structured-views-${user.defaultAccount}/view-3`
+              }
+            ]).then((res) => {
               callback();
             }).catch(callback);
           }
