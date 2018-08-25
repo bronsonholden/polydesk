@@ -43,12 +43,12 @@ module.exports = {
           views.push(view);
           callback();
         } else {
-          db.query(`FOR set IN \`metadata-sets-${inputs.account}\` FILTER set._set == "${view.displayName.metadataSet}" RETURN DISTINCT set["$${view.displayName.metadataField}"]`).then((cursor) => {
+          db.query(`FOR set IN \`metadata-sets-${inputs.account}\` FILTER set._set == "${view.fieldFilter.metadataSet}" RETURN DISTINCT set["$${view.fieldFilter.metadataField}"]`).then((cursor) => {
             cursor.each((val) => {
               views.push({
                 _view: view._view,
                 filter: {
-                  field: view.displayName.metadataField,
+                  field: view.fieldFilter.metadataField,
                   value: val.value
                 }
               });

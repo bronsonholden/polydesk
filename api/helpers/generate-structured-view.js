@@ -67,7 +67,7 @@ module.exports = {
         } else {
           var filters = [];
 
-          filters.push(`set["$${view.displayName.metadataField}"].value LIKE "${inputs.filter[view.displayName.metadataField]}"`);
+          filters.push(`set["$${view.fieldFilter.metadataField}"].value LIKE "${inputs.filter[view.fieldFilter.metadataField]}"`);
 
           if (inputs.filter) {
             Object.keys(inputs.filter).forEach((key) => {
@@ -75,7 +75,7 @@ module.exports = {
             });
           }
 
-          var q = `FOR set IN \`${metadataSetsColl}\` FILTER set._set == "${view.displayName.metadataSet}" AND ${filters.join(' AND ')} RETURN set._object`;
+          var q = `FOR set IN \`${metadataSetsColl}\` FILTER set._set == "${view.fieldFilter.metadataSet}" AND ${filters.join(' AND ')} RETURN set._object`;
 
           db.query(q).then((cursor) => {
             var results = [];

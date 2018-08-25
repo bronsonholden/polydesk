@@ -1,7 +1,7 @@
 {
   "structuredView": {
     "_view": 1,
-    "displayName": "Active Contracts",
+    "fieldFilter": "Active Contracts",
     "strict": true,
     "include": [
       {

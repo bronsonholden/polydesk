@@ -69,7 +69,7 @@
           }
 
           if (superview) {
-            var title = typeof(superview.displayName) === 'string' ? superview.displayName : queryObject[superview.displayName.metadataField];
+            var title = typeof(superview.fieldFilter) === 'string' ? superview.fieldFilter : queryObject[superview.fieldFilter.metadataField];
         %>
             <a class="list-group-item list-group-item-action bg-light" href="/documents/view/<%- superview._view %>?<%- upQuery %>"><i style="display: inline-block; width: 14px;" class="ion-chevron-up"></i> <%- title %></a>
         <%
@@ -79,12 +79,12 @@
             subviews.forEach(function (subview) {
               if (subview.filterExpression) {
         %>
-                <a class="list-group-item list-group-item-action" href="/documents/view/<%- subview._view %>"><i style="display: inline-block; width: 14px;" class="ion-chevron-right"></i> <%- subview.displayName %></a>
+                <a class="list-group-item list-group-item-action" href="/documents/view/<%- subview._view %>"><i style="display: inline-block; width: 14px;" class="ion-chevron-right"></i> <%- subview.fieldFilter %></a>
         <%
               } else {
                 var qs = `${query}&${encodeURIComponent(subview.filter.field)}=${encodeURIComponent(subview.filter.value)}`;
         %>
-                <a class="list-group-item list-group-item-action" href="/documents/view/<%- subview._view %>?<%- qs %>"><i style="display: inline-block; width: 14px;" class="ion-chevron-right"></i> <%- subview.filter.value %></a>
+                <a class="list-group-item list-group-item-action" href="/documents/view/<%- subview._view %>?<%- qs %>"><i style="display: inline-block; width: 14px;" class="ion-chevron-right"></i> <%- subview.filter.display %></a>
         <%
               }
             });

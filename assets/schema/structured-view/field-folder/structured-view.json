@@ -1,6 +1,6 @@
 {
   "structuredView": {
-    "displayName": {
+    "fieldFilter": {
       "metdataSet": "Contract",
       "metadataField": "Company"
     }

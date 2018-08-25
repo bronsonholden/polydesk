@@ -2,27 +2,27 @@
   "documents": [
     {
       "_view": 1,
-      "displayName": "Employee Files",
+      "fieldFilter": "Employee Files",
       "filterExpression": "set[\"$Document Type\"] == \"Employee Files\""
     },
     {
       "_view": 2,
-      "displayName": "Legal",
+      "fieldFilter": "Legal",
       "filterExpression": "set[\"$Document Type\"] == \"Legal\""
     },
     {
       "_view": 3,
-      "displayName": "Onboarding",
+      "fieldFilter": "Onboarding",
       "filterExpression": "set[\"$Document Category\"] == \"Onboarding\""
     },
     {
       "_view": 4,
-      "displayName": "Personal",
+      "fieldFilter": "Personal",
       "filterExpression": "set[\"$Document Category\"] == \"Personal\""
     },
     {
       "_view": 5,
-      "displayName": "Confidential",
+      "fieldFilter": "Confidential",
       "filterExpression": "set[\"$Document Category\"] == \"Confidential\""
     }
   ]
