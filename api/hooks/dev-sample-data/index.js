@@ -238,7 +238,7 @@ module.exports = (sails) => {
               {
                 _key: 'view-1',
                 _view: 1,
-                fieldFilter: 'Employee Files',
+                displayName: 'Employee Files',
                 include: [
                   {
                     metadataSets: [
