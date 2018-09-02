@@ -75,15 +75,30 @@ module.exports = {
               });
             }
 
-            var q = `FOR set IN \`metadata-sets-${inputs.account}\` FILTER set._set == "${view.displayName.metadataSet}" ${filters.length > 0 ? ' AND ' + filters.join(' AND ') : ''} RETURN DISTINCT set["$${view.displayName.metadataField}"].value`;
+            var displayExpression = `set["$${view.fieldFilter.metadataField}"].value`;
+
+            if (view.displayName) {
+              var values = view.displayName.map((part) => {
+                if (part.literal) {
+                  return `"${part.literal}"`;
+                } else if (part.metadataField) {
+                  return `set["$${part.metadataField}"].value`;
+                }
+              });
+
+              displayExpression = `CONCAT(${values.join(', ')})`
+            }
+
+            var q = `FOR set IN \`metadata-sets-${inputs.account}\` FILTER set._set == "${view.fieldFilter.metadataSet}" ${filters.length > 0 ? ' AND ' + filters.join(' AND ') : ''} RETURN DISTINCT { display: ${displayExpression}, filterValue: set["$${view.fieldFilter.metadataField}"].value }`;
 
             db.query(q).then((cursor) => {
-              cursor.each((val) => {
+              cursor.each((result) => {
                 views.push({
                   _view: view._view,
                   filter: {
-                    field: view.displayName.metadataField,
-                    value: val
+                    field: view.fieldFilter.metadataField,
+                    display: result.display,
+                    value: result.filterValue
                   }
                 });
               });

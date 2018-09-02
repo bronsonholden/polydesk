@@ -85,8 +85,8 @@ module.exports = {
 
           // If we're looking at field folders, delete the metadata field
           // being expanded from the filter to get superview query
-          if (typeof view.displayName === 'object') {
-            delete req.query[view.displayName.metadataField];
+          if (typeof view.fieldFilter === 'object') {
+            delete req.query[view.fieldFilter.metadataField];
           }
 
           // Query string for superview

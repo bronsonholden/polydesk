@@ -251,7 +251,7 @@ module.exports = (sails) => {
               {
                 _key: 'view-2',
                 _view: 2,
-                displayName: {
+                fieldFilter: {
                   metadataSet: 'Employee Files',
                   metadataField: 'Status'
                 }
@@ -259,7 +259,7 @@ module.exports = (sails) => {
               {
                 _key: 'view-3',
                 _view: 3,
-                displayName: {
+                fieldFilter: {
                   metadataSet: 'Employee Files',
                   metadataField: 'Company'
                 }
@@ -267,10 +267,21 @@ module.exports = (sails) => {
               {
                 _key: 'view-4',
                 _view: 4,
-                displayName: {
+                fieldFilter: {
                   metadataSet: 'Employee Files',
                   metadataField: 'Employee ID'
-                }
+                },
+                displayName: [
+                  {
+                    metadataField: "First Name"
+                  },
+                  {
+                    literal: " "
+                  },
+                  {
+                    metadataField: "Last Name"
+                  }
+                ]
               }
             ], {
               waitForSync: true,
