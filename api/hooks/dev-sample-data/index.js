@@ -318,6 +318,33 @@ module.exports = (sails) => {
                 _to: `structured-views-${user.defaultAccount}/view-3`
               }
             ]).then((res) => {
+              callback(null, user);
+            }).catch(callback);
+          },
+          (user, callback) => {
+            /**
+             * Create some example pins
+             */
+
+            var db = new arangoDb.Database({
+              url: sails.config.metadata.arangoDb.url
+            });
+
+            db.useDatabase(sails.config.metadata.arangoDb.database);
+            db.useBasicAuth(sails.config.metadata.arangoDb.username, sails.config.metadata.arangoDb.password);
+
+            const collection = db.collection(`metadata-pins-${user.defaultAccount}`);
+
+            collection.import([
+              {
+                user: 1,
+                metadataSet: 'Employee Files',
+                metadataFields: [
+                  'First Name',
+                  'Last Name'
+                ]
+              }
+            ]).then((res) => {
               callback();
             }).catch(callback);
           }

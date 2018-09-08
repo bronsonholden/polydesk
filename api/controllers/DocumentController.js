@@ -26,6 +26,9 @@ module.exports = {
         });
       }
 
+      var accountId = req.session.account;
+      var userId = req.session.user;
+
       documents = documents.map((doc) => {
         return {
           id: doc.id,
@@ -38,13 +41,38 @@ module.exports = {
       sails.helpers.getRootStructuredViews.with({
         account: req.session.account
       }).switch({
-        success: (results) => {
-          res.view('pages/documents', {
-            layout: 'layouts/documents',
-            documents: documents,
-            superview: null,
-            subviews: results,
-            bulkViewLink: false
+        success: (subviews) => {
+          async.mapSeries(documents, (doc, callback) => {
+            sails.helpers.getPinnedMetadata.with({
+              account: accountId,
+              user: userId,
+              document: doc.id
+            }).switch({
+              success: (pinnedMetadata) => {
+                callback(null, {
+                  id: doc.id,
+                  name: doc.name,
+                  fileType: doc.fileType,
+                  href: `/viewer/${doc.id}`,
+                  pinnedMetadata: pinnedMetadata
+                });
+              },
+              error: (err) => {
+                callback(err);
+              }
+            });
+          }, (err, results) => {
+            if (err) {
+              return callback(err);
+            }
+
+            res.view('pages/documents', {
+              layout: 'layouts/documents',
+              documents: results,
+              superview: null,
+              subviews: subviews,
+              bulkViewLink: false
+            });
           });
         },
         error: (err) => {
@@ -56,6 +84,7 @@ module.exports = {
   structuredView: (req, res) => {
     var viewId = req.param('view');
     var accountId = req.session.account;
+    var userId = req.session.user;
 
     sails.helpers.generateStructuredView.with({
       view: viewId,
@@ -72,35 +101,51 @@ module.exports = {
             return res.send(err);
           }
 
-          documents = documents.map((doc) => {
-            return {
-              id: doc.id,
-              name: doc.name,
-              fileType: doc.fileType,
-              href: `/viewer/${doc.id}`
-            };
-          });
+          async.mapSeries(documents, (doc, callback) => {
+            sails.helpers.getPinnedMetadata.with({
+              account: accountId,
+              user: userId,
+              document: doc.id
+            }).switch({
+              success: (pinnedMetadata) => {
+                callback(null, {
+                  id: doc.id,
+                  name: doc.name,
+                  fileType: doc.fileType,
+                  href: `/viewer/${doc.id}`,
+                  pinnedMetadata: pinnedMetadata
+                });
+              },
+              error: (err) => {
+                callback(err);
+              }
+            });
+          }, (err, results) => {
+            if (err) {
+              return callback(err);
+            }
 
-          var query = querystring.stringify(req.query);
+            var query = querystring.stringify(req.query);
 
-          // If we're looking at field folders, delete the metadata field
-          // being expanded from the filter to get superview query
-          if (typeof view.fieldFilter === 'object') {
-            delete req.query[view.fieldFilter.metadataField];
-          }
+            // If we're looking at field folders, delete the metadata field
+            // being expanded from the filter to get superview query
+            if (typeof view.fieldFilter === 'object') {
+              delete req.query[view.fieldFilter.metadataField];
+            }
 
-          // Query string for superview
-          var upQuery = querystring.stringify(req.query);
+            // Query string for superview
+            var upQuery = querystring.stringify(req.query);
 
-          res.view('pages/documents', {
-            layout: 'layouts/documents',
-            documents: documents,
-            subviews: view.subviews,
-            superview: view.superview,
-            bulkViewLink: true,
-            query: query,
-            queryObject: req.query,
-            upQuery: upQuery
+            res.view('pages/documents', {
+              layout: 'layouts/documents',
+              documents: results,
+              subviews: view.subviews,
+              superview: view.superview,
+              bulkViewLink: true,
+              query: query,
+              queryObject: req.query,
+              upQuery: upQuery
+            });
           });
         });
       },

@@ -105,11 +105,24 @@
             <th scope="col" class="document-list-toggle"><input type="checkbox"></th>
             <th scope="col" class="document-list-toggle"><i class="ion-android-star-half"></i></th>
             <th scope="col">Document Name</th>
-            <th scope="col">Type</th>
           </tr>
         </thead>
         <tbody>
-          <% documents.forEach(function (doc) { %>
+          <%
+            documents.forEach(function (doc) {
+              var pins = [];
+              var pinString;
+
+              if (doc.pinnedMetadata) {
+                _.forEach(doc.pinnedMetadata, (set, setName) => {
+                  _.forEach(set.fields, (field, fieldName) => {
+                    pins.push(`${fieldName}: ${field.value}`);
+                  });
+                });
+
+                pinString = pins.join(' | ');
+              }
+          %>
             <tr>
               <td class="document-list-toggle">
                 <input type="checkbox">
@@ -118,10 +131,7 @@
                 <i class="ion-android-star-outline"></i>
               </td>
               <td>
-                <a href="<%- doc.href %>"><%- doc.name %></a>
-              </td>
-              <td>
-                <%- doc.fileType %>
+                <a href="<%- doc.href %>"><%- doc.name %></a><br><%- pinString %>
               </td>
             </tr>
           <% }); %>
