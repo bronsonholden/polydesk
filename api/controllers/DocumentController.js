@@ -26,6 +26,9 @@ module.exports = {
         });
       }
 
+      var accountId = req.session.account;
+      var userId = req.session.user;
+
       documents = documents.map((doc) => {
         return {
           id: doc.id,
@@ -38,13 +41,38 @@ module.exports = {
       sails.helpers.getRootStructuredViews.with({
         account: req.session.account
       }).switch({
-        success: (results) => {
-          res.view('pages/documents', {
-            layout: 'layouts/documents',
-            documents: documents,
-            superview: null,
-            subviews: results,
-            bulkViewLink: false
+        success: (subviews) => {
+          async.mapSeries(documents, (doc, callback) => {
+            sails.helpers.getPinnedMetadata.with({
+              account: accountId,
+              user: userId,
+              document: doc.id
+            }).switch({
+              success: (pinnedMetadata) => {
+                callback(null, {
+                  id: doc.id,
+                  name: doc.name,
+                  fileType: doc.fileType,
+                  href: `/viewer/${doc.id}`,
+                  pinnedMetadata: pinnedMetadata
+                });
+              },
+              error: (err) => {
+                callback(err);
+              }
+            });
+          }, (err, results) => {
+            if (err) {
+              return callback(err);
+            }
+
+            res.view('pages/documents', {
+              layout: 'layouts/documents',
+              documents: results,
+              superview: null,
+              subviews: subviews,
+              bulkViewLink: false
+            });
           });
         },
         error: (err) => {
