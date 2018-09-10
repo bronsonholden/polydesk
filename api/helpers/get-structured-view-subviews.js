@@ -86,7 +86,7 @@ module.exports = {
                 }
               });
 
-              displayExpression = `CONCAT(${values.join(', ')})`
+              displayExpression = `CONCAT(${values.join(', ')})`;
             }
 
             var q = `FOR set IN \`metadata-sets-${inputs.account}\` FILTER set._set == "${view.fieldFilter.metadataSet}" ${filters.length > 0 ? ' AND ' + filters.join(' AND ') : ''} RETURN DISTINCT { display: ${displayExpression}, filterValue: set["$${view.fieldFilter.metadataField}"].value }`;

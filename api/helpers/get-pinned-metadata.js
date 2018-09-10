@@ -53,8 +53,6 @@ module.exports = {
         db.useDatabase(sails.config.metadata.arangoDb.database);
         db.useBasicAuth(sails.config.metadata.arangoDb.username, sails.config.metadata.arangoDb.password);
 
-        const collection = db.collection(`metadata-pins-${inputs.account}`);
-
         var query = `FOR pin IN \`metadata-pins-${inputs.account}\` FILTER pin.user == ${inputs.user} RETURN pin`;
 
         db.query(query).then((cursor) => {
@@ -65,7 +63,6 @@ module.exports = {
           });
 
           callback(null, metadataSets, pins);
-
         }).catch(exits.error);
       },
       (metadataSets, pins, callback) => {
@@ -86,7 +83,7 @@ module.exports = {
       }
     ], (err, pinnedMetadata) => {
       if (err) {
-        return callback(err);
+        return exits.error(err);
       }
 
       exits.success(pinnedMetadata);

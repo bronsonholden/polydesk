@@ -63,7 +63,7 @@ module.exports = {
             });
           }, (err, results) => {
             if (err) {
-              return callback(err);
+              return res.status(500).send(err);
             }
 
             res.view('pages/documents', {
@@ -98,7 +98,7 @@ module.exports = {
           }
         }).exec((err, documents) => {
           if (err) {
-            return res.send(err);
+            return res.status.send(err);
           }
 
           async.mapSeries(documents, (doc, callback) => {
@@ -122,7 +122,7 @@ module.exports = {
             });
           }, (err, results) => {
             if (err) {
-              return callback(err);
+              return res.status(500).send(err);
             }
 
             var query = querystring.stringify(req.query);
