@@ -25,20 +25,13 @@ module.exports = {
         }
       },
       error: (err) => {
-        res.serverError({
-          message: err.message,
-          problems: err.problems
-        });
+        res.serverError(err);
       },
       accountAlreadyExists: (err) => {
-        return res.status(409).send({
-          message: err.message
-        });
+        return res.conflict('pages/signup', err);
       },
       userAlreadyExists: (err) => {
-        return res.status(409).send({
-          message: err.message
-        });
+        return res.conflict('pages/signup', err);
       }
     });
   }
