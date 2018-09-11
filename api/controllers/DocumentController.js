@@ -21,7 +21,7 @@ module.exports = {
       sort: 'id ASC'
     }).exec((err, documents) => {
       if (err) {
-        return res.status(500).send({
+        return res.serverError({
           message: err.message
         });
       }
@@ -63,7 +63,7 @@ module.exports = {
             });
           }, (err, results) => {
             if (err) {
-              return res.status(500).send(err);
+              return res.serverError(err);
             }
 
             res.view('pages/documents', {
@@ -122,7 +122,7 @@ module.exports = {
             });
           }, (err, results) => {
             if (err) {
-              return res.status(500).send(err);
+              return res.serverError(err);
             }
 
             var query = querystring.stringify(req.query);
@@ -197,7 +197,7 @@ module.exports = {
       }
     ], (err, metadataSets) => {
       if (err) {
-        return res.status(500).send({
+        return res.serverError({
           message: err.message
         });
       }
@@ -269,7 +269,7 @@ module.exports = {
       }
     ], (err) => {
       if (err) {
-        return res.status(500).send({
+        return res.serverError({
           message: err.message
         });
       }
@@ -296,7 +296,7 @@ module.exports = {
       }
     }, (err, files) => {
       if (err) {
-        return res.status(500).send({
+        return res.serverError({
           message: err.message
         });
       }
@@ -342,7 +342,7 @@ module.exports = {
         });
       }, (err, documents) => {
         if (err) {
-          return res.status(500).send(err);
+          return res.serverError(err);
         }
 
         res.redirect('/documents');
@@ -361,7 +361,7 @@ module.exports = {
         return res.status(201).send(data);
       },
       error: (err) => {
-        return res.status(500).send({
+        return res.serverError({
           message: err.message
         });
       },
@@ -384,7 +384,7 @@ module.exports = {
         return res.status(200).send(data);
       },
       error: (err) => {
-        return res.status(500).send({
+        return res.serverError({
           message: err.message
         });
       },
@@ -406,7 +406,7 @@ module.exports = {
         return res.status(200).send(data);
       },
       error: (err) => {
-        return res.status(500).send({
+        return res.serverError({
           message: err.message
         });
       },

@@ -22,7 +22,7 @@ module.exports = {
         return res.status(200).send(user);
       },
       error: (err) => {
-        return res.status(500).send({
+        return res.serverError({
           message: err.message,
           problems: err.problems
         });

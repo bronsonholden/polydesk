@@ -1,2 +1,37 @@
-<h1>500</h1>
-<p>Server Error</p>
+<div class="container-fluid">
+  <div class="row">
+    <nav class="navbar navbar-expand-sm navbar-light bg-light w-100">
+      <a class="navbar-brand" href="/">Go Back</a>
+      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbar-content" aria-controls="navbar-content" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+    </nav>
+  </div>
+  <div class="row">
+    <div class="jumbotron jumbotron-fluid m-0 px-0 py-4 w-100">
+      <div class="container">
+        <h1 class="display-4">500</h1>
+        <p class="lead">
+          A server error has occurred
+        </p>
+      </div>
+    </div>
+  </div>
+  <div class="row my-4">
+    <div class="col-sm-6 offset-sm-3">
+      <div class="card">
+        <div class="card-body">
+          <span style="font-family: monospace;">
+            <%- err.stack %>
+          </span>
+        </div>
+      </div>
+    </div>
+    <div class="col-sm-6 offset-sm-3">
+      <br>
+      <p>
+        Please email help@polydesk.io with the details of your error and a description of what action you were performing when it occurred. This helps us narrow down the issue and resolve it as soon as possible.
+      </p>
+    </div>
+  </div>
+</div>

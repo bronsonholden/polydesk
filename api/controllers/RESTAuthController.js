@@ -16,7 +16,7 @@ module.exports = {
   login: (req, res) => {
     passport.authenticate('local', (err, user, info) => {
       if (err) {
-        return res.status(500).send(err);
+        return res.serverError(err);
       }
 
       if (!user) {
@@ -25,7 +25,7 @@ module.exports = {
 
       req.login(user, (err) => {
         if (err) {
-          return res.status(500).send(err);
+          return res.serverError(err);
         }
 
         req.session.user = user.id;

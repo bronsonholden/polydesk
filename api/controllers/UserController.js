@@ -25,7 +25,7 @@ module.exports = {
         }
       },
       error: (err) => {
-        res.status(500).send({
+        res.serverError({
           message: err.message,
           problems: err.problems
         });

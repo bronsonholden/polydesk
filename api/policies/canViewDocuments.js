@@ -5,7 +5,7 @@ module.exports = (req, res, next) => {
     name: 'view_documents'
   }, (err, capability) => {
     if (err) {
-      return res.status(500).send(err);
+      return res.serverError(err);
     }
 
     if (!capability) {
