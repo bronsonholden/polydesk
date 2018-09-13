@@ -1,5 +1,5 @@
 <% endpoint = sails.getRouteFor('AuthController.login') %>
-<% url = endpoint.url + (next ? `?next=${next}` : '') %>
+<% url = endpoint.url + (typeof next !== 'undefined' && next ? `?next=${next}` : '') %>
 
 <div class="container-fluid">
   <div class="row">
@@ -37,7 +37,7 @@
   </div>
   <div class="row my-4">
     <%
-      if (typeof err !== 'undefined') {
+      if (typeof(err) !== 'undefined') {
     %>
         <div class="col-sm-4 offset-sm-3">
           <div class="alert alert-danger" role="alert">

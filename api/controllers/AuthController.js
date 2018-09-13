@@ -20,7 +20,7 @@ module.exports = {
       }
 
       if (!user) {
-        return res.redirect('/login');
+        return res.unauthorized('pages/login', info);
       }
 
       req.login(user, (err) => {
