@@ -33,6 +33,7 @@
     "sails-hook-orm": "^2.1.0",
     "sails-hook-sockets": "^1.5.3",
     "sails-postgresql": "^1.0.1",
+    "shipit-npm": "^0.2.0",
     "skipper-better-s3": "^2.3.0",
     "socket.io-redis": "5.2.0",
     "uuid": "^3.3.2"
