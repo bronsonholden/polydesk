@@ -47,7 +47,9 @@
     "eslint-plugin-promise": "^3.8.0",
     "eslint-plugin-standard": "^3.1.0",
     "mocha": "^5.2.0",
-    "nyc": "^11.9.0"
+    "nyc": "^11.9.0",
+    "shipit-cli": "^4.1.1",
+    "shipit-deploy": "^4.1.1"
   },
   "scripts": {
     "start": "NODE_ENV=production node app.js",
