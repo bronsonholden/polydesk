@@ -7,7 +7,10 @@ module.exports = {
       watch: true,
       env_production: {
         'NODE_ENV': 'production'
-      }
+      },
+      ignoreWatch: [
+        '.tmp'
+      ]
     }
   ]
 };
