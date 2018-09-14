@@ -1,9 +1,11 @@
 const os = require('os');
 const path = require('path').posix;
 const shipitDeploy = require('shipit-deploy');
+const shipitNpm = require('shipit-npm');
 
 module.exports = (shipit) => {
   shipitDeploy(shipit);
+  shipitNpm(shipit);
 
   shipit.initConfig({
     default: {
