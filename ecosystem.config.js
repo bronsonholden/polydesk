@@ -7,7 +7,13 @@ module.exports = {
       watch: true,
       env_production: {
         'NODE_ENV': 'production'
-      }
+      },
+      ignore_watch: [
+        '.tmp',
+        '.git',
+        'node_modules',
+        'views/layouts'
+      ]
     }
   ]
 };
