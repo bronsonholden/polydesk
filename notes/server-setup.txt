@@ -1,0 +1,4 @@
+Update /etc/postgresql/9.x/main/pg_hba.conf and /etc/postgresql/9.x/main/postgresql.conf:
+Bind to address 0.0.0.0/0
+
+Update /etc/arangodb3/arangod.conf: Set endpoint to 0.0.0.0:8529
