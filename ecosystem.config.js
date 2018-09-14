@@ -11,7 +11,8 @@ module.exports = {
       ignore_watch: [
         '.tmp',
         '.git',
-        'node_modules'
+        'node_modules',
+        'views/layouts'
       ]
     }
   ]
