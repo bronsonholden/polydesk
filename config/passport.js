@@ -42,9 +42,7 @@ passport.use(new LocalStrategy({
         });
       }
 
-      callback(null, user.toJSON(), {
-        message: 'Login successful'
-      });
+      callback(null, user.toJSON());
     });
   });
 }));

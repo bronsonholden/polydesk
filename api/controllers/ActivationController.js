@@ -14,7 +14,7 @@ module.exports = {
       return 'One or more validation errors occurred';
     }).switch({
       error: (err) => {
-        res.status(500).send({
+        res.serverError({
           message: err.message,
           problems: err.problems
         });

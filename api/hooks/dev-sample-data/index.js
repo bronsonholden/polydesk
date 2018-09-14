@@ -273,13 +273,13 @@ module.exports = (sails) => {
                 },
                 displayName: [
                   {
-                    metadataField: "First Name"
+                    metadataField: 'First Name'
                   },
                   {
-                    literal: " "
+                    literal: ' '
                   },
                   {
-                    metadataField: "Last Name"
+                    metadataField: 'Last Name'
                   }
                 ]
               }

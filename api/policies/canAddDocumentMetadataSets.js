@@ -5,7 +5,7 @@ module.exports = (req, res, next) => {
     name: 'add_document_metadata_sets'
   }, (err, capability) => {
     if (err) {
-      return res.status(500).send(err);
+      return res.serverError(err);
     }
 
     if (!capability) {

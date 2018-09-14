@@ -29,6 +29,9 @@ module.exports = {
     success: {
       outputFriendlyName: 'Metadata Pin',
       outputDescription: 'Created metadata pin object'
+    },
+    error: {
+      outputDescription: 'A server error occurred'
     }
   },
   fn: (inputs, exits) => {
@@ -46,7 +49,7 @@ module.exports = {
       metadataSet: inputs.metadataSet,
       metadataFields: inputs.metadataFields
     }).then((pin) => {
-      callback(null, pin);
-    }).catch(callback);
+      exits.success(pin);
+    }).catch(exits.error);
   }
 };
