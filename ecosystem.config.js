@@ -8,8 +8,10 @@ module.exports = {
       env_production: {
         'NODE_ENV': 'production'
       },
-      ignoreWatch: [
-        '.tmp'
+      ignore_watch: [
+        '.tmp',
+        '.git',
+        'node_modules'
       ]
     }
   ]
