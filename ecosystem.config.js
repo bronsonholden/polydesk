@@ -3,7 +3,7 @@ module.exports = {
     {
       name: 'polydesk',
       script: './app.js',
-      cwd: '/home/ubuntu/polydesk/current',
+      cwd: '/home/ubuntu/polydesk',
       watch: true,
       env_production: {
         'sails_hooks__grunt': false,

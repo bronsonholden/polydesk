@@ -24,4 +24,8 @@ module.exports = (shipit) => {
       servers: 'ubuntu@polydesk.io'
     }
   });
+
+  shipit.task('copy-config', async () => {
+    await shipit.copyToRemote('config/env/*.js', 'config/env');
+  });
 };
