@@ -1,0 +1,35 @@
+---
+driver:
+  name: ec2
+  aws_ssh_key_id: key-polydesk-dev-01
+  region: us-west-2
+  availability_zone: a
+  subnet_id: subnet-cf33d184
+  instance_type: t2.micro
+  image_id: ami-0d10b1979afc575ba
+  security_group_ids: [ "sg-d2a2c3ad" ]
+  retryable_tries: 120
+
+provisioner:
+  name: chef_zero
+
+verifier:
+  name: inspec
+
+transport:
+  ssh_key: ~/.ssh/key-polydesk-dev-01.pem
+
+platforms:
+  - name: ubuntu-14.04
+
+suites:
+  - name: default
+    run_list:
+      - recipe[polydesk-monolith::default]
+    verifier:
+      inspec tests:
+        - test/integration/default
+    attributes:
+      polydesk:
+        ssl_dir: /etc/polydesk
+        hostname: 'https://polydesk.io'
