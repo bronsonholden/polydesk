@@ -44,3 +44,27 @@ end
 nginx_site 'default' do
   enable false
 end
+
+include_recipe 'git'
+
+git_client 'default' do
+  action :install
+end
+
+directory "#{node['polydesk']['project_dir']}" do
+  owner 'root'
+  group 'root'
+  mode '0644'
+  recursive true
+  action :create
+end
+
+git "#{node['polydesk']['project_dir']}" do
+  repository 'https://github.com/paulholden2/polydesk'
+  checkout_branch 'master'
+end
+
+include_recipe 'nodejs'
+include_recipe 'nodejs::npm'
+
+node.default['nodejs']['version'] = '10.10.0'

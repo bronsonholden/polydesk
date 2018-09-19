@@ -32,4 +32,5 @@ suites:
     attributes:
       polydesk:
         ssl_dir: /etc/polydesk
+        project_dir: /var/www/polydesk
         hostname: 'https://polydesk.io'
