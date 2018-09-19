@@ -49,7 +49,7 @@ function loadPage(pageNum) {
     });
 
     pdfPage.getTextContent().then(textContent => {
-      pdfjsLib.renderTextLayer({
+      PDFJS.renderTextLayer({
         textContent,
         container,
         viewport,
@@ -75,8 +75,8 @@ $(document).ready(function () {
 
   let viewer = document.getElementById('viewer');
 
-  pdfjsLib.workerSrc = './pdf.worker.js';
-  pdfjsLib.getDocument(viewer.getAttribute('data-url')).then(pdf => {
+  PDFJS.workerSrc = '/dependencies/pdf.worker.min.js';
+  PDFJS.getDocument(viewer.getAttribute('data-url')).then(pdf => {
     pdfDocument = pdf;
 
     for (let i = 0; i < pdf.pdfInfo.numPages; i++) {
