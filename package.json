@@ -33,7 +33,6 @@
     "sails-hook-orm": "^2.1.0",
     "sails-hook-sockets": "^1.5.3",
     "sails-postgresql": "^1.0.1",
-    "shipit-npm": "^0.2.0",
     "skipper-better-s3": "^2.3.0",
     "socket.io-redis": "5.2.0",
     "uuid": "^3.3.2"
@@ -48,9 +47,7 @@
     "eslint-plugin-promise": "^3.8.0",
     "eslint-plugin-standard": "^3.1.0",
     "mocha": "^5.2.0",
-    "nyc": "^11.9.0",
-    "shipit-cli": "^4.1.1",
-    "shipit-deploy": "^4.1.1"
+    "nyc": "^11.9.0"
   },
   "scripts": {
     "start": "NODE_ENV=production node app.js",
