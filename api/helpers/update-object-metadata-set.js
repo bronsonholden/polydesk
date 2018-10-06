@@ -34,8 +34,7 @@ module.exports = {
       type: 'string',
       required: true,
       isIn: [
-        'document',
-        'folder'
+        'document'
       ]
     }
   },
@@ -57,9 +56,6 @@ module.exports = {
     switch (inputs.objectType) {
     case 'document':
       prefix = 'd';
-      break;
-    case 'folder':
-      prefix = 'f';
       break;
     default:
       return exits.invalidObjectType(new Error('The specified object type is invalid'));
