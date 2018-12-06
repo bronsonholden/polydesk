@@ -51,6 +51,7 @@
   },
   "scripts": {
     "start": "NODE_ENV=production node app.js",
+    "sails": "sails",
     "test": "nyc mocha test/**/*.js",
     "lint": "eslint ."
   },
